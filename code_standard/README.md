@@ -1,5 +1,39 @@
 # Code Standards
 
+## Table of contents
+
+### Formatting
+* [2 Spaces for indentation](#2-spaces-for-indentation)
+* [Use Semicolons](#use-semicolons)
+* [80 characters per line](#80-characters-per-line)
+* [Use single quotes](#use-single-quotes)
+* [Opening braces go on the same line](#opening-braces-go-on-the-same-line)
+* [Always use braces](#always-use-braces)
+* [Declare one variable per var statement](#declare-one-variable-per-var-statement)
+
+### Naming Conventions
+* [Use lowerCamelCase for variables, properties and function names](#use-lowercamelcase-for-variables-properties-and-function-names)
+* [Use UpperCamelCase for class names](#use-uppercamelcase-for-class-names)
+* [Use UPPERCASE for Constants](#use-uppercase-for-constants)
+
+### Conditionals
+* [Use the === operator](#use-the--operator)
+* [Use descriptive conditions](#use-descriptive-conditions)
+
+### Functions
+* [Write small functions](#write-small-functions)
+* [Return early from functions](#return-early-from-functions)
+* [Name your closures](#name-your-closures)
+* [No nested closures](#no-nested-closures)
+* [Method chaining](#method-chaining)
+
+### Comments
+* [Use slashes for comments](#use-slashes-for-comments)
+
+### Miscellaneous
+* [](#)
+* [Do not extend built-in prototypes](#do-not-extend-built-in-prototypes)
+
 ### Formatting
 
 #### 2 Spaces for indentation
@@ -40,6 +74,29 @@ if (true)
 {
   console.log('losing');
 }
+```
+
+#### Always use braces
+This will help the future you if you want to add some code to a block.
+
+*Right:*
+```js
+if (true) {
+  console.log('winning');
+}
+
+while (true) {
+  console.log('winning');
+}
+```
+
+*Wrong:*
+```js
+if (true)
+  console.log('losing');
+
+while (true)
+  console.log('losing');
 ```
 
 #### Declare one variable per var statement
@@ -323,6 +380,16 @@ if (isSessionValid) {
 ```
 
 ### Miscellaneous
+
+#### Requires At Top
+Always put requires at top of file to clearly illustrate a file's dependencies. Besides giving an overview for others at a quick glance of dependencies and possible memory impact, it allows one to determine if they need a package.json file should they choose to use the file elsewhere.
+
+#### Divide node/npm and project requires
+Divide npm and core node packages from the project packages.
+
+#### Do not extend built-in prototypes
+Do not extend the prototype of native JavaScript objects. Your future self will be forever grateful.
+
 *Right:*
 ```js
 var a = [];
