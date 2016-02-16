@@ -1,0 +1,26 @@
+{
+  "name": "djakne-backend",
+  "version": "0.1.0",
+  "description": "Backend service for Djäkne Kaffebar",
+  "scripts": {
+    "commit": "git-cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MattiasPernhult/djakne-backend.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MattiasPernhult/djakne-backend/issues"
+  },
+  "homepage": "https://github.com/MattiasPernhult/djakne-backend#readme",
+  "devDependencies": {
+    "commitizen": "^2.5.0",
+    "cz-conventional-changelog": "^1.1.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
