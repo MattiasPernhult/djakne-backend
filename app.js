@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 // project packages
 var index = require('./app/routes/index');
-
+var vote = require('./app/routes/vote');
 // Ändra denna
 // mongoose.connect('mongodb://localhost/sandbox');
 
@@ -20,6 +20,7 @@ var app = express();
 // });
 
 app.use('/', index);
+app.use('/vote', vote);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -27,6 +28,8 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
 
 // error handlers
 
