@@ -7,12 +7,11 @@ var index = require('./app/routes/index');
 var coffeeRoute = require('./app/routes/coffee');
 var auth = require('./app/config/auth');
 // Ändra denna
-// mongoose.connect('mongodb://localhost/sandbox');
+ mongoose.connect(auth.mongoConnection);
 
 // variables
 var app = express();
 
-mongoose.connect(auth.mongoConnection);
 // app.use('*', function(req, res, next) {
 //     res.header('Access-Control-Allow-Origin', '*');
 //     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');

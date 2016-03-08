@@ -1,4 +1,3 @@
-
 var mongoService = require('../services/mongo_coffee_service');
 var controller = {};
 
@@ -9,13 +8,13 @@ controller.post = function(req, res) {
 
     title: req.body.title,
     description: req.body.description,
-    totalVotes: req.body.totalVotes,
     date: req.body.date,
-    one: req.body.one,
-    two: req.body.two,
-    three: req.body.three,
-    four: req.body.four,
-    five: req.body.five,
+    totalVotes: 0,
+    one: 0,
+    two: 0,
+    three: 0,
+    four: 0,
+    five: 0,
   };
 
   console.log('coffee_controller set body');
@@ -33,7 +32,7 @@ controller.post = function(req, res) {
   console.log('controller end');
 };
 
-var getAvarageVotes = function(query, res){
+var getAvarageVotes = function(query, res) {
 
   var vote = {};
 
