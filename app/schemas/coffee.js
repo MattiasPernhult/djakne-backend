@@ -8,9 +8,9 @@ var CoffeeSchema = new mongoose.Schema({
   date: Date,
   one: Number,
   two: Number,
-  tree: Number,
+  three: Number,
   four: Number,
   five: Number,
 });
 
-module.exports = mongoose.model('Coffe', CoffeeSchema);
+module.exports = mongoose.model('Coffee', CoffeeSchema);

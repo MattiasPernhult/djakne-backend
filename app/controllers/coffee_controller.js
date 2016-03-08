@@ -4,7 +4,7 @@ var controller = {};
 
 controller.post = function (req, res) {
 
-  console.log('i coffee/ post');
+  console.log('I coffee_controller/ post');
   var coffeeToAdd = {
 
     title: req.body.title,
@@ -13,21 +13,25 @@ controller.post = function (req, res) {
     date: req.body.date,
     one: req.body.one,
     two: req.body.two,
-    tree: req.body.tree,
+    three: req.body.three,
     four: req.body.four,
     five: req.body.five,
   };
+
+  console.log("coffee_controller set body")
 
   mongoService.insertCoffee(coffeeToAdd, function (err, result) {
 
     if(err){
       console.log(err);
-      return.res.status(500).send(err);
+      return res.status(500).send(err);
     }
     console.log('Coffee To Add : ' + result.id);
     res.send(result);
 
   });
+  console.log("controller end");
+};
 
   var getAvarageVotes = function(query, res){
 
@@ -74,5 +78,7 @@ controller.post = function (req, res) {
     return new Date(dateTo).getDate() > new Date(dateFrom).getDate();
   };
 
-  module.exports = controller;
-}
+  
+
+
+module.exports = controller;
