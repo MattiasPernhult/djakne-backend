@@ -1,9 +1,6 @@
 var eventCtrl = require('../../../app/controllers/event_controller');
 var chai = require('chai');
-// var chaiAsPromised = require('chai-as-promised');
 var expect = chai.expect;
-// chai.should();
-// chai.use(chaiAsPromised);
 
 describe('Testing the event controller', function() {
   // TODO: Add tests for the event controller
@@ -21,7 +18,7 @@ describe('Testing the event controller', function() {
     };
 
     mockResponse = {
-      statusCode: null,
+      statusCode: 200,
       result: null,
       status: function(status) {
         this.statusCode = status;
@@ -36,41 +33,35 @@ describe('Testing the event controller', function() {
 
   describe('Testing /events POST', function() {
     describe('Testing values for title', function() {
-      it('should return status 400 if title is too short', function(done) {
+      it('should return status 400 if title is too short', function() {
         mockRequest.body.title = 'H';
         eventCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
-        done();
       });
-      it('should return status 400 if title is a number', function(done) {
+      it('should return status 400 if title is a number', function() {
         mockRequest.body.title = 23;
         eventCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
-        done();
       });
-      it('should return status 400 if title is undefined', function(done) {
+      it('should return status 400 if title is undefined', function() {
         mockRequest.body.title = undefined;
         eventCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
-        done();
       });
-      it('should return status 400 if title is null', function(done) {
+      it('should return status 400 if title is null', function() {
         mockRequest.body.title = null;
         eventCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
-        done();
       });
-      it('should return status 400 if title is " "', function(done) {
+      it('should return status 400 if title is " "', function() {
         mockRequest.body.title = '';
         eventCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
-        done();
       });
-      it('should return status 200 if title is Lunch', function(done) {
+      it('should return status 200 if title is Lunch', function() {
         mockRequest.body.title = 'Lunch';
         eventCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(200);
-        done();
       });
     });
   });
