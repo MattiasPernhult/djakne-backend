@@ -6,11 +6,11 @@ var error = {};
 
 controller.post = function(req, res) {
 
-  console.log('i events/ post');
+  // console.log('i events/ post');
 
   var eventToAdd = createAndValidateEventModel(req);
-  console.log('här');
-  if (eventToAdd === null) {
+
+  if (!eventToAdd) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
   mongoService.insertEvent(eventToAdd, function(err, result) {
@@ -20,7 +20,7 @@ controller.post = function(req, res) {
     }
     console.log('Event added : ' + result.id);
     console.log(res);
-    return res.status(200).send(result);
+    res.send(result);
   });
 };
 
