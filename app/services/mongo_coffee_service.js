@@ -1,9 +1,9 @@
-var CoffeeVoteSchema = require('../schemas/vote')
+var CoffeeSchema = require('../schemas/coffee')
 var mongoService = function(){
 
   var insertCoffee = function(coffeeToAdd, callback){
 
-    var newCoffee = new CoffeeVoteSchema(coffeeToAdd);
+    var newCoffee = new CoffeeSchema(coffeeToAdd);
     newCoffee.save(function(err, response)){
 
       if(err){
@@ -15,9 +15,9 @@ var mongoService = function(){
       return callback(null, r);
     };
   });
- var getCoffeeVotes = function(query, callback){
+ var getCoffee = function(query, callback){
 
-   CoffeeVoteSchema.find(query, function (err, votes) {
+   CoffeeSchema.find(query, function (err, votes) {
 
    })
  }

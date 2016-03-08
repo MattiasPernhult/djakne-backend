@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-var voteController = require('../controllers/vote_controller');
+var voteController = require('../controllers/coffee_controller');
 
 /**
  * Endpoint for /
  * HTTP method: GET
  */
 router.get('/', function (req, res, next) {
-  vote_controller.get(req, res);
+  coffee_controller.get(req, res);
 });
 
 /**

@@ -4,7 +4,7 @@ var controller = {};
 
 controller.post = function (req, res) {
 
-  console.log('i votes/ post');
+  console.log('i coffee/ post');
   var coffeeToAdd = {
 
     title: req.body.title,
@@ -43,7 +43,7 @@ controller.post = function (req, res) {
       query = buildQuery(req);
     }
 
-    mongoService.getEvents(query, function(err, resultFromDB) {
+    mongoService.getCoffee(query, function(err, resultFromDB) {
       if (err) {
         console.log(err);
         return res.status(500).send(err);

@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
-var CoffeeVoteSchema = new mongoose.Schema({
+var CoffeeSchema = new mongoose.Schema({
 
   title: String,
   description: String,
-  totalVote: Number,
+  totalVotes: Number,
   date: Date,
   one: Number,
   two: Number,
@@ -13,4 +13,4 @@ var CoffeeVoteSchema = new mongoose.Schema({
   five: Number,
 });
 
-module.exports = mongoose.model('Coffe', CoffeeVoteSchema);
+module.exports = mongoose.model('Coffe', CoffeeSchema);
