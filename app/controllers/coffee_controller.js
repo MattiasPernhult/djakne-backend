@@ -2,7 +2,7 @@
 var mongoService = require('../services/mongo_coffee_service');
 var controller = {};
 
-controller.post = function (req, res) {
+controller.post = function(req, res) {
 
   console.log('I coffee_controller/ post');
   var coffeeToAdd = {
@@ -18,11 +18,11 @@ controller.post = function (req, res) {
     five: req.body.five,
   };
 
-  console.log("coffee_controller set body")
+  console.log('coffee_controller set body');
 
-  mongoService.insertCoffee(coffeeToAdd, function (err, result) {
+  mongoService.insertCoffee(coffeeToAdd, function(err, result) {
 
-    if(err){
+    if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
@@ -30,16 +30,16 @@ controller.post = function (req, res) {
     res.send(result);
 
   });
-  console.log("controller end");
+  console.log('controller end');
 };
 
-  var getAvarageVotes = function(query, res){
+var getAvarageVotes = function(query, res){
 
-    var vote = {};
+  var vote = {};
 
-  };
+};
 
-  controller.get = function(req, res) {
+controller.get = function(req, res) {
     var query = {};
     var queryParamsExists = Object.keys(req.query).length !== 0;
 
@@ -59,7 +59,7 @@ controller.post = function (req, res) {
     });
   };
 
-  var buildQuery = function(req) {
+var buildQuery = function(req) {
     var query = {
       date: {},
     };
@@ -74,11 +74,8 @@ controller.post = function (req, res) {
     return query;
   };
 
-  var dateToIsValid = function(dateFrom, dateTo) {
+var dateToIsValid = function(dateFrom, dateTo) {
     return new Date(dateTo).getDate() > new Date(dateFrom).getDate();
   };
-
-  
-
 
 module.exports = controller;
