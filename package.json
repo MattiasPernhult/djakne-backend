@@ -5,7 +5,8 @@
   "scripts": {
     "commit": "git-cz",
     "start": "node app.js",
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "test": "mocha --recursive test/unit_test",
+    "test-nyan": "mocha --recursive test/unit_test -R nyan"
   },
   "repository": {
     "type": "git",
