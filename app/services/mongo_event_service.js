@@ -5,12 +5,12 @@ var mongoService = function() {
 
   var insertEvent = function(eventToAdd, callback) {
     var newEvent = new EventSchema(eventToAdd);
-    newEvent.save(function(err, response) {
+    newEvent.save(function(err, event) {
       if (err) {
         return callback(err, null);
       }
       var r = {
-        id: response._id,
+        id: event._id,
       };
       return callback(null, r);
     });
