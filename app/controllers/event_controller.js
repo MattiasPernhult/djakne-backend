@@ -11,7 +11,6 @@ controller.post = function(req, res) {
   var eventToAdd = createAndValidateEventModel(req);
   console.log('här');
   if (eventToAdd === null) {
-    console.log(res);
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
   mongoService.insertEvent(eventToAdd, function(err, result) {
@@ -20,7 +19,8 @@ controller.post = function(req, res) {
       return res.status(500).send(err);
     }
     console.log('Event added : ' + result.id);
-    res.send(result);
+    console.log(res);
+    return res.status(200).send(result);
   });
 };
 
@@ -75,10 +75,9 @@ var createAndValidateEventModel = function(req) {
   var date = req.body.date;
 
   var eventToAdd = new EventModel(title, text, author, date);
-  // console.log('skapat event : ' + JSON.stringify(eventToAdd, null, 4));
+  console.log('skapat event : ' + JSON.stringify(eventToAdd, null, 4));
   if (eventToAdd.validate()) {
-    eventToAdd.trimStrings();
-    // console.log(JSON.stringify(eventToAdd, null, 4));
+    console.log(JSON.stringify(eventToAdd, null, 4));
     return eventToAdd;
   }
   return null;
