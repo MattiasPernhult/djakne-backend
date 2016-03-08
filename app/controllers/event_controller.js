@@ -1,16 +1,12 @@
 var mongoService = require('../services/mongo_event_service');
 var EventModel = require('../models/event_model');
+var helper = require('../utils/helper');
 
 var controller = {};
-var error = {};
 
 controller.post = function(req, res) {
-
-  console.log('i events/ post');
-
   var eventToAdd = createAndValidateEventModel(req);
-  console.log('här');
-  if (eventToAdd === null) {
+  if (!eventToAdd) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
   mongoService.insertEvent(eventToAdd, function(err, result) {
@@ -62,22 +58,10 @@ var buildQuery = function(req, res) {
   return query;
 };
 
-var dateToIsValid = function(dateFrom, dateTo) {
-  return new Date(dateTo).getDate() > new Date(dateFrom).getDate();
-};
-
 var createAndValidateEventModel = function(req) {
-
-  console.log('i createAndValidateEventModel ' + req.body.title);
-  var title = req.body.title;
-  var text = req.body.text;
-  var author = req.body.author;
-  var date = req.body.date;
-
-  var eventToAdd = new EventModel(title, text, author, date);
-  console.log('skapat event : ' + JSON.stringify(eventToAdd, null, 4));
+  var body = req.body;
+  var eventToAdd = new EventModel(body.title, body.text, body.author, body.date);
   if (eventToAdd.validate()) {
-    console.log(JSON.stringify(eventToAdd, null, 4));
     return eventToAdd;
   }
   return null;
