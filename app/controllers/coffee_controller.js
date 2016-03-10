@@ -32,11 +32,18 @@ controller.post = function(req, res) {
   console.log('controller end');
 };
 
-var getAvarageVotes = function(query, res) {
-
-  var vote = {};
-
-};
+function getAvarageVotes(query) {
+  var objects = query;
+  for (var i = 0; i < objects.length; i++) {
+    objects[i].averageVotes = 0;
+    if (objects[i].totalVotes > 0) {
+      objects[i].averageVotes = (objects[i].one + objects[i].two +
+        objects[i].three + objects[i].four +
+        objects[i].five) / objects[i].totalVotes;
+    }
+  }
+  return objects;
+}
 
 controller.get = function(req, res) {
     var query = {};
@@ -51,6 +58,7 @@ controller.get = function(req, res) {
         console.log(err);
         return res.status(500).send(err);
       }
+      resultFromDB = getAvarageVotes(JSON.parse(JSON.stringify(resultFromDB)));
       var response = {
         result: resultFromDB,
       };
