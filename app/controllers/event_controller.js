@@ -8,15 +8,16 @@ controller.post = function(req, res) {
   // console.log('i events/ post');
 
   var eventToAdd = createEventModel(req);
-  if (eventToAdd.checkAttributes()) {
+
+  if (!eventToAdd.checkAttributes()) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
   mongoService.insertEvent(eventToAdd, function(err, addedEvent) {
     if (err) {
-      console.log(err);
+      // console.log(err);
       return res.status(500).send(err);
     }
-    console.log('Event added : ' + addedEvent.result.id);
+    // console.log('Event added : ' + addedEvent.result.id);
     res.send(addedEvent);
   });
 };
@@ -35,12 +36,13 @@ controller.get = function(req, res) {
   }
   mongoService.getEvents(query, function(err, resultFromDB) {
     if (err) {
-      console.log(err);
+      // console.log(err);
       return res.status(500).send(err);
     }
     var response = {
       result: resultFromDB,
     };
+    // console.log(resultFromDB);
     res.send(response);
   });
 };
@@ -61,12 +63,12 @@ var buildQuery = function(req, res) {
 var validateQueryParameters = function(query) {
   var errors = [];
   if (query.dateFrom !== undefined) {
-    if (!validator.dateIsValid(query.dateFrom)) {
+    if (!validator.isDate(query.dateFrom)) {
       errors.push({message: 'The dateFrom query parameter is in the wrong format'});
     }
   }
   if (query.dateTo !== undefined) {
-    if (!validator.dateIsValid(query.dateTo)) {
+    if (!validator.isDate(query.dateTo)) {
       errors.push({message: 'The dateTo query parameter is in the wrong format'});
     }
     if (query.dateFrom !== undefined) {

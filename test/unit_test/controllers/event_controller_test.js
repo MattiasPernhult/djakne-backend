@@ -50,11 +50,43 @@ describe('Testing the event controller', function() {
   });
   describe('Testing /events with GET', function() {
     describe('Testing sending wrong parameters', function() {
-      it('should return status 400 if the query is wrong', function() {
+      it('should return status 400 if dateFrom is wrong', function() {
         mockRequest.query.dateFrom = '2016-06-18T08Z';
         eventCtrl.get(mockRequest, mockResponse);
-        console.log(mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
+      });
+      it('should return status 400 if dateTo is wrong', function() {
+        mockRequest.query.dateTo = '2016-20-18T08Z';
+        eventCtrl.get(mockRequest, mockResponse);
+        expect(mockResponse.statusCode).to.equal(400);
+      });
+      it('should return status 400 if dateTo is earlier than dateFrom', function() {
+        mockRequest.query.dateFrom = '2016-09-18 08:00:00';
+        mockRequest.query.dateTo = '2016-02-20 08:00:00';
+        eventCtrl.get(mockRequest, mockResponse);
+        expect(mockResponse.statusCode).to.equal(400);
+      });
+    });
+    describe('Testing sending correct parameters', function() {
+      this.timeout(6000);
+      it('should return status 200 if the dataFrom-query parameter is correct', function(done) {
+        mockRequest.query.dateFrom = '2016-02-18 08:00:00';
+        eventCtrl.get(mockRequest, mockResponse);
+        expect(mockResponse.statusCode).to.equal(200);
+        done();
+      });
+      it('should return status 200 if the dataTo-query parameter is correct', function(done) {
+        mockRequest.query.dateTo = '2016-09-18 08:00:00';
+        eventCtrl.get(mockRequest, mockResponse);
+        expect(mockResponse.statusCode).to.equal(200);
+        done();
+      });
+      it('should return status 200 if the dataFrom and dateTo params is correct', function(done) {
+        mockRequest.query.dateFrom = '2016-02-18 08:00:00';
+        mockRequest.query.dateTo = '2016-09-20 10:10:00';
+        eventCtrl.get(mockRequest, mockResponse);
+        expect(mockResponse.statusCode).to.equal(200);
+        done();
       });
     });
   });
