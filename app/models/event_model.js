@@ -1,45 +1,26 @@
 var validator = require('../utils/validator');
 
 var Event = function(title, text, author, date) {
-  if (this.validateTitle(title)) {
+  if (this.validateString(title)) {
     this.title = title;
   }
-  if (this.validateText(text)) {
+  if (this.validateString(text)) {
     this.text = text;
   }
-  if (this.validateAuthor(author)) {
+  if (this.validateString(author)) {
     this.author = author;
   }
   if (this.validateDate(date)) {
-    this.date = date.trim();
+    this.date = date;
   }
 };
 
-Event.prototype.validateTitle = function(title) {
-  var passed = true;
-  passed = validator.hasMinLength(title, 3);
-  passed = validator.isString(title);
-  return passed;
-};
-
-Event.prototype.validateText = function(text) {
-  var passed = true;
-  passed = validator.hasMinLength(text, 5);
-  passed = validator.isString(text);
-  return passed;
-};
-
-Event.prototype.validateAuthor = function(author) {
-  var passed = true;
-  passed = validator.hasMinLength(author, 1);
-  passed = validator.isString(author);
-  return passed;
+Event.prototype.validateString = function(attribute) {
+  return validator.isString(attribute) && validator.hasMinLength(attribute, 2);
 };
 
 Event.prototype.validateDate = function(date) {
-  var passed = true;
-  passed = validator.isDate(date);
-  return passed;
+  return validator.isDate(date);
 };
 
 Event.prototype.trimStrings = function() {
