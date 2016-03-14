@@ -1,8 +1,12 @@
-var validate = require('validator');
-
 var validator = {};
 
 validator.hasMinLength = function(attribute, minLength) {
+  if (!validator.isString(attribute)) {
+    return false;
+  }
+  if (typeof minLength !== 'number') {
+    return false;
+  }
   return (attribute.length >= minLength);
 };
 
@@ -14,7 +18,7 @@ validator.isDate = function(input) {
   if (input === undefined || typeof input !== 'string') {
     return false;
   }
-  return validate.isDate(input);
+  return input.match(/^(\d{4})\-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/);
 };
 
 module.exports = validator;
