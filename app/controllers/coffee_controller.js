@@ -32,7 +32,22 @@ controller.post = function(req, res) {
   console.log('controller end');
 };
 
+<<<<<<< HEAD
 
+=======
+function getAvarageVotes(query) {
+  var objects = query;
+  for (var i = 0; i < objects.length; i++) {
+    objects[i].averageVotes = 0;
+    if (objects[i].totalVotes > 0) {
+      objects[i].averageVotes = (objects[i].one + objects[i].two +
+        objects[i].three + objects[i].four +
+        objects[i].five) / objects[i].totalVotes;
+    }
+  }
+  return objects;
+}
+>>>>>>> b5585b80106292d91112b734f0c405a03bc336c4
 
 controller.get = function(req, res) {
   var query = {};
@@ -42,6 +57,7 @@ controller.get = function(req, res) {
     query = buildQuery(req);
   }
 
+<<<<<<< HEAD
   mongoService.getCoffee(query, function(err, resultFromDB) {
     if (err) {
       console.log(err);
@@ -53,6 +69,20 @@ controller.get = function(req, res) {
     res.send(response);
   });
 };
+=======
+    mongoService.getCoffee(query, function(err, resultFromDB) {
+      if (err) {
+        console.log(err);
+        return res.status(500).send(err);
+      }
+      resultFromDB = getAvarageVotes(JSON.parse(JSON.stringify(resultFromDB)));
+      var response = {
+        result: resultFromDB,
+      };
+      res.send(response);
+    });
+  };
+>>>>>>> b5585b80106292d91112b734f0c405a03bc336c4
 
 var buildQuery = function(req) {
   var query = {
