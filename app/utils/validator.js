@@ -2,17 +2,18 @@ var validate = require('validator');
 
 var validator = {};
 
-validator.hasMinLength = function(attribute) {
-  return (attribute.length > 3);
+validator.hasMinLength = function(attribute, minLength) {
+  return (attribute.length >= minLength);
 };
 
 validator.isString = function(attribute) {
   return (typeof attribute === 'string');
 };
 
-validator.dateIsValid = function(input) {
-  // Make sure it's a string
-  input = input + '';
+validator.isDate = function(input) {
+  if (input === undefined || typeof input !== 'string') {
+    return false;
+  }
   return validate.isDate(input);
 };
 

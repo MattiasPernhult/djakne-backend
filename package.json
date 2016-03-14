@@ -6,7 +6,8 @@
     "commit": "git-cz",
     "start": "node app.js",
     "test": "mocha --recursive test/unit_test",
-    "test-nyan": "mocha --recursive test/unit_test -R nyan"
+    "test-nyan": "mocha --recursive test/unit_test -R nyan",
+    "test-istanbul": "istanbul --include-all-sources cover -x app.js -x app/config/**/*.js -x app/routes/**/*.js _mocha -- -R spec ./test/unit_test/**/*_test.js"
   },
   "repository": {
     "type": "git",
