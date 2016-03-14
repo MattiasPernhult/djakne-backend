@@ -12,7 +12,7 @@ describe('Testing the event controller', function() {
         title: 'Lunch',
         text: 'Maten',
         author: 'Lasse',
-        date: '2016-06-18T08:00:00.000Z',
+        date: '2016-06-18 08:00:00',
       },
       query: {},
     };
@@ -36,6 +36,7 @@ describe('Testing the event controller', function() {
       it('should return status 400 if title is too short', function() {
         mockRequest.body.title = 'H';
         eventCtrl.post(mockRequest, mockResponse);
+        console.log(mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
       });
     });
