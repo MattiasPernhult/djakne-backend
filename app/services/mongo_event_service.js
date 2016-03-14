@@ -10,7 +10,9 @@ var mongoService = function() {
         return callback(err, null);
       }
       var r = {
-        id: event._id,
+        result: {
+          id: event._id,
+        },
       };
       return callback(null, r);
     });

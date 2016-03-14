@@ -16,4 +16,8 @@ validator.dateIsValid = function(input) {
   return validate.isDate(input);
 };
 
+validator.isDateFromLessThanDateTo = function(dateFrom, dateTo) {
+  return (new Date(dateTo) > new Date(dateFrom));
+};
+
 module.exports = validator;

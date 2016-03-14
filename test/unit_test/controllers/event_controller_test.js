@@ -14,6 +14,7 @@ describe('Testing the event controller', function() {
         author: 'Lasse',
         date: '2016-06-18T08:00:00.000Z',
       },
+      query: {},
     };
 
     mockResponse = {
@@ -30,69 +31,29 @@ describe('Testing the event controller', function() {
     };
   });
 
-  describe('Testing /events POST', function() {
-    describe('Testing values for title', function() {
+  describe('Testing /events with POST', function() {
+    describe('Testing sending wrong parameters', function() {
       it('should return status 400 if title is too short', function() {
         mockRequest.body.title = 'H';
         eventCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
       });
-      it('should return status 400 if title is a number', function() {
-        mockRequest.body.title = 23;
+    });
+    describe('Testing sending correct parameters', function() {
+      it('should return a valid response if all parameters are correct', function() {
         eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 400 if title is undefined', function() {
-        mockRequest.body.title = undefined;
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 400 if title is null', function() {
-        mockRequest.body.title = null;
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 400 if title is " "', function() {
-        mockRequest.body.title = '';
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 200 if title is Lunch', function() {
-        mockRequest.body.title = 'Lunch';
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(200);
+        console.log(mockResponse);
+        expect(mockResponse.statusCode).to.not.equal(400);
       });
     });
-    describe('Testing values for text', function() {
-      it('should return status 400 if text is too short', function() {
-        mockRequest.body.text = 'E';
-        eventCtrl.post(mockRequest, mockResponse);
+  });
+  describe('Testing /events with GET', function() {
+    describe('Testing sending wrong parameters', function() {
+      it('should return status 400 if the query is wrong', function() {
+        mockRequest.query.dateFrom = '2016-06-18T08Z';
+        eventCtrl.get(mockRequest, mockResponse);
+        console.log(mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 400 if text is a number', function() {
-        mockRequest.body.text = 23;
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 400 if text is undefined', function() {
-        mockRequest.body.text = undefined;
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 400 if text is null', function() {
-        mockRequest.body.text = null;
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 400 if text is " "', function() {
-        mockRequest.body.text = '';
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 200 if text is Lunch', function() {
-        mockRequest.body.text = 'Lunch på restaurangen';
-        eventCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(200);
       });
     });
   });
