@@ -32,49 +32,45 @@ controller.post = function(req, res) {
   console.log('controller end');
 };
 
-var getAvarageVotes = function(query, res) {
 
-  var vote = {};
-
-};
 
 controller.get = function(req, res) {
-    var query = {};
-    var queryParamsExists = Object.keys(req.query).length !== 0;
+  var query = {};
+  var queryParamsExists = Object.keys(req.query).length !== 0;
 
-    if (queryParamsExists) {
-      query = buildQuery(req);
+  if (queryParamsExists) {
+    query = buildQuery(req);
+  }
+
+  mongoService.getCoffee(query, function(err, resultFromDB) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
     }
-
-    mongoService.getCoffee(query, function(err, resultFromDB) {
-      if (err) {
-        console.log(err);
-        return res.status(500).send(err);
-      }
-      var response = {
-        result: resultFromDB,
-      };
-      res.send(response);
-    });
-  };
+    var response = {
+      result: resultFromDB,
+    };
+    res.send(response);
+  });
+};
 
 var buildQuery = function(req) {
-    var query = {
-      date: {},
-    };
-    if (req.query.dateFrom !== undefined) {
-      query.date.$gte = new Date(req.query.dateFrom);
-    }
-    if (req.query.dateTo !== undefined) {
-      if (dateToIsValid) {
-        query.date.$lt = new Date(req.query.dateTo);
-      }
-    }
-    return query;
+  var query = {
+    date: {},
   };
+  if (req.query.dateFrom !== undefined) {
+    query.date.$gte = new Date(req.query.dateFrom);
+  }
+  if (req.query.dateTo !== undefined) {
+    if (dateToIsValid) {
+      query.date.$lt = new Date(req.query.dateTo);
+    }
+  }
+  return query;
+};
 
 var dateToIsValid = function(dateFrom, dateTo) {
-    return new Date(dateTo).getDate() > new Date(dateFrom).getDate();
-  };
+  return new Date(dateTo).getDate() > new Date(dateFrom).getDate();
+};
 
 module.exports = controller;

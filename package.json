@@ -4,7 +4,8 @@
   "description": "Backend service for Djäkne Kaffebar",
   "scripts": {
     "commit": "git-cz",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha --recursive test/unit_test"
   },
   "repository": {
     "type": "git",

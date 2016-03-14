@@ -1,4 +1,5 @@
 {
   "preset": "node-style-guide",
-  "requireCapitalizedComments": false
+  "requireCapitalizedComments": false,
+  "validateLineBreaks": "CRLF"
 }
