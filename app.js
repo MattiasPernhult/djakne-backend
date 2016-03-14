@@ -1,24 +1,27 @@
 // npm packages
 var express = require('express');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 
 // project packages
 var index = require('./app/routes/index');
 var coffeeRoute = require('./app/routes/coffee');
 var auth = require('./app/config/auth');
 // Ändra denna
- mongoose.connect(auth.mongoConnection);
+mongoose.connect(auth.mongoConnection);
 
 // variables
 var app = express();
 
-// app.use('*', function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//
-//     next();
-// });
+app.use('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+  next();
+});
+
+app.use(bodyParser.json());
 
 app.use('/', index);
 app.use('/coffee', coffeeRoute);
