@@ -27,10 +27,15 @@ var mongoService = function() {
     });
   };
 
+  var getCoffeeOneCurrent = function(query, callback) {
+    CoffeeSchema.find({}).sort({startDate: -1}).limit(1).exec(callback);
+  };
+
   return {
     insertCoffee: insertCoffee,
     getCoffee: getCoffee,
     getCoffeeOne: getCoffeeOne,
+    getCoffeeOneCurrent: getCoffeeOneCurrent,
   };
 };
 

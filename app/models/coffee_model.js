@@ -3,14 +3,16 @@ var validator = require('../utils/coffee_validator');
 var Coffee = function(title, description, date) {
   this.title = title;
   this.description = description;
-  this.date = date.trim();
+  this.startDate = startDate.trim();
+  this.endDate = endDate.trim();
 };
 
 Coffee.prototype.validator = function() {
   console.log('i model');
   if (validator.isStringAndMinLength(this.title) &&
     validator.isStringAndMinLength(this.description) &&
-    validator.eventDate(this.date)) {
+    validator.eventStartDate(this.startDate) &&
+    validator.eventEndDate(this.endDdate)) {
     console.log('validering ok model');
     return true;
   }

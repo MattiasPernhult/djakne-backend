@@ -9,8 +9,8 @@ controller.post = function(req, res) {
 
     title: req.body.title,
     description: req.body.description,
-    startDate: req.body.date,
-    stopDate: req.body.date,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
     totalVotes: 0,
     one: 0,
     two: 0,
@@ -35,17 +35,22 @@ controller.post = function(req, res) {
   console.log('controller end');
 };
 
-function getAverageVotes(query) {
+function getAverageVotesArray(query) {
   var objects = query;
   for (var i = 0; i < objects.length; i++) {
-    objects[i].averageVotes = 0;
-    if (objects[i].totalVotes > 0) {
-      objects[i].averageVotes = (objects[i].one + objects[i].two +
-        objects[i].three + objects[i].four +
-        objects[i].five) / objects[i].totalVotes;
-    }
+    objects[i] = getAverageVotes(objects[i]);
   }
   return objects;
+}
+
+function getAverageVotes(object) {
+  object.averageVotes = 0;
+  if (object.totalVotes > 0) {
+    object.averageVotes = (object.one + object.two +
+      object.three + object.four +
+      object.five) / object.totalVotes;
+  }
+  return object
 }
 
 controller.getHistory = function(req, res) {
@@ -61,7 +66,7 @@ controller.getHistory = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = getAverageVotes(JSON.parse(JSON.stringify(resultFromDB)));
+    resultFromDB = getAverageVotesArray(JSON.parse(JSON.stringify(resultFromDB)));
     var response = {
       result: resultFromDB,
     };
@@ -70,11 +75,8 @@ controller.getHistory = function(req, res) {
 };
 
 controller.getID = function(req, res) {
-  console.log('req.params');
   var query = {};
-  console.log('HELLO');
   console.log(req.params.id);
-  console.log(req.params['id']);
   if (req.params.length > 0) {
     query = buildQueryID(req);
   }
@@ -97,14 +99,15 @@ controller.getCurrent = function(req, res) {
   var queryParamsExists = Object.keys(req.query).length !== 0;
 
   if (queryParamsExists) {
-    query = buildQueryID(req);
+    query = buildQueryCurrent(req);
   }
 
-  mongoService.getCoffeeOne(query, function(err, resultFromDB) {
+  mongoService.getCoffeeOneCurrent(query, function(err, resultFromDB) {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
+    resultFromDB = getAverageVotes(JSON.parse(JSON.stringify(resultFromDB[0])));
     var response = {
       result: resultFromDB,
     };
@@ -119,23 +122,15 @@ var buildQueryHistory = function(req) {
 
 var buildQueryID = function(req) {
     var query = {
-      djakneID: req.params['id'],
+      djakneID: req.params.id,
     };
     return query;
   };
 
 var buildQueryCurrent = function(req) {
     var query = {
-      date: {},
+      startDate: -1,
     };
-    if (req.query.dateFrom !== undefined) {
-      query.date.$gte = new Date(req.query.dateFrom);
-    }
-    if (req.query.dateTo !== undefined) {
-      if (dateToIsValid) {
-        query.date.$lt = new Date(req.query.dateTo);
-      }
-    }
     return query;
   };
 
