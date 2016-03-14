@@ -31,11 +31,20 @@ var mongoService = function() {
     CoffeeSchema.find({}).sort({startDate: -1}).limit(1).exec(callback);
   };
 
+  var putVote = function(id, query, callback) {
+    console.log('service: ' + id);
+    CoffeeSchema.update({ djakneID: id }, query,
+      function(err, coffee) {
+        return callback(err, coffee);
+      });
+  };
+
   return {
     insertCoffee: insertCoffee,
     getCoffee: getCoffee,
     getCoffeeOne: getCoffeeOne,
     getCoffeeOneCurrent: getCoffeeOneCurrent,
+    putVote: putVote,
   };
 };
 

@@ -46,9 +46,9 @@ function getAverageVotesArray(query) {
 function getAverageVotes(object) {
   object.averageVotes = 0;
   if (object.totalVotes > 0) {
-    object.averageVotes = (object.one + object.two +
-      object.three + object.four +
-      object.five) / object.totalVotes;
+    object.averageVotes = (object.one + (object.two * 2) +
+      (object.three * 3) + (object.four * 4) +
+      (object.five * 5)) / object.totalVotes;
   }
   return object
 }
@@ -66,7 +66,8 @@ controller.getHistory = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = getAverageVotesArray(JSON.parse(JSON.stringify(resultFromDB)));
+    resultFromDB = getAverageVotesArray(
+      JSON.parse(JSON.stringify(resultFromDB)));
     var response = {
       result: resultFromDB,
     };
@@ -77,7 +78,7 @@ controller.getHistory = function(req, res) {
 controller.getID = function(req, res) {
   var query = {};
   console.log(req.params.id);
-  if (req.params.length > 0) {
+  if (req.params.id.length > 0) {
     query = buildQueryID(req);
   }
 
@@ -115,6 +116,25 @@ controller.getCurrent = function(req, res) {
   });
 };
 
+controller.putVote = function(req, res) {
+  var query = {};
+  console.log(req.params.id + ' / ' + req.params.vote);
+  if (req.params.vote.length > 0 && req.params.id.length > 0) {
+    query = buildQueryVote(req);
+  }
+  mongoService.putVote(req.params.id, query, function(err, resultFromDB) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    var response = {
+      result: resultFromDB,
+    };
+    console.log('send result put');
+    res.send(response);
+  });
+}
+
 var buildQueryHistory = function(req) {
   var query = {};
   return query;
@@ -134,8 +154,32 @@ var buildQueryCurrent = function(req) {
     return query;
   };
 
-var dateToIsValid = function(dateFrom, dateTo) {
-    return new Date(dateTo).getDate() > new Date(dateFrom).getDate();
-  };
+var buildQueryVote = function(req) {
+  var query = {};
+  console.log('build: ' + req.params.vote);
+  switch (req.params.vote) {
+    case 1:
+      console.log('1');
+      query = { $inc: { one: 1, totalVotes: 1 }};
+      break;
+    case '2':
+      console.log('2');
+      query = { $inc: { two: 1, totalVotes: 1 }};
+      break;
+    case '3':
+      console.log('3');
+      query = { $inc: { three: 1, totalVotes: 1 }};
+      break;
+    case '4':
+      console.log('4');
+      query = { $inc: { four: 1, totalVotes: 1 }};
+      break;
+    case '5':
+      console.log('5');
+      query = { $inc: { five: 1, totalVotes: 1 }};
+      break;
+  }
+  return query;
+}
 
 module.exports = controller;
