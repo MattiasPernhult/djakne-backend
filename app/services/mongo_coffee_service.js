@@ -9,7 +9,7 @@ var mongoService = function() {
         return callback(err, null);
       }
       var r = {
-        id: response._id,
+        djakneID: response.djakneID,
       };
       return callback(null, r);
     });
@@ -21,9 +21,16 @@ var mongoService = function() {
     });
   };
 
+  var getCoffeeOne = function(query, callback) {
+    CoffeeSchema.findOne(query, function(err, coffee) {
+      return callback(err, coffee);
+    });
+  };
+
   return {
     insertCoffee: insertCoffee,
     getCoffee: getCoffee,
+    getCoffeeOne: getCoffeeOne,
   };
 };
 

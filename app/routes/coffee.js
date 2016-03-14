@@ -16,7 +16,8 @@ router.get('/current', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res) {
-  coffeeController.getID(req.params.id);
+  console.log('router id');
+  coffeeController.getID(req, res);
 });
 /*
  * Endpoint for /
@@ -29,10 +30,10 @@ router.post('/', function(req, res, next) {
   coffeeController.post(req, res);
 });
 
-router.post('/vote/:id', function(req, res, next) {
+router.put('/vote/:id', function(req, res, next) {
   // TODO: anropa helper funktion som kollar att alla parametrar finns
   console.log('I coffee routes /coffee post');
-  coffeeController.postVote(req, res);
+  coffeeController.putVote(req, res);
 });
 
 
