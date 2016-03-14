@@ -61,14 +61,19 @@ describe('Testing the event model', function() {
   });
 
   describe('Testing date attribute', function() {
-    it('should return "2016-06-18T08:00" when adding "2016-06-18T08:00"', function() {
-      var event = new Event('Hackaton', 'Hackaton på Djäkne', 'Lasse', '2016-06-18T08:00');
-      expect(event.date).to.equal('2016-06-18T08:00');
+    it('should return "2016-06-18 08:00:00" when adding "2016-06-18 08:00:00"', function() {
+      var event = new Event('Hackaton', 'Hackaton på Djäkne', 'Lasse', '2016-06-18 08:00:00');
+      expect(event.date).to.equal('2016-06-18 08:00:00');
     });
 
-    it('should return "2016-06-18" when adding "2016-06-18"', function() {
+    it('should return undefined when adding "2016-06-18"', function() {
       var event = new Event('Hackaton', 'Hackaton på Djäkne', 'Lasse', '2016-06-18');
-      expect(event.date).to.equal('2016-06-18');
+      expect(event.date).to.equal(undefined);
+    });
+
+    it('should return undefined when adding "2016-06-18 08:00"', function() {
+      var event = new Event('Hackaton', 'Hackaton på Djäkne', 'Lasse', '2016-06-18 08:00');
+      expect(event.date).to.equal(undefined);
     });
 
     it('should return undefined when adding "Hackaton"', function() {
