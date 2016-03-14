@@ -7,8 +7,8 @@ var controller = {};
 controller.post = function(req, res) {
   // console.log('i events/ post');
 
-  var eventToAdd = createAndValidateEventModel(req);
-  if (!eventToAdd) {
+  var eventToAdd = createEventModel(req);
+  if (eventToAdd.checkAttributes()) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
   mongoService.insertEvent(eventToAdd, function(err, result) {
@@ -60,13 +60,10 @@ var buildQuery = function(req, res) {
   return query;
 };
 
-var createAndValidateEventModel = function(req) {
+var createEventModel = function(req) {
   var body = req.body;
   var eventToAdd = new EventModel(body.title, body.text, body.author, body.date);
-  if (eventToAdd.validate()) {
-    return eventToAdd;
-  }
-  return null;
+  return eventToAdd;
 };
 
 module.exports = controller;

@@ -15,6 +15,11 @@ var Event = function(title, text, author, date) {
   }
 };
 
+Event.prototype.checkAttributes = function() {
+  return this.title !== undefined && this.text !== undefined && this.author !== undefined &&
+  this.date !== undefined;
+};
+
 Event.prototype.validateString = function(attribute) {
   return validator.isString(attribute) && validator.hasMinLength(attribute, 2);
 };
