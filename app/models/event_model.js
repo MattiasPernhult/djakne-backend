@@ -1,46 +1,45 @@
 var validator = require('../utils/validator');
 
 var Event = function(title, text, author, date) {
-  this.title = title;
-  this.text = text;
-  this.author = author;
-  this.date = date.trim();
+  if (this.validateTitle(title)) {
+    this.title = title;
+  }
+  if (this.validateText(text)) {
+    this.text = text;
+  }
+  if (this.validateAuthor(author)) {
+    this.author = author;
+  }
+  if (this.validateDate(date)) {
+    this.date = date.trim();
+  }
 };
 
-Event.prototype.validate = function() {
-  // console.log('i model');
-  if (validator.dateIsValid(this.date) && !this.runNullCheckValidation() &&
-    this.runStringCheckValidation() && this.runLengthValidation()) {
-    // console.log('validering ok model');
-    return true;
-  }
-  // console.log('validering ej ok model');
-  return false;
+Event.prototype.validateTitle = function(title) {
+  var passed = true;
+  passed = validator.hasMinLength(title, 3);
+  passed = validator.isString(title);
+  return passed;
 };
 
-Event.prototype.runLengthValidation = function() {
-  // console.log('lenght validation');
-  if (validator.hasMinLength(this.title) && validator.hasMinLength(this.text) &&
-    validator.hasMinLength(this.author)) {
-    return true;
-  }
-  return false;
+Event.prototype.validateText = function(text) {
+  var passed = true;
+  passed = validator.hasMinLength(text, 5);
+  passed = validator.isString(text);
+  return passed;
 };
 
-Event.prototype.runNullCheckValidation = function() {
-  if (!this.title && !this.text && !this.author && !this.date) {
-    return true;
-  }
-  return false;
+Event.prototype.validateAuthor = function(author) {
+  var passed = true;
+  passed = validator.hasMinLength(author, 1);
+  passed = validator.isString(author);
+  return passed;
 };
 
-Event.prototype.runStringCheckValidation = function() {
-  // console.log('string check');
-  if (validator.isString(this.title) && validator.isString(this.text) &&
-    validator.isString(this.author)) {
-    return true;
-  }
-  return false;
+Event.prototype.validateDate = function(date) {
+  var passed = true;
+  passed = validator.isDate(date);
+  return passed;
 };
 
 Event.prototype.trimStrings = function() {
