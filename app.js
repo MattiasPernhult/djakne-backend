@@ -10,6 +10,23 @@ var auth = require('./app/config/auth');
 // connect to mongodb
 mongoose.connect(auth.mongoConnection);
 
+mongoose.connection.on('connected', function() {
+  console.log('Connected to MongoDB');
+});
+
+mongoose.connection.on('error',function(err) {
+  console.log('Error when connecting to MongoDB: ' + err);
+  process.exit(0);
+});
+
+// If the Node process ends, close the Mongoose connection
+process.on('SIGINT', function() {
+  mongoose.connection.close(function() {
+    console.log('MongoDB connection disconnected through app termination');
+    process.exit(0);
+  });
+});
+
 // variables
 var app = express();
 
