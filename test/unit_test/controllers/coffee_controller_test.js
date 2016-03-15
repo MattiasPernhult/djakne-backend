@@ -1,7 +1,7 @@
 var coffeCtrl = require('../../../app/controllers/coffee_controller');
 var chai = require('chai');
 var expect = chai.expect;
-
+chai.should();
 describe('Testing the event controller', function() {
   var mockRequest;
   var mockResponse;
@@ -11,14 +11,17 @@ describe('Testing the event controller', function() {
       body: {
         title: 'Kaffe',
         text: 'Gott kaffe',
-        date: '2016-06-18T08:00:00.000Z',
-        avarageVotes: 0,
-        voteOne: 0,
-        voteTwo: 0,
-        voteThree: 0,
-        voteFour: 0,
-        voteFive: 0,
+        startDate: '2016-06-18 08:00:00.000',
+        endDate: '2016-06-18 08:00:00.000',
+        djakneId: 'ID01',
+        avarageVotes: 1,
+        voteOne: 1,
+        voteTwo: 1,
+        voteThree: 1,
+        voteFour: 1,
+        voteFive: 1,
       },
+      query: { },
     };
 
     mockResponse = {
@@ -35,18 +38,8 @@ describe('Testing the event controller', function() {
     };
   });
 
-  describe('Testing /events POST', function() {
+  describe('Testing /coffe POST', function() {
     describe('Testing values for title', function() {
-      it('should return status 400 if title is too short', function() {
-        mockRequest.body.title = 'K';
-        coffeCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 400 if title is a number', function() {
-        mockRequest.body.title = 88;
-        coffeCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
       it('should return status 400 if title is undefined', function() {
         mockRequest.body.title = undefined;
         coffeCtrl.post(mockRequest, mockResponse);
@@ -69,11 +62,6 @@ describe('Testing the event controller', function() {
       });
     });
     describe('Testing values for text', function() {
-      it('should return status 400 if text is too short', function() {
-        mockRequest.body.text = 'L';
-        coffeCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(400);
-      });
       it('should return status 400 if text is a number', function() {
         mockRequest.body.text = 90;
         coffeCtrl.post(mockRequest, mockResponse);
@@ -99,6 +87,18 @@ describe('Testing the event controller', function() {
         coffeCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(200);
       });
+    });
+  });
+  describe('Testing /current coffe GET', function() {
+    it('Should return status 400 if date is correct', function() {
+      mockRequest.query.date = '2016-06-18 08:00:00.000';
+      coffeCtrl.get(mockRequest, mockResponse);
+      expect(mockResponse.statusCode).to.equal(400);
+    });
+    it('"json"', function() {
+      mockRequest.query = 'json';
+      var response = 'mock result from services';
+      return coffeCtrl.get(mockRequest, mockResponse).should.equal(response);
     });
   });
 });

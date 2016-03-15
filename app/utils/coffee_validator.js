@@ -1,20 +1,28 @@
-var validate = require('coffeeValidator');
-
 var coffeeValidator = {};
 
-
-coffeeValidator.isStringAndMinLength = function(attribut) {
-  console.log('attribut length :' + ' : ' + attribut.length);
-  return ((attribut.length > 3) && (typeof attribut === 'string'));
+coffeeValidator.hasMinLength = function(attribute, minLength) {
+  if (!coffeeValidator.isString(attribute)) {
+    return false;
+  }
+  if (typeof minLength !== 'number') {
+    return false;
+  }
+  return (attribute.length >= minLength);
 };
 
-coffeeValidator.voteDate = function(input) {
-  // Make sure it's a string
-  input = input + '';
-  return coffeeValidator.voteDate(input);
+coffeeValidator.isString = function(attribute) {
+  return (typeof attribute === 'string');
 };
 
+coffeeValidator.isDate = function(input) {
+  if (input === undefined || typeof input !== 'string') {
+    return false;
+  }
+  return input.match(/^(\d{4})\-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/);
+};
 
+coffeeValidator.isDateFromLessThanDateTo = function(dateFrom, dateTo) {
+  return (new Date(dateTo) > new Date(dateFrom));
+};
 
-
-module.exports = validator;
+module.exports = coffeeValidator;
