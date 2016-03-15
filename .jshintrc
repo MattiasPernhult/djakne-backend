@@ -12,7 +12,7 @@
   "eqeqeq": true,
   "freeze": true,
   "indent": 2,
-  "latedef": true,
+  "latedef": false,
   "laxcomma": true,
   "node": true,
   "trailing": true,

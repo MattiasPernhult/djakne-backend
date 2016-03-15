@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "description": "Backend service for Djäkne Kaffebar",
   "scripts": {
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "start": "node app.js",
+    "test": "mocha --recursive test/unit_test",
+    "test-nyan": "mocha --recursive test/unit_test -R nyan",
+    "test-istanbul": "istanbul --include-all-sources cover -x app.js -x app/config/**/*.js -x app/routes/**/*.js _mocha -- -R spec ./test/unit_test/**/*_test.js"
   },
   "repository": {
     "type": "git",
@@ -15,8 +19,11 @@
   },
   "homepage": "https://github.com/MattiasPernhult/djakne-backend#readme",
   "devDependencies": {
+    "chai": "3.5.0",
     "commitizen": "^2.5.0",
-    "cz-conventional-changelog": "^1.1.5"
+    "cz-conventional-changelog": "^1.1.5",
+    "mocha": "2.4.5",
+    "istanbul": "0.4.2"
   },
   "config": {
     "commitizen": {
@@ -24,10 +31,9 @@
     }
   },
   "dependencies": {
-    "chai": "3.5.0",
-    "chai-as-promised": "5.2.0",
+    "body-parser": "1.15.0",
     "express": "4.13.4",
-    "mocha": "2.4.5",
-    "mongoose": "4.4.5"
+    "mongoose": "4.4.5",
+    "validator": "5.1.0"
   }
 }

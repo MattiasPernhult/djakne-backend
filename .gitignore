@@ -1,1 +1,7 @@
 node_modules
+
+npm-debug.log
+
+app/config/auth.js
+
+coverage
