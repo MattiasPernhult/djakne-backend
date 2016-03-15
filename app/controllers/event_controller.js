@@ -14,7 +14,6 @@ controller.post = function(req, res) {
   }
   mongoService.insertEvent(eventToAdd, function(err, addedEvent) {
     if (err) {
-      // console.log(err);
       return res.status(500).send(err);
     }
     // console.log('Event added : ' + addedEvent.result.id);
@@ -36,13 +35,11 @@ controller.get = function(req, res) {
   }
   mongoService.getEvents(query, function(err, resultFromDB) {
     if (err) {
-      // console.log(err);
       return res.status(500).send(err);
     }
     var response = {
       result: resultFromDB,
     };
-    // console.log(resultFromDB);
     res.send(response);
   });
 };

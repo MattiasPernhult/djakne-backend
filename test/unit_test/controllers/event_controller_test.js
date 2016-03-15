@@ -36,14 +36,12 @@ describe('Testing the event controller', function() {
       it('should return status 400 if title is too short', function() {
         mockRequest.body.title = 'H';
         eventCtrl.post(mockRequest, mockResponse);
-        console.log(mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
       });
     });
     describe('Testing sending correct parameters', function() {
       it('should return a valid response if all parameters are correct', function() {
         eventCtrl.post(mockRequest, mockResponse);
-        console.log(mockResponse);
         expect(mockResponse.statusCode).to.not.equal(400);
       });
     });
