@@ -9,7 +9,7 @@ var mongoService = function() {
         return callback(err, null);
       }
       var r = {
-        id: response._id,
+        djakneID: response.djakneID,
       };
       return callback(null, r);
     });
@@ -21,9 +21,29 @@ var mongoService = function() {
     });
   };
 
+  var getCoffeeOne = function(query, callback) {
+    CoffeeSchema.findOne(query, function(err, coffee) {
+      return callback(err, coffee);
+    });
+  };
+
+  var getCoffeeOneCurrent = function(query, callback) {
+    CoffeeSchema.find({}).sort({startDate: -1}).limit(1).exec(callback);
+  };
+
+  var putVote = function(id, query, callback) {
+    CoffeeSchema.update({ djakneID: id }, query,
+      function(err, coffee) {
+        return callback(err, coffee);
+      });
+  };
+
   return {
     insertCoffee: insertCoffee,
     getCoffee: getCoffee,
+    getCoffeeOne: getCoffeeOne,
+    getCoffeeOneCurrent: getCoffeeOneCurrent,
+    putVote: putVote,
   };
 };
 

@@ -2,6 +2,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var path = require('path');
 
 // project packages
 var index = require('./app/routes/index');
@@ -13,6 +14,8 @@ mongoose.connect(auth.mongoConnection);
 // variables
 var app = express();
 
+app.set('views', path.join(__dirname, './app/views'));
+app.set('view engine', 'jade');
 app.use('*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');

@@ -16,7 +16,7 @@ router.get('/current', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res) {
-  coffeeController.getID(req.params.id);
+  coffeeController.getID(req, res);
 });
 /*
  * Endpoint for /
@@ -25,14 +25,12 @@ router.get('/:id', function(req, res) {
 
 router.post('/', function(req, res, next) {
   // TODO: anropa helper funktion som kollar att alla parametrar finns
-  console.log('I coffee routes /coffee post');
   coffeeController.post(req, res);
 });
 
-router.post('/vote/:id', function(req, res, next) {
+router.put('/vote/:id/:vote', function(req, res, next) {
   // TODO: anropa helper funktion som kollar att alla parametrar finns
-  console.log('I coffee routes /coffee post');
-  coffeeController.postVote(req, res);
+  coffeeController.putVote(req, res);
 });
 
 

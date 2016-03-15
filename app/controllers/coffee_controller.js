@@ -1,18 +1,14 @@
 var mongoService = require('../services/mongo_coffee_service');
-/**var CoffeModel = require('../models/coffe_model');**/
+/*var CoffeModel = require('../models/coffe_model');**/
 var uuid = require('node-uuid');
 var controller = {};
 
 controller.post = function(req, res) {
-
-  console.log('I coffee_controller/ post');
-  /**  var coffeeToAdd = createCoffeModel(req);**/
   var coffeeToAdd = {
     title: req.body.title,
     description: req.body.description,
-    startDate: req.body.date,
-    stopDate: req.body.date,
-    totalVotes: 0,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
     one: 0,
     two: 0,
     three: 0,
@@ -21,32 +17,39 @@ controller.post = function(req, res) {
     djakneID: uuid.v4(),
   };
 
-  console.log('coffee_controller set body');
-
   mongoService.insertCoffee(coffeeToAdd, function(err, result) {
 
     if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
-    console.log('Coffee To Add : ' + result.djakneID);
+    console.log('New coffee: ' + result.djakneID);
     res.send(result);
 
   });
-  console.log('controller end');
 };
 
-function getAverageVotes(query) {
+function modifyJSONArray(query) {
   var objects = query;
   for (var i = 0; i < objects.length; i++) {
-    objects[i].averageVotes = 0;
-    if (objects[i].totalVotes > 0) {
-      objects[i].averageVotes = (objects[i].one + objects[i].two +
-        objects[i].three + objects[i].four +
-        objects[i].five) / objects[i].totalVotes;
-    }
+    objects[i] = modifyJSON(objects[i]);
   }
   return objects;
+}
+
+function modifyJSON(object) {
+  object.averageVotes = 0;
+  object.totalVotes = 0;
+  object.totalVotes = object.one + object.two +
+  object.three + object.four + object.five;
+  if (object.totalVotes > 0) {
+    object.averageVotes = ((object.one + (object.two * 2) +
+      (object.three * 3) + (object.four * 4) +
+      (object.five * 5)) / object.totalVotes).toFixed(1);
+  }
+  delete object._id;
+  delete object.__v;
+  return object
 }
 
 controller.getHistory = function(req, res) {
@@ -62,21 +65,19 @@ controller.getHistory = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = getAverageVotes(JSON.parse(JSON.stringify(resultFromDB)));
+    resultFromDB = modifyJSONArray(
+      JSON.parse(JSON.stringify(resultFromDB)));
     var response = {
       result: resultFromDB,
     };
+    console.log('New get history');
     res.send(response);
   });
 };
 
 controller.getID = function(req, res) {
-  console.log('req.params');
   var query = {};
-  console.log('HELLO');
-  console.log(req.params.id);
-  console.log(req.params['id']);
-  if (req.params.length > 0) {
+  if (req.params.id.length > 0) {
     query = buildQueryID(req);
   }
 
@@ -85,21 +86,43 @@ controller.getID = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = getAverageVotes(JSON.parse(JSON.stringify(resultFromDB)));
+    resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
     var response = {
       result: resultFromDB,
     };
+    console.log('New get ID: ' + req.params.id);
     res.send(response);
   });
 };
+
 controller.getCurrent = function(req, res) {
   var query = {};
   var queryParamsExists = Object.keys(req.query).length !== 0;
 
   if (queryParamsExists) {
-    query = buildQueryID(req);
+    query = buildQueryCurrent(req);
   }
-  mongoService.getCoffeeOne(query, function(err, resultFromDB) {
+
+  mongoService.getCoffeeOneCurrent(query, function(err, resultFromDB) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB[0])));
+    var response = {
+      result: resultFromDB,
+    };
+    console.log('New get current: ' + req.params.id);
+    res.send(response);
+  });
+};
+
+controller.putVote = function(req, res) {
+  var query = {};
+  if (req.params.vote.length > 0 && req.params.id.length > 0) {
+    query = buildQueryVote(req);
+  }
+  mongoService.putVote(req.params.id, query, function(err, resultFromDB) {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
@@ -107,9 +130,10 @@ controller.getCurrent = function(req, res) {
     var response = {
       result: resultFromDB,
     };
+    console.log('New vote: ' + req.params.id);
     res.send(response);
   });
-};
+}
 
 var buildQueryHistory = function(req) {
   var query = {};
@@ -117,32 +141,39 @@ var buildQueryHistory = function(req) {
 };
 
 var buildQueryID = function(req) {
-  var query = {
-    djakneID: req.params['id'],
+    var query = {
+      djakneID: req.params.id,
+    };
+    return query;
   };
-  return query;
-};
 
 var buildQueryCurrent = function(req) {
-  var query = {
-    date: {},
+    var query = {
+      startDate: -1,
+    };
+    return query;
   };
-  if (req.query.dateFrom !== undefined) {
-    query.date.$gte = new Date(req.query.dateFrom);
-  }
-  if (req.query.dateTo !== undefined) {
-    if (dateToIsValid) {
-      query.date.$lt = new Date(req.query.dateTo);
-    }
+
+var buildQueryVote = function(req) {
+  var query = {};
+  switch (req.params.vote) {
+    case '1':
+      query = { $inc: { one: 1 }};
+      break;
+    case '2':
+      query = { $inc: { two: 1 }};
+      break;
+    case '3':
+      query = { $inc: { three: 1 }};
+      break;
+    case '4':
+      query = { $inc: { four: 1 }};
+      break;
+    case '5':
+      query = { $inc: { five: 1 }};
+      break;
   }
   return query;
-};
+}
 
-var dateToIsValid = function(dateFrom, dateTo) {
-  return new Date(dateTo).getDate() > new Date(dateFrom).getDate();
-};
-/**var createCoffeModel= function(req) {
-  var body = req.body;
-  var coffeeToAdd = new CoffeModel(body.title, body.text, body.date)
-}**/
 module.exports = controller;
