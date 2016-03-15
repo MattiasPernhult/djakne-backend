@@ -1,21 +1,25 @@
 var mongoService = require('../services/mongo_coffee_service');
-var CoffeModel = require('../models/coffe_model');
+var CoffeModel = require('../models/coffee_model');
 var uuid = require('node-uuid');
+
 var controller = {};
 
 controller.post = function(req, res) {
-  var coffeeToAdd = new createCoffeModel(req);
-  };
 
+  var coffeeToAdd = createCoffeModel(req);
+
+  if (!coffeeToAdd.checkAttributs()) {
+    return res.status(400).send({
+      message: 'The parameters for the coffee went wrong',
+    });
+  }
   mongoService.insertCoffee(coffeeToAdd, function(err, result) {
-
     if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
     console.log('New coffee: ' + result.djakneID);
     res.send(result);
-
   });
 };
 
@@ -39,7 +43,7 @@ function modifyJSON(object) {
   }
   delete object._id;
   delete object.__v;
-  return object
+  return object;
 }
 
 controller.getHistory = function(req, res) {
@@ -123,7 +127,7 @@ controller.putVote = function(req, res) {
     console.log('New vote: ' + req.params.id);
     res.send(response);
   });
-}
+};
 var buildQueryHistory = function(req) {
   var query = {};
   return query;
@@ -141,52 +145,63 @@ var buildQueryCurrent = function(req) {
   return query;
 };
 
-  var buildQueryVote = function(req)
+var buildQueryVote = function(req) {
   var query = {};
+
   switch (req.params.vote) {
-  case '1': {
-    query = {
-      $inc: {
-        one: 1
+    case '1':
+      {
+        query = {
+          $inc: {
+            one: 1,
+          },
+        };
+        break;
       }
-    };
-      break;
     case '2':
-      query = {
-        $inc: {
-          two: 1
-        }
-      };
-      break;
+      {
+        query = {
+          $inc: {
+            two: 1,
+          },
+        };
+        break;
+      }
     case '3':
-      query = {
-        $inc: {
-          three: 1
-        }
-      };
-      break;
+      {
+        query = {
+          $inc: {
+            three: 1,
+          },
+        };
+        break;
+      }
     case '4':
-      query = {
-        $inc: {
-          four: 1
-        }
-      };
-      break;
+      {
+        query = {
+          $inc: {
+            four: 1,
+          },
+        };
+        break;
+      }
     case '5':
-      query = {
-        $inc: {
-          five: 1
-        }
-      };
-      break;
+      {
+        query = {
+          $inc: {
+            five: 1,
+          },
+        };
+        break;
+      }
+      return query;
   }
-  return query;
-}
+};
+
 var createCoffeModel = function(req) {
   var body = req.body;
   var coffeeToAdd = new CoffeModel(body.title, body.describe,
-    body.startDate, body.endDate, body.djakneID, body.voteOne,
-  body.voteTwo, body.voteThree, body.voteFour, body.voteFive);
-  return eventToAdd;
+    body.startDate, body.endDate);
+  return coffeeToAdd;
 };
 module.exports = controller;

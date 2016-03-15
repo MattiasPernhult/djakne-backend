@@ -1,7 +1,6 @@
 var validator = require('../utils/coffee_validator');
 
-var Coffee = function(title, description, startDate, endDate,
-  voteOne, voteTwo, voteThree, voteFour, voteFive, djakneID) {
+var Coffee = function(title, description, startDate, endDate, djakneID) {
   if (this.validateString(title)) {
     this.title = title;
   }
@@ -14,14 +13,12 @@ var Coffee = function(title, description, startDate, endDate,
   if (this.validateDate(endDate)) {
     this.endDate = endDate;
   }
-  if (this.validateString(djakneID)) {
-    this.djakneID = djakneID;
-  }
-  this.voteOne = 0;
-  this.voteTwo = 0;
-  this.voteThree = 0;
-  this.voteFour = 0;
-  this.voteFive = 0;
+  this.djakneID = djakneID;
+  this.one = 0;
+  this.two = 0;
+  this.three = 0;
+  this.four = 0;
+  this.five = 0;
 };
 Coffee.prototype.checkAttributes = function() {
   return this.title !== undefined && this.description !== undefined &&
