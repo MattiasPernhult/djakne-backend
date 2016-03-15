@@ -32,7 +32,6 @@ var mongoService = function() {
   };
 
   var putVote = function(id, query, callback) {
-    console.log('service: ' + id);
     CoffeeSchema.update({ djakneID: id }, query,
       function(err, coffee) {
         return callback(err, coffee);

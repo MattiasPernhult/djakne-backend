@@ -3,15 +3,11 @@ var uuid = require('node-uuid');
 var controller = {};
 
 controller.post = function(req, res) {
-
-  console.log('I coffee_controller/ post');
   var coffeeToAdd = {
-
     title: req.body.title,
     description: req.body.description,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
-    totalVotes: 0,
     one: 0,
     two: 0,
     three: 0,
@@ -20,36 +16,38 @@ controller.post = function(req, res) {
     djakneID: uuid.v4(),
   };
 
-  console.log('coffee_controller set body');
-
   mongoService.insertCoffee(coffeeToAdd, function(err, result) {
 
     if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
-    console.log('Coffee To Add : ' + result.djakneID);
+    console.log('New coffee: ' + result.djakneID);
     res.send(result);
 
   });
-  console.log('controller end');
 };
 
-function getAverageVotesArray(query) {
+function modifyJSONArray(query) {
   var objects = query;
   for (var i = 0; i < objects.length; i++) {
-    objects[i] = getAverageVotes(objects[i]);
+    objects[i] = modifyJSON(objects[i]);
   }
   return objects;
 }
 
-function getAverageVotes(object) {
+function modifyJSON(object) {
   object.averageVotes = 0;
+  object.totalVotes = 0;
+  object.totalVotes = object.one + object.two +
+  object.three + object.four + object.five;
   if (object.totalVotes > 0) {
-    object.averageVotes = (object.one + (object.two * 2) +
+    object.averageVotes = ((object.one + (object.two * 2) +
       (object.three * 3) + (object.four * 4) +
-      (object.five * 5)) / object.totalVotes;
+      (object.five * 5)) / object.totalVotes).toFixed(1);
   }
+  delete object._id;
+  delete object.__v;
   return object
 }
 
@@ -66,18 +64,18 @@ controller.getHistory = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = getAverageVotesArray(
+    resultFromDB = modifyJSONArray(
       JSON.parse(JSON.stringify(resultFromDB)));
     var response = {
       result: resultFromDB,
     };
+    console.log('New get history');
     res.send(response);
   });
 };
 
 controller.getID = function(req, res) {
   var query = {};
-  console.log(req.params.id);
   if (req.params.id.length > 0) {
     query = buildQueryID(req);
   }
@@ -87,10 +85,11 @@ controller.getID = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = getAverageVotes(JSON.parse(JSON.stringify(resultFromDB)));
+    resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
     var response = {
       result: resultFromDB,
     };
+    console.log('New get ID: ' + req.params.id);
     res.send(response);
   });
 };
@@ -108,17 +107,17 @@ controller.getCurrent = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = getAverageVotes(JSON.parse(JSON.stringify(resultFromDB[0])));
+    resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB[0])));
     var response = {
       result: resultFromDB,
     };
+    console.log('New get current: ' + req.params.id);
     res.send(response);
   });
 };
 
 controller.putVote = function(req, res) {
   var query = {};
-  console.log(req.params.id + ' / ' + req.params.vote);
   if (req.params.vote.length > 0 && req.params.id.length > 0) {
     query = buildQueryVote(req);
   }
@@ -130,7 +129,7 @@ controller.putVote = function(req, res) {
     var response = {
       result: resultFromDB,
     };
-    console.log('send result put');
+    console.log('New vote: ' + req.params.id);
     res.send(response);
   });
 }
@@ -156,27 +155,21 @@ var buildQueryCurrent = function(req) {
 
 var buildQueryVote = function(req) {
   var query = {};
-  console.log('build: ' + req.params.vote);
   switch (req.params.vote) {
-    case 1:
-      console.log('1');
-      query = { $inc: { one: 1, totalVotes: 1 }};
+    case '1':
+      query = { $inc: { one: 1 }};
       break;
     case '2':
-      console.log('2');
-      query = { $inc: { two: 1, totalVotes: 1 }};
+      query = { $inc: { two: 1 }};
       break;
     case '3':
-      console.log('3');
-      query = { $inc: { three: 1, totalVotes: 1 }};
+      query = { $inc: { three: 1 }};
       break;
     case '4':
-      console.log('4');
-      query = { $inc: { four: 1, totalVotes: 1 }};
+      query = { $inc: { four: 1 }};
       break;
     case '5':
-      console.log('5');
-      query = { $inc: { five: 1, totalVotes: 1 }};
+      query = { $inc: { five: 1 }};
       break;
   }
   return query;

@@ -16,7 +16,6 @@ router.get('/current', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res) {
-  console.log('router id');
   coffeeController.getID(req, res);
 });
 /*
@@ -26,13 +25,11 @@ router.get('/:id', function(req, res) {
 
 router.post('/', function(req, res, next) {
   // TODO: anropa helper funktion som kollar att alla parametrar finns
-  console.log('I coffee routes /coffee post');
   coffeeController.post(req, res);
 });
 
 router.put('/vote/:id/:vote', function(req, res, next) {
   // TODO: anropa helper funktion som kollar att alla parametrar finns
-  console.log('I coffee routes /coffee put');
   coffeeController.putVote(req, res);
 });
 
