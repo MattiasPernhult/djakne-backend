@@ -1,6 +1,5 @@
 var mongoService = require('../services/mongo_coffee_service');
 var CoffeModel = require('../models/coffee_model');
-var uuid = require('node-uuid');
 
 var controller = {};
 
@@ -8,7 +7,7 @@ controller.post = function(req, res) {
 
   var coffeeToAdd = createCoffeModel(req);
 
-  if (!coffeeToAdd.checkAttributs()) {
+  if (!coffeeToAdd.checkAttributes()) {
     return res.status(400).send({
       message: 'The parameters for the coffee went wrong',
     });
@@ -149,54 +148,50 @@ var buildQueryVote = function(req) {
   var query = {};
 
   switch (req.params.vote) {
-    case '1':
-      {
-        query = {
-          $inc: {
-            one: 1,
-          },
-        };
-        break;
-      }
-    case '2':
-      {
-        query = {
-          $inc: {
-            two: 1,
-          },
-        };
-        break;
-      }
-    case '3':
-      {
-        query = {
-          $inc: {
-            three: 1,
-          },
-        };
-        break;
-      }
-    case '4':
-      {
-        query = {
-          $inc: {
-            four: 1,
-          },
-        };
-        break;
-      }
-    case '5':
-      {
-        query = {
-          $inc: {
-            five: 1,
-          },
-        };
-        break;
-      }
-      return query;
+    case '1': {
+      query = {
+        $inc: {
+          one: 1,
+        },
+      };
+      break;
+    }
+    case '2': {
+      query = {
+        $inc: {
+          two: 1,
+        },
+      };
+      break;
+    }
+    case '3': {
+      query = {
+        $inc: {
+          three: 1,
+        },
+      };
+      break;
+    }
+    case '4': {
+      query = {
+        $inc: {
+          four: 1,
+        },
+      };
+      break;
+    }
+    case '5': {
+      query = {
+        $inc: {
+          five: 1,
+        },
+      };
+      break;
+    }
   }
+  return query;
 };
+
 
 var createCoffeModel = function(req) {
   var body = req.body;

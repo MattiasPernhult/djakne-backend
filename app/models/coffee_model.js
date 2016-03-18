@@ -1,6 +1,7 @@
 var validator = require('../utils/coffee_validator');
+var uuid = require('node-uuid');
 
-var Coffee = function(title, description, startDate, endDate, djakneID) {
+var Coffee = function(title, description, startDate, endDate) {
   if (this.validateString(title)) {
     this.title = title;
   }
@@ -13,7 +14,7 @@ var Coffee = function(title, description, startDate, endDate, djakneID) {
   if (this.validateDate(endDate)) {
     this.endDate = endDate;
   }
-  this.djakneID = djakneID;
+  this.djakneID = uuid.v4();
   this.one = 0;
   this.two = 0;
   this.three = 0;
