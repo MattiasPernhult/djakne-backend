@@ -17,7 +17,7 @@ var CoffeeModel = function(title, description, startDate, endDate, image, webpag
   if (this.validateURL(image)) {
     this.image = image;
   }
-  if (this.validateURL(link)) {
+  if (this.validateURL(webpage)) {
     this.webpage = webpage;
   }
   this.djakneID = uuid.v4();
