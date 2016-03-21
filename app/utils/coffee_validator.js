@@ -1,3 +1,4 @@
+var validator = require('validator');
 var coffeeValidator = {};
 
 coffeeValidator.hasMinLength = function(attribute, minLength) {
@@ -11,14 +12,11 @@ coffeeValidator.hasMinLength = function(attribute, minLength) {
 };
 
 coffeeValidator.isString = function(attribute) {
-  return (typeof attribute === 'string');
+  return (typeof attribute === 'string' || attribute instanceof String);
 };
 
 coffeeValidator.isDate = function(input) {
-  if (input === undefined || typeof input !== 'string') {
-    return false;
-  }
-  return input.match(/^(\d{4})\-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/);
+  return validator.isISO8601(input);
 };
 
 coffeeValidator.isDateFromLessThanDateTo = function(dateFrom, dateTo) {

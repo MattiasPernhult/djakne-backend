@@ -1,11 +1,11 @@
 var mongoService = require('../services/mongo_coffee_service');
-var CoffeModel = require('../models/coffee_model');
+var CoffeeModel = require('../models/coffee_model');
 
 var controller = {};
 
 controller.post = function(req, res) {
 
-  var coffeeToAdd = createCoffeModel(req);
+  var coffeeToAdd = createCoffeeModel(req);
 
   if (!coffeeToAdd.checkAttributes()) {
     return res.status(400).send({
@@ -193,9 +193,9 @@ var buildQueryVote = function(req) {
 };
 
 
-var createCoffeModel = function(req) {
+var createCoffeeModel = function(req) {
   var body = req.body;
-  var coffeeToAdd = new CoffeModel(body.title, body.describe,
+  var coffeeToAdd = new CoffeeModel(body.title, body.description,
     body.startDate, body.endDate);
   return coffeeToAdd;
 };

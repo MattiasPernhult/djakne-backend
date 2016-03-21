@@ -1,7 +1,7 @@
 var validator = require('../utils/coffee_validator');
 var uuid = require('node-uuid');
 
-var Coffee = function(title, description, startDate, endDate) {
+var CoffeeModel = function(title, description, startDate, endDate) {
   if (this.validateString(title)) {
     this.title = title;
   }
@@ -21,27 +21,26 @@ var Coffee = function(title, description, startDate, endDate) {
   this.four = 0;
   this.five = 0;
 };
-Coffee.prototype.checkAttributes = function() {
+CoffeeModel.prototype.checkAttributes = function() {
   return this.title !== undefined && this.description !== undefined &&
-    this.djakneID !== undefined && this.startDate !== undefined &&
-      this.endDate !== undefined;
+   this.startDate !== undefined && this.endDate !== undefined;
 };
-Coffee.prototype.validateString = function(attribute) {
+CoffeeModel.prototype.validateString = function(attribute) {
   return validator.isString(attribute) &&
   validator.hasMinLength(attribute, 2);
 };
 
-Coffee.prototype.validateDate = function(startDate) {
+CoffeeModel.prototype.validateDate = function(startDate) {
   return validator.isDate(startDate);
 };
 
-Coffee.prototype.validateDate = function(endDate) {
+CoffeeModel.prototype.validateDate = function(endDate) {
   return validator.isDate(endDate);
 };
 
-Coffee.prototype.trimStrings = function() {
+CoffeeModel.prototype.trimStrings = function() {
   this.title.trim();
   this.description.trim();
 };
 
-module.exports = Coffee;
+module.exports = CoffeeModel;
