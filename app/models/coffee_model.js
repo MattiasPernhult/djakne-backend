@@ -1,7 +1,7 @@
 var validator = require('../utils/coffee_validator');
 var uuid = require('node-uuid');
 
-var CoffeeModel = function(title, description, startDate, endDate, image, link) {
+var CoffeeModel = function(title, description, startDate, endDate, image, webpage) {
   if (this.validateString(title)) {
     this.title = title;
   }
@@ -18,7 +18,7 @@ var CoffeeModel = function(title, description, startDate, endDate, image, link) 
     this.image = image;
   }
   if (this.validateURL(link)) {
-    this.link = link;
+    this.webpage = webpage;
   }
   this.djakneID = uuid.v4();
   this.one = 0;

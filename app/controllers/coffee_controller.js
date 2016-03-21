@@ -196,7 +196,7 @@ var buildQueryVote = function(req) {
 var createCoffeeModel = function(req) {
   var body = req.body;
   var coffeeToAdd = new CoffeeModel(body.title, body.description,
-    body.startDate, body.endDate, body.image, body.link);
+    body.startDate, body.endDate, body.image, body.webpage);
   return coffeeToAdd;
 };
 module.exports = controller;
