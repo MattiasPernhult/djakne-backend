@@ -30,7 +30,7 @@ var CoffeeModel = function(title, description, startDate, endDate, image, webpag
 CoffeeModel.prototype.checkAttributes = function() {
   return this.title !== undefined && this.description !== undefined &&
    this.startDate !== undefined && this.endDate !== undefined &&
-   this.image !== undefined && this.link !== undefined;
+   this.image !== undefined && this.webpage !== undefined;
 };
 CoffeeModel.prototype.validateString = function(attribute) {
   return validator.isString(attribute) &&

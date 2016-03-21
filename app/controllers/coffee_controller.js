@@ -105,7 +105,7 @@ controller.getCurrent = function(req, res) {
     var response = {
       result: resultFromDB,
     };
-    console.log('New get current: ' + req.params.id);
+    console.log('New get current: ' + resultFromDB.djakneID);
     res.send(response);
   });
 };
