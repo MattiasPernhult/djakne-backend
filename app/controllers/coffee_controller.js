@@ -151,45 +151,34 @@ var buildQueryCurrent = function(req) {
 
 var buildQueryVote = function(req) {
   var query = {};
-  console.log(req.body.vote);
   switch (req.body.vote) {
     case '1': {
       query = {
-        $inc: {
-          one: 1,
-        },
+        $inc: { one: 1, }, $push: { voted: req.body.userID },
       };
       break;
     }
     case '2': {
       query = {
-        $inc: {
-          two: 1,
-        },
+        $inc: { two: 1, }, $push: { voted: req.body.userID },
       };
       break;
     }
     case '3': {
       query = {
-        $inc: {
-          three: 1,
-        },
+        $inc: { three: 1, }, $push: { voted: req.body.userID },
       };
       break;
     }
     case '4': {
       query = {
-        $inc: {
-          four: 1,
-        },
+        $inc: { four: 1, }, $push: { voted: req.body.userID },
       };
       break;
     }
     case '5': {
       query = {
-        $inc: {
-          five: 1,
-        },
+        $inc: { five: 1, }, $push: { voted: req.body.userID },
       };
       break;
     }

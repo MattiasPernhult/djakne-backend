@@ -1,7 +1,8 @@
 var validator = require('../utils/coffee_validator');
 var uuid = require('node-uuid');
 
-var CoffeeModel = function(title, description, startDate, endDate, image, webpage) {
+var CoffeeModel = function(title, description,
+  startDate, endDate, image, webpage) {
   if (this.validateString(title)) {
     this.title = title;
   }
@@ -26,6 +27,7 @@ var CoffeeModel = function(title, description, startDate, endDate, image, webpag
   this.three = 0;
   this.four = 0;
   this.five = 0;
+  this.voted = [];
 };
 CoffeeModel.prototype.checkAttributes = function() {
   return this.title !== undefined && this.description !== undefined &&

@@ -15,6 +15,7 @@ var CoffeeSchema = new mongoose.Schema({
   djakneID: String,
   image: String,
   webpage: String,
+  voted: [String],
 });
 
 module.exports = mongoose.model('Coffee', CoffeeSchema);
