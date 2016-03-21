@@ -27,4 +27,29 @@ coffeeValidator.isURL = function(input) {
   return validator.isURL(input);
 };
 
+coffeeValidator.isUUID = function(input) {
+  return validator.isUUID(input);
+};
+
+coffeeValidator.validateVote = function(input) {
+  if (!this.isString(input.body.vote)) {
+    console.log('vote/string');
+    return false;
+  }
+  if (input.body.vote.length !== 1) {
+    console.log('vote/length');
+    return false;
+  }
+  if (!this.isString(input.body.djakneID)) {
+    console.log('uuid/string');
+    return false;
+  }
+  if (!validator.isUUID(input.body.djakneID)) {
+    console.log('uuid');
+    console.log(input.body.djakneID);
+    return false;
+  }
+  return true;
+};
+
 module.exports = coffeeValidator;

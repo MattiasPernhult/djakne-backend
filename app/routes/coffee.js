@@ -28,7 +28,7 @@ router.post('/', function(req, res, next) {
   coffeeController.post(req, res);
 });
 
-router.put('/vote/:id/:vote', function(req, res, next) {
+router.put('/vote', function(req, res, next) {
   // TODO: anropa helper funktion som kollar att alla parametrar finns
   coffeeController.putVote(req, res);
 });

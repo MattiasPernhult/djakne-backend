@@ -1,5 +1,6 @@
 var mongoService = require('../services/mongo_coffee_service');
 var CoffeeModel = require('../models/coffee_model');
+var validator = require('../utils/coffee_validator');
 
 var controller = {};
 
@@ -9,7 +10,7 @@ controller.post = function(req, res) {
 
   if (!coffeeToAdd.checkAttributes()) {
     return res.status(400).send({
-      message: 'The parameters for the coffee went wrong',
+      message: 'The parameters for the coffee was wrong',
     });
   }
   mongoService.insertCoffee(coffeeToAdd, function(err, result) {
@@ -19,6 +20,27 @@ controller.post = function(req, res) {
     }
     console.log('New coffee: ' + result.djakneID);
     res.send(result);
+  });
+};
+
+controller.putVote = function(req, res) {
+  var query = {};
+  if (!validator.validateVote(req)) {
+    return res.status(400).send({
+      message: 'The parameters for the vote was wrong',
+    });
+  }
+  query = buildQueryVote(req);
+  mongoService.putVote(req.body.djakneID, query, function(err, resultFromDB) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    var response = {
+      result: resultFromDB,
+    };
+    console.log('New vote: ' + req.body.djakneID);
+    res.send(response);
   });
 };
 
@@ -110,23 +132,6 @@ controller.getCurrent = function(req, res) {
   });
 };
 
-controller.putVote = function(req, res) {
-  var query = {};
-  if (req.params.vote.length > 0 && req.params.id.length > 0) {
-    query = buildQueryVote(req);
-  }
-  mongoService.putVote(req.params.id, query, function(err, resultFromDB) {
-    if (err) {
-      console.log(err);
-      return res.status(500).send(err);
-    }
-    var response = {
-      result: resultFromDB,
-    };
-    console.log('New vote: ' + req.params.id);
-    res.send(response);
-  });
-};
 var buildQueryHistory = function(req) {
   var query = {};
   return query;
@@ -146,8 +151,8 @@ var buildQueryCurrent = function(req) {
 
 var buildQueryVote = function(req) {
   var query = {};
-
-  switch (req.params.vote) {
+  console.log(req.body.vote);
+  switch (req.body.vote) {
     case '1': {
       query = {
         $inc: {
@@ -199,4 +204,5 @@ var createCoffeeModel = function(req) {
     body.startDate, body.endDate, body.image, body.webpage);
   return coffeeToAdd;
 };
+
 module.exports = controller;
