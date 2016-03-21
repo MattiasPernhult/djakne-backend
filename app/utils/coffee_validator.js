@@ -23,4 +23,8 @@ coffeeValidator.isDateFromLessThanDateTo = function(dateFrom, dateTo) {
   return (new Date(dateTo) > new Date(dateFrom));
 };
 
+coffeeValidator.isURL = function(input) {
+  return validator.isURL(input);
+};
+
 module.exports = coffeeValidator;

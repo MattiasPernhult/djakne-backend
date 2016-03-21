@@ -13,6 +13,8 @@ var CoffeeSchema = new mongoose.Schema({
   four: Number,
   five: Number,
   djakneID: String,
+  image: String,
+  link: String,
 });
 
 module.exports = mongoose.model('Coffee', CoffeeSchema);
