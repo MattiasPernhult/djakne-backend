@@ -4,7 +4,6 @@ var CoffeeSchema = new mongoose.Schema({
 
   title: String,
   description: String,
-  idDjakne: String,
   startDate: Date,
   endDate: Date,
   one: Number,
