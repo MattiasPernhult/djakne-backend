@@ -14,6 +14,9 @@ describe('Testing the coffee controller', function() {
           text: 'Gott kaffe',
           startDate: '2016-06-18 08:00:00.000',
           endDate: '2016-06-18 08:00:00.000',
+          image: 'www.djakne.se/image',
+          webpage: 'www.djaken.se',
+          voted: '1,2,4',
         },
         query: { },
       };
