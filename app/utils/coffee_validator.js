@@ -15,12 +15,6 @@ coffeeValidator.isString = function(attribute) {
   return (typeof attribute === 'string');
 };
 
-coffeeValidator.sssisDate = function(input) {
-  if(validator.isISO8601(input) && this.isString(input)) console.log(input);
-  return validator.isISO8601(input) && this.isString(input);
-};
-
-
 coffeeValidator.isDate = function(input) {
   if (input === undefined || typeof input !== 'string') {
     return false;
@@ -33,6 +27,9 @@ coffeeValidator.isDateFromLessThanDateTo = function(dateFrom, dateTo) {
 };
 
 coffeeValidator.isURL = function(input) {
+  if (!this.isString(input)) {
+    return false;
+  }
   return validator.isURL(input);
 };
 
