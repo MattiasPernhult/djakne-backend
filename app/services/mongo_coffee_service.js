@@ -32,10 +32,10 @@ var mongoService = function() {
   };
 
   var putVote = function(id, query, callback) {
-    CoffeeSchema.update({ djakneID: id }, query,
-      function(err, coffee) {
-        return callback(err, coffee);
-      });
+    CoffeeSchema.findOneAndUpdate({voted: { $nin: [ id ] } }, query)
+      .sort({startDate: -1}).exec(function(err, res) {
+      return callback(err, res);
+    });
   };
 
   return {
