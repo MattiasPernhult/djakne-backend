@@ -27,10 +27,6 @@ coffeeValidator.isURL = function(input) {
   return validator.isURL(input);
 };
 
-coffeeValidator.isUUID = function(input) {
-  return validator.isUUID(input);
-};
-
 coffeeValidator.validateVote = function(input) {
   if (!this.isString(input.body.vote)) {
     return false;
@@ -39,12 +35,6 @@ coffeeValidator.validateVote = function(input) {
     return false;
   }
   if (input.body.vote.length !== 1) {
-    return false;
-  }
-  if (!this.isString(input.body.djakneID)) {
-    return false;
-  }
-  if (!validator.isUUID(input.body.djakneID)) {
     return false;
   }
   return true;

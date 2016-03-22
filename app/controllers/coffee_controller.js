@@ -31,16 +31,23 @@ controller.putVote = function(req, res) {
     });
   }
   query = buildQueryVote(req);
-  mongoService.putVote(req.body.djakneID, query, function(err, resultFromDB) {
+  mongoService.putVote(req.body.userID, query, function(err, resultFromDB) {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
-    var response = {
-      result: resultFromDB,
-    };
-    console.log('New vote: ' + req.body.djakneID);
-    res.send(response);
+    if (resultFromDB !== null) {
+      var response = {
+        result: 'OK',
+      };
+      console.log('New vote: ' + req.body.userID);
+      res.send(response);
+    }else {
+      var response = {
+        result: 'one user = one vote!',
+      };
+      res.send(response);
+    }
   });
 };
 

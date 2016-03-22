@@ -35,16 +35,15 @@ CoffeeModel.prototype.checkAttributes = function() {
    this.image !== undefined && this.webpage !== undefined;
 };
 CoffeeModel.prototype.validateString = function(attribute) {
+  if (!validator.isString(attribute) ||
+  !validator.hasMinLength(attribute, 2)) console.log('string');
   return validator.isString(attribute) &&
   validator.hasMinLength(attribute, 2);
 };
 
-CoffeeModel.prototype.validateDate = function(startDate) {
-  return validator.isDate(startDate);
-};
-
-CoffeeModel.prototype.validateDate = function(endDate) {
-  return validator.isDate(endDate);
+CoffeeModel.prototype.validateDate = function(date) {
+  if(!validator.isDate(date)) console.log('date');
+  return validator.isDate(date);
 };
 
 CoffeeModel.prototype.trimStrings = function() {
@@ -53,6 +52,7 @@ CoffeeModel.prototype.trimStrings = function() {
 };
 
 CoffeeModel.prototype.validateURL = function(url) {
+  if(!validator.isURL(url)) console.log('url');
   return validator.isURL(url);
 };
 
