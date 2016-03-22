@@ -7,7 +7,6 @@ var controller = {};
 controller.post = function(req, res) {
 
   var coffeeToAdd = createCoffeeModel(req);
-
   if (!coffeeToAdd.checkAttributes()) {
     return res.status(400).send({
       message: 'The parameters for the coffee was wrong',

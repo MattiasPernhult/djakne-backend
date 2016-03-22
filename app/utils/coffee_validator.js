@@ -12,11 +12,20 @@ coffeeValidator.hasMinLength = function(attribute, minLength) {
 };
 
 coffeeValidator.isString = function(attribute) {
-  return (typeof attribute === 'string' || attribute instanceof String);
+  return (typeof attribute === 'string');
 };
 
+coffeeValidator.sssisDate = function(input) {
+  if(validator.isISO8601(input) && this.isString(input)) console.log(input);
+  return validator.isISO8601(input) && this.isString(input);
+};
+
+
 coffeeValidator.isDate = function(input) {
-  return validator.isISO8601(input);
+  if (input === undefined || typeof input !== 'string') {
+    return false;
+  }
+  return input.match(/^(\d{4})\-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/);
 };
 
 coffeeValidator.isDateFromLessThanDateTo = function(dateFrom, dateTo) {
