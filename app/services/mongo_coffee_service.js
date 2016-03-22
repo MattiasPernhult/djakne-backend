@@ -38,12 +38,19 @@ var mongoService = function() {
     });
   };
 
+  var removeCoffeeOne = function(query, callback) {
+    CoffeeSchema.findOneAndRemove(query, function(err, coffee) {
+      return callback(err, coffee);
+    });
+  };
+
   return {
     insertCoffee: insertCoffee,
     getCoffee: getCoffee,
     getCoffeeOne: getCoffeeOne,
     getCoffeeOneCurrent: getCoffeeOneCurrent,
     putVote: putVote,
+    removeCoffeeOne: removeCoffeeOne,
   };
 };
 

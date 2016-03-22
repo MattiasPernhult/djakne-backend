@@ -1,39 +1,44 @@
 var coffeeCtrl = require('../../../app/controllers/coffee_controller');
 var chai = require('chai');
 var expect = chai.expect;
+var chaiHttp = require('chai-http');
+var server = require('../../../app');
 chai.should();
-describe('Testing the coffee controller', function() {
-  describe('Testing /coffe POST', function() {
-    var mockRequest;
-    var mockResponse;
+chai.use(chaiHttp);
 
-    beforeEach(function() {
-      mockRequest = {
-        body: {
-          title: 'Kaffe',
-          description: 'Gott kaffe!',
-          startDate: '2016-06-18 08:00:00',
-          endDate: '2016-06-23 08:00:00',
-          image: 'www.djakne.se/image',
-          webpage: 'www.djakne.se',
-          voted: ['1','2','3'],
-        },
-        query: { },
-      };
+describe('Testing coffee_controller', function() {
+  var testID;
 
-      mockResponse = {
-        statusCode: 200,
-        result: null,
-        status: function(status) {
-          this.statusCode = status;
-          return this;
-        },
-        send: function(result) {
-          this.result = result;
-          return this;
-        },
-      };
-    });
+  var mockRequest;
+  var mockResponse;
+
+  beforeEach(function() {
+    mockRequest = {
+      body: {
+        title: 'Test',
+        description: 'Valid description',
+        startDate: '2018-06-18 08:00:00',
+        endDate: '2018-06-23 08:00:00',
+        image: 'www.test.com/image',
+        webpage: 'www.test.com',
+      },
+      query: { },
+    };
+
+    mockResponse = {
+      statusCode: 200,
+      result: null,
+      status: function(status) {
+        this.statusCode = status;
+        return this;
+      },
+      send: function(result) {
+        this.result = result;
+        return this;
+      },
+    };
+  });
+  describe('Testing /coffee POST', function() {
     describe('Testing title', function() {
       it('should return status 400 if title is to short', function() {
         mockRequest.body.title = 'B';
@@ -54,11 +59,6 @@ describe('Testing the coffee controller', function() {
         mockRequest.body.title = '';
         coffeeCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 200 if title is ok', function() {
-        mockRequest.body.title = 'Latte';
-        coffeeCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(200);
       });
     });
     describe('Testing description', function() {
@@ -81,11 +81,6 @@ describe('Testing the coffee controller', function() {
         mockRequest.body.description = '';
         coffeeCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
-      });
-      it('should return status 200 if description is ok', function() {
-        mockRequest.body.description = 'description is ok!';
-        coffeeCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(200);
       });
     });
     describe('Testing startdate', function() {
@@ -110,10 +105,6 @@ describe('Testing the coffee controller', function() {
         coffeeCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
       });
-      it('should return status 200 if startdate is ok', function() {
-        coffeeCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(200);
-      });
     });
     describe('Testing enddate', function() {
       it('should return status 400 if enddate is undefined', function() {
@@ -137,18 +128,72 @@ describe('Testing the coffee controller', function() {
         coffeeCtrl.post(mockRequest, mockResponse);
         expect(mockResponse.statusCode).to.equal(400);
       });
-      it('should return status 200 if enddate is ok', function() {
-        coffeeCtrl.post(mockRequest, mockResponse);
-        expect(mockResponse.statusCode).to.equal(200);
+    });
+    describe('Test all params with valid input', function() {
+      it('should respond with 200', function(done) {
+        chai.request(server)
+            .post('/coffee')
+            .send(mockRequest.body)
+            .end(function(err, res) {
+              testID = res.body.djakneID;
+              res.should.have.status(200);
+              done();
+            });
       });
     });
   });
-  describe('Testing /current GET', function() {
+  describe('Testing /coffee/current GET', function() {
+    it('should respond with 200', function(done) {
+      chai.request(server)
+          .get('/coffee/current')
+          .end(function(err, res) {
+            done();
+            res.should.have.status(200);
+            expect(res.body.djakneID).to.equal(testID);
+            expect(res.body.title).to.equal(mockRequest.body.title);
+            expect(res.body.description).to.equal(mockRequest.body.description);
+            expect(res.body.image).to.equal(mockRequest.body.image);
+            expect(res.body.webpage).to.equal(mockRequest.body.webpage);
+
+          });
+    });
   });
-  describe('Testing /history GET', function() {
+  describe('Testing /coffee/history GET', function() {
+    it('should respond with 200', function(done) {
+      chai.request(server)
+          .get('/coffee/history')
+          .end(function(err, res) {
+            done();
+            res.should.have.status(200);
+          });
+    });
   });
-  describe('Testing /:id GET', function() {
+  describe('Testing /coffee/:id GET', function() {
+    it('should respond with 200', function(done) {
+      chai.request(server)
+          .get('/coffee/' + testID)
+          .end(function(err, res) {
+            done();
+            res.should.have.status(200);
+            expect(res.body.djakneID).to.equal(testID);
+            expect(res.body.title).to.equal(mockRequest.body.title);
+            expect(res.body.description).to.equal(mockRequest.body.description);
+            expect(res.body.image).to.equal(mockRequest.body.image);
+            expect(res.body.webpage).to.equal(mockRequest.body.webpage);
+
+          });
+    });
   });
-  describe('Testing /vote PUT', function() {
+  describe('Testing /coffee/vote PUT', function() {
+  });
+  describe('Testing /coffee/remove/:id GET', function() {
+    it('should respond with 200', function(done) {
+      chai.request(server)
+          .get('/coffee/remove/' + testID)
+          .end(function(err, res) {
+            res.should.have.status(200);
+            done();
+          });
+    });
   });
 });

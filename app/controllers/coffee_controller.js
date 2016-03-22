@@ -45,7 +45,7 @@ controller.putVote = function(req, res) {
       var response = {
         result: 'one user = one vote!',
       };
-      res.send(response);
+      res.status(400).send(response);
     }
   });
 };
@@ -86,8 +86,12 @@ controller.getHistory = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = modifyJSONArray(
-      JSON.parse(JSON.stringify(resultFromDB)));
+    if (resultFromDB) {
+      resultFromDB = modifyJSONArray(
+        JSON.parse(JSON.stringify(resultFromDB)));
+    }else {
+      res.status(400).send(response);
+    }
     var response = {
       result: resultFromDB,
     };
@@ -107,7 +111,11 @@ controller.getID = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
+    if (resultFromDB) {
+      resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
+    }else {
+      res.status(400).send(response);
+    }
     var response = {
       result: resultFromDB,
     };
@@ -129,11 +137,37 @@ controller.getCurrent = function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     }
-    resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB[0])));
+    if (resultFromDB) {
+      resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB[0])));
+    }else {
+      res.status(400).send(response);
+    }
     var response = {
       result: resultFromDB,
     };
     console.log('New get current: ' + resultFromDB.djakneID);
+    res.send(response);
+  });
+};
+
+controller.removeID = function(req, res) {
+  var query = {};
+  if (req.params.id.length > 0) {
+    query = buildQueryID(req);
+  }
+
+  mongoService.removeCoffeeOne(query, function(err, resultFromDB) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    if (!resultFromDB) {
+      res.status(400).send(response);
+    }
+    var response = {
+      result: resultFromDB.djakneID,
+    };
+    console.log('Removed ID: ' + req.params.id);
     res.send(response);
   });
 };
