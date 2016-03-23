@@ -143,7 +143,7 @@ describe('Testing coffee_controller', function() {
     });
   });
   describe('Testing /coffee/current GET', function() {
-    it('should respond with 200', function(done) {
+    it('should respond with 200 with correct URL', function(done) {
       chai.request(server)
           .get('/coffee/current')
           .end(function(err, res) {
@@ -159,7 +159,7 @@ describe('Testing coffee_controller', function() {
     });
   });
   describe('Testing /coffee/history GET', function() {
-    it('should respond with 200', function(done) {
+    it('should respond with 200 with correct URL', function(done) {
       chai.request(server)
           .get('/coffee/history')
           .end(function(err, res) {
@@ -169,7 +169,7 @@ describe('Testing coffee_controller', function() {
     });
   });
   describe('Testing /coffee/:id GET', function() {
-    it('should respond with 200', function(done) {
+    it('should respond with 200 with correct URL', function(done) {
       chai.request(server)
           .get('/coffee/' + testID)
           .end(function(err, res) {
@@ -185,14 +185,63 @@ describe('Testing coffee_controller', function() {
     });
   });
   describe('Testing /coffee/vote PUT', function() {
+    beforeEach(function() {
+      req = {
+        body: {
+          vote: '1',
+          userID: '12',
+        },
+        query: { },
+      };
+    });
+    it('should respond with 200 with correct input', function(done) {
+      chai.request(server)
+          .put('/coffee/vote')
+          .send(req.body)
+          .end(function(err, res) {
+            done();
+            res.should.have.status(200);
+          });
+    });
+    it('should respond with 400 if same userID is used twice', function(done) {
+      chai.request(server)
+          .put('/coffee/vote')
+          .send(req.body)
+          .end(function(err, res) {
+            done();
+            res.should.have.status(400);
+          });
+    });
+    it('should respond with 200 with changed userID', function(done) {
+      req.body.vote = '3';
+      req.body.userID = '123';
+      chai.request(server)
+          .put('/coffee/vote')
+          .send(req.body)
+          .end(function(err, res) {
+            done();
+            res.should.have.status(200);
+          });
+    });
+    it('should return totalVotes = 2 and averageVotes = 2' , function(done) {
+      chai.request(server)
+          .get('/coffee/' + testID)
+          .end(function(err, res) {
+            done();
+            res.should.have.status(200);
+            expect(res.body.djakneID).to.equal(testID);
+            expect(res.body.totalVotes).to.equal(2);
+            expect(res.body.averageVotes).to.equal(2);
+          });
+    });
   });
   describe('Testing /coffee/remove/:id GET', function() {
-    it('should respond with 200', function(done) {
+    it('should respond with 200 with correct URL', function(done) {
       chai.request(server)
           .get('/coffee/remove/' + testID)
           .end(function(err, res) {
-            res.should.have.status(200);
             done();
+            res.should.have.status(200);
           });
     });
   });
