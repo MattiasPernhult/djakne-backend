@@ -5,7 +5,6 @@ var Coffee = require('../app/schemas/coffee');
 var request = require('request');
 var mongoose = require('mongoose');
 var uuid = require('node-uuid');
-var async = require('async');
 
 var errorImageUrl = 'https://cdn2.iconfinder.com/data/icons/toolbar-signs-4/512/' +
   'fail_delete_agt_action_usb-512.png';
@@ -40,15 +39,11 @@ mongoose.connection.on('connected', function() {
         process.exit(1);
       }
       console.log('Preparing the coffebeans for insertion into MongoDB');
-      var coffeeBeans = body.results.splice(multiple, body.results.length);
-      async.each(coffeeBeans, function(coffeeBean, done) {
-        var preparedCoffeeBean = prepareSingleCoffeeBean(coffeeBean);
-        console.log('Coffeebean has been prepared for insertion into MongoDB');
-        saveSingleBeanToMongo(preparedCoffeeBean, done);
-      }, function(err) {
-        console.log('Finish!');
-        process.exit(1);
-      });
+      for (var i = 0; i < multiple; i++) {
+        var preparedCoffeeBean = prepareSingleCoffeeBean(body.results[i]);
+        console.log('Coffeebean ' + i + ' has been prepared for insertion into MongoDB');
+        saveSingleBeanToMongo(preparedCoffeeBean);
+      }
     } else {
       console.log('Preparing the coffebean for insertion into MongoDB');
       var preparedBean = prepareSingleCoffeeBean(body.results[0]);
@@ -77,7 +72,7 @@ var prepareSingleCoffeeBean = function(latestCoffeeBean) {
   return coffeeBean;
 };
 
-var saveSingleBeanToMongo = function(coffeeBean, done) {
+var saveSingleBeanToMongo = function(coffeeBean) {
   console.log('Saving coffeebean to MongoDB...');
   Coffee.findOne({
     startDate: coffeeBean.startDate,
@@ -85,24 +80,20 @@ var saveSingleBeanToMongo = function(coffeeBean, done) {
     if (err) {
       console.log('Error occured when saving the coffebean');
       handleMongoError(err);
-      done();
     } else if (!coffee) {
       var newCoffee = new Coffee(coffeeBean);
       newCoffee.save(function(err, resp) {
         if (err) {
           console.log('Error occured when saving the coffebean');
           handleMongoError(err);
-          done();
         } else {
           console.log('Coffeebean was added successfully!');
           handleMongoSuccess('Coffeebean was added successfully');
-          done();
         }
       });
     } else {
       console.log('Coffeebean already exists in MongoDB');
       handleMongoSuccess('Coffeebean already exists');
-      done();
     }
   });
 };
