@@ -31,13 +31,16 @@
     }
   },
   "dependencies": {
+    "async": "^2.0.0-rc.2",
     "body-parser": "1.15.0",
+    "chai-http": "~2.0.1",
     "express": "4.13.4",
+    "jade": "^1.11.0",
     "mongoose": "4.4.5",
+    "mysql": "^2.10.2",
     "node-uuid": "^1.4.7",
     "request": "^2.69.0",
     "slack-notify": "^0.1.6",
-    "validator": "5.1.0",
-    "chai-http": "~2.0.1"
+    "validator": "5.1.0"
   }
 }

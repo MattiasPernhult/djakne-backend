@@ -8,6 +8,7 @@ var path = require('path');
 var index = require('./app/routes/index');
 var eventRoute = require('./app/routes/event');
 var coffeeRoute = require('./app/routes/coffee');
+var menuRoute = require('./app/routes/menu');
 var auth = require('./app/config/auth');
 
 // connect to mongodb
@@ -48,6 +49,7 @@ app.use('*', function(req, res, next) {
 app.use('/', index);
 app.use('/coffee', coffeeRoute);
 app.use('/events', eventRoute);
+app.use('/menu', menuRoute);
 
 
 // catch 404 and forward to error handler
@@ -84,9 +86,9 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.set('port', 3000);
+app.set('port', 4000);
 app.listen(app.get('port'), function() {
-  console.log('Server is listening on port 3000..');
+  console.log('Server is listening on port 4000..');
 });
 
 module.exports = app;

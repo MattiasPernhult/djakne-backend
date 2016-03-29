@@ -5,6 +5,7 @@ var Coffee = require('../app/schemas/coffee');
 var request = require('request');
 var mongoose = require('mongoose');
 var uuid = require('node-uuid');
+var async = require('async');
 
 var errorImageUrl = 'https://cdn2.iconfinder.com/data/icons/toolbar-signs-4/512/' +
   'fail_delete_agt_action_usb-512.png';
@@ -16,52 +17,92 @@ var image = 'attachment_image';
 var description = 'post_contents';
 var links = 'post_links';
 
+var multiple = process.env.NUMBER;
+
 mongoose.connect(auth.mongoConnection);
 
 mongoose.connection.on('connected', function() {
+  console.log('Fetching latest coffeebeans...');
   request(auth.coffeeBeanUrl, function(error, response, body) {
     if (error) {
       console.error('Couldn\'t get coffee beans');
       process.exit(1);
     }
+    console.log('Latest coffeebeans has been fetched!');
     body = JSON.parse(body);
-    var latestCoffeeBean = body.results[0];
-
-    var coffeeBean = {
-      title: getTitle(latestCoffeeBean),
-      startDate: getDate(latestCoffeeBean),
-      endDate: undefined,
-      image: getImage(latestCoffeeBean),
-      description: getDescription(latestCoffeeBean),
-      webpages: getLinks(latestCoffeeBean),
-      djakneID: uuid.v4(),
-    };
-
-    coffeeBean.endDate = new Date(coffeeBean.startDate.getFullYear(),
-      coffeeBean.startDate.getMonth(), coffeeBean.startDate.getDate() + 4, '18');
-
-    coffeeBean.startDate = coffeeBean.startDate.toISOString();
-    coffeeBean.endDate = coffeeBean.endDate.toISOString();
-
-    saveToMongo(coffeeBean);
+    if (multiple) {
+      multiple = Number(multiple);
+      if (isNaN(multiple)) {
+        console.error('NUMBER must be a number');
+        process.exit(1);
+      } else if (multiple > 9 || multiple < 2) {
+        console.error('NUMBER must be less than 10 or greater than 1');
+        process.exit(1);
+      }
+      console.log('Preparing the coffebeans for insertion into MongoDB');
+      var coffeeBeans = body.results.splice(multiple, body.results.length);
+      async.each(coffeeBeans, function(coffeeBean, done) {
+        var preparedCoffeeBean = prepareSingleCoffeeBean(coffeeBean);
+        console.log('Coffeebean has been prepared for insertion into MongoDB');
+        saveSingleBeanToMongo(preparedCoffeeBean, done);
+      }, function(err) {
+        console.log('Finish!');
+        process.exit(1);
+      });
+    } else {
+      console.log('Preparing the coffebean for insertion into MongoDB');
+      var preparedBean = prepareSingleCoffeeBean(body.results[0]);
+      console.log('Coffeebean has been prepared for insertion into MongoDB');
+      saveSingleBeanToMongo(preparedBean);
+    }
   });
 });
 
-var saveToMongo = function(coffeeBean) {
-  Coffee.findOne({startDate: coffeeBean.startDate}, function(err, coffee) {
+var prepareSingleCoffeeBean = function(latestCoffeeBean) {
+  var coffeeBean = {
+    title: getTitle(latestCoffeeBean),
+    startDate: getDate(latestCoffeeBean),
+    endDate: undefined,
+    image: getImage(latestCoffeeBean),
+    description: getDescription(latestCoffeeBean),
+    webpages: getLinks(latestCoffeeBean),
+    djakneID: uuid.v4(),
+  };
+
+  coffeeBean.endDate = new Date(coffeeBean.startDate.getFullYear(),
+    coffeeBean.startDate.getMonth(), coffeeBean.startDate.getDate() + 4, '18');
+
+  coffeeBean.startDate = coffeeBean.startDate.toISOString();
+  coffeeBean.endDate = coffeeBean.endDate.toISOString();
+  return coffeeBean;
+};
+
+var saveSingleBeanToMongo = function(coffeeBean, done) {
+  console.log('Saving coffeebean to MongoDB...');
+  Coffee.findOne({
+    startDate: coffeeBean.startDate,
+  }, function(err, coffee) {
     if (err) {
+      console.log('Error occured when saving the coffebean');
       handleMongoError(err);
+      done();
     } else if (!coffee) {
       var newCoffee = new Coffee(coffeeBean);
       newCoffee.save(function(err, resp) {
         if (err) {
+          console.log('Error occured when saving the coffebean');
           handleMongoError(err);
+          done();
         } else {
+          console.log('Coffeebean was added successfully!');
           handleMongoSuccess('Coffeebean was added successfully');
+          done();
         }
       });
     } else {
+      console.log('Coffeebean already exists in MongoDB');
       handleMongoSuccess('Coffeebean already exists');
+      done();
     }
   });
 };
@@ -76,7 +117,7 @@ var handleMongoSuccess = function(message) {
   });
 };
 
-var handleMongoError = function(errorMessage) {
+var handleMongoError = function(errorMessage)  {
   console.error(errorMessage);
   slack.send({
     channel: '#coffee-bean-scraping',
@@ -99,7 +140,7 @@ var handleErrorWithParameters = function(errorMessage) {
   });
 };
 
-var getLinks = function(coffeeBean) {
+var getLinks = function(coffeeBean)  {
   if (!coffeeBean[links]) {
     handleErrorWithParameters('Coffee bean description is wrong, either undefined or string');
     process.exit(1);
@@ -110,7 +151,7 @@ var getLinks = function(coffeeBean) {
   return coffeeBean[links];
 };
 
-var getDescription = function(coffeeBean) {
+var getDescription = function(coffeeBean)  {
   if (!coffeeBean[description]) {
     handleErrorWithParameters('Coffee bean description is wrong, either undefined or string');
     process.exit(1);
@@ -146,7 +187,7 @@ var getDate = function(coffeeBean) {
   return new Date(year, month, day, '08');
 };
 
-var getTitle = function(coffeeBean) {
+var getTitle = function(coffeeBean)  {
   if (!coffeeBean[title] && typeof coffeeBean[title] !== 'string') {
     handleErrorWithParameters('Coffee bean title is wrong, either undefined or string');
     process.exit(1);
@@ -157,17 +198,53 @@ var getTitle = function(coffeeBean) {
 var getMonth = function(month) {
   month = month.substring(0, month.length - 1);
   switch (month) {
-    case 'januari': {return 0;}
-    case 'februari': {return 1;}
-    case 'mars': {return 2;}
-    case 'april': {return 3;}
-    case 'maj': {return 4;}
-    case 'juni': {return 5;}
-    case 'juli': {return 6;}
-    case 'augusti': {return 7;}
-    case 'september': {return 8;}
-    case 'oktober': {return 9;}
-    case 'november': {return 10;}
-    case 'december': {return 11;}
+    case 'januari':
+      {
+        return 0;
+      }
+    case 'februari':
+      {
+        return 1;
+      }
+    case 'mars':
+      {
+        return 2;
+      }
+    case 'april':
+      {
+        return 3;
+      }
+    case 'maj':
+      {
+        return 4;
+      }
+    case 'juni':
+      {
+        return 5;
+      }
+    case 'juli':
+      {
+        return 6;
+      }
+    case 'augusti':
+      {
+        return 7;
+      }
+    case 'september':
+      {
+        return 8;
+      }
+    case 'oktober':
+      {
+        return 9;
+      }
+    case 'november':
+      {
+        return 10;
+      }
+    case 'december':
+      {
+        return 11;
+      }
   }
 };
