@@ -24,9 +24,22 @@ var mongoService = function() {
     });
   };
 
+  var registerForEvent = function(userId, eventId, callback) {
+    console.log('i mongoService');
+    EventSchema.findOneAndUpdate({
+      _id: eventId,
+    }, {
+      $addToSet: {attendee: userId},
+    }, function(err, updatedEvent) {
+      console.log(err);
+      return callback(err, updatedEvent);
+    });
+  };
+
   return {
     insertEvent: insertEvent,
     getEvents: getEvents,
+    registerForEvent: registerForEvent,
   };
 };
 

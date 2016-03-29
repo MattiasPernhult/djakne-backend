@@ -13,20 +13,17 @@ mongoose.connect(auth.mongoConnection);
 // variables
 var app = express();
 
-/*
-app.set('views', path.join(__dirname, './app/views'));
-app.set('view engine', 'ejs');
 
- app.use('*', function(req, res, next) {
-     res.header('Access-Control-Allow-Origin', '*');
-     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-     res.header('Access-Control-Allow-Headers', 'Content-Type');
+// app.set('views', path.join(__dirname, './app/views'));
+// app.set('view engine', 'ejs');
 
-     next();
- });
+app.use('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
 
- */
-
+  next();
+});
 
 app.use('/', index);
 app.use('/events', eventRoute);
@@ -65,9 +62,9 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.set('port', 3000);
+app.set('port', 4000);
 app.listen(app.get('port'), function() {
-  console.log('Server is listening on port 3000..');
+  console.log('Server is listening on port 4000..');
 });
 
 
