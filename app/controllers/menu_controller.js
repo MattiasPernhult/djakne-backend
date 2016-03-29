@@ -8,8 +8,8 @@ controller.getMenu = function(req, res) {
     if (err) {
       return res.status(500).send('Shit.. we have some problem with the database...');
     }
-    helper.sanitizeProductNames(products, true);
-    return res.send({products: products});
+    var productsInCategory = helper.sanitizeProductNames(products, true);
+    return res.send({products: productsInCategory});
   });
 };
 

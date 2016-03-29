@@ -16,7 +16,7 @@ var mysqlService = function() {
     'djakne.product.price AS price, djakne.producttype.name AS category FROM ' +
     'djakne.product_producttype INNER JOIN djakne.producttype ON djakne.producttype.id ' +
     '= djakne.product_producttype.producttype_id INNER JOIN djakne.product ON djakne.product.id ' +
-    '= djakne.product_producttype.product_id;';
+    '= djakne.product_producttype.product_id WHERE djakne.product.showInMenu = 1;';
     executeQuery(query, done);
   };
 
