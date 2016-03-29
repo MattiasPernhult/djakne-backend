@@ -37,6 +37,7 @@
     "node-uuid": "^1.4.7",
     "request": "^2.69.0",
     "slack-notify": "^0.1.6",
-    "validator": "5.1.0"
+    "validator": "5.1.0",
+    "chai-http": "~2.0.1"
   }
 }

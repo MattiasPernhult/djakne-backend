@@ -1,5 +1,5 @@
 {
   "preset": "node-style-guide",
   "requireCapitalizedComments": false,
-  "maximumLineLength": 100,
+  "maximumLineLength": 100
 }

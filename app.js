@@ -1,10 +1,13 @@
 // npm packages
 var express = require('express');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var path = require('path');
 
 // project packages
 var index = require('./app/routes/index');
 var eventRoute = require('./app/routes/event');
+var coffeeRoute = require('./app/routes/coffee');
 var auth = require('./app/config/auth');
 
 // connect to mongodb
@@ -14,7 +17,7 @@ mongoose.connection.on('connected', function() {
   console.log('Connected to MongoDB');
 });
 
-mongoose.connection.on('error',function(err) {
+mongoose.connection.on('error', function(err) {
   console.log('Error when connecting to MongoDB: ' + err);
   process.exit(0);
 });
@@ -30,22 +33,20 @@ process.on('SIGINT', function() {
 // variables
 var app = express();
 
-/*
 app.set('views', path.join(__dirname, './app/views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'jade');
 
- app.use('*', function(req, res, next) {
-     res.header('Access-Control-Allow-Origin', '*');
-     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-     res.header('Access-Control-Allow-Headers', 'Content-Type');
+app.use(bodyParser.json());
+app.use('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
 
-     next();
- });
-
- */
-
+  next();
+});
 
 app.use('/', index);
+app.use('/coffee', coffeeRoute);
 app.use('/events', eventRoute);
 
 
@@ -55,6 +56,8 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
 
 // error handlers
 
@@ -81,11 +84,9 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
 app.set('port', 3000);
 app.listen(app.get('port'), function() {
   console.log('Server is listening on port 3000..');
 });
-
 
 module.exports = app;
