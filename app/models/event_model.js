@@ -28,10 +28,4 @@ Event.prototype.validateDate = function(date) {
   return validator.isDate(date);
 };
 
-Event.prototype.trimStrings = function() {
-  this.title = this.title.trim();
-  this.text = this.text.trim();
-  this.author = this.author.trim();
-};
-
 module.exports = Event;
