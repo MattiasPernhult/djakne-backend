@@ -12,8 +12,8 @@ var mysqlService = function() {
   });
 
   var getMenuWithCategory = function(done) {
-    var query = 'SELECT djakne.product.name AS Produkt, djakne.product.id AS Id, ' +
-    'djakne.product.price AS Pris, djakne.producttype.name AS Kategori FROM ' +
+    var query = 'SELECT djakne.product.name AS name, djakne.product.id AS id, ' +
+    'djakne.product.price AS price, djakne.producttype.name AS category FROM ' +
     'djakne.product_producttype INNER JOIN djakne.producttype ON djakne.producttype.id ' +
     '= djakne.product_producttype.producttype_id INNER JOIN djakne.product ON djakne.product.id ' +
     '= djakne.product_producttype.product_id;';
