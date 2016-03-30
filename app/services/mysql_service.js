@@ -20,6 +20,23 @@ var mysqlService = function() {
     executeQuery(query, done);
   };
 
+  var getPeopleAtDjakneToday = function(done) {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    var day = date.getDate();
+    var onlyDate = year + '-' + month + '-' + day;
+
+    var query = mysql.format('SELECT dm.id, dm.firstName, dm.lastName, dm.image FROM ' +
+    'djakne.member AS dm INNER JOIN djakne.`order` as do ON dm.id = do.member_id ' +
+    'WHERE date(do.orderTime) = ? and dm.active = 1 and dm.image != "" ' +
+    'GROUP BY dm.id;', [onlyDate]);
+    executeQuery(query, done);
+  };
+
   var getUserByLinkedInToken = function(token, done) {
     var query = mysql.format('SELECT id FROM `member` WHERE appToken = ?', [token]);
     executeQuery(query, done);
@@ -34,6 +51,7 @@ var mysqlService = function() {
   return {
     getMenuWithCategory: getMenuWithCategory,
     getUserByLinkedInToken: getUserByLinkedInToken,
+    getPeopleAtDjakneToday: getPeopleAtDjakneToday,
   };
 
 };
