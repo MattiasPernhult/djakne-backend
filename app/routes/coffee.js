@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var coffeeController = require('../controllers/coffee_controller');
+var auth = require('../middleware/auth');
 
 /**
  * Endpoint for /
@@ -34,10 +35,9 @@ router.post('/', function(req, res, next) {
  * Endpoint for /
  * HTTP method: PUT
  */
-router.put('/vote', function(req, res, next) {
+router.put('/vote', auth.requiresLogin, function(req, res, next) {
   // TODO: anropa helper funktion som kollar att alla parametrar finns
   coffeeController.putVote(req, res);
 });
-
 
 module.exports = router;

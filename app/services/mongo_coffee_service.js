@@ -32,8 +32,11 @@ var mongoService = function() {
   };
 
   var putVote = function(id, query, callback) {
-    CoffeeSchema.findOneAndUpdate({voted: { $nin: [ id ] } }, query)
-      .sort({startDate: -1}).exec(function(err, res) {
+    var date = new Date();
+    date = date.toISOString();
+    // "endDate": {$gte: new ISODate("2016-03-30T13:00:00Z")}
+    CoffeeSchema.findOneAndUpdate({endDate: {$gte: date}, voted: { $nin: [ id ] } }, query)
+      .exec(function(err, res) {
       return callback(err, res);
     });
   };

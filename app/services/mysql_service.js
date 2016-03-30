@@ -20,6 +20,11 @@ var mysqlService = function() {
     executeQuery(query, done);
   };
 
+  var getUserByLinkedInToken = function(token, done) {
+    var query = mysql.format('SELECT id FROM `member` WHERE appToken = ?', [token]);
+    executeQuery(query, done);
+  };
+
   var executeQuery = function(query, done) {
     connection.query(query, function(err, rows) {
       return done(err, rows);
@@ -28,6 +33,7 @@ var mysqlService = function() {
 
   return {
     getMenuWithCategory: getMenuWithCategory,
+    getUserByLinkedInToken: getUserByLinkedInToken,
   };
 
 };

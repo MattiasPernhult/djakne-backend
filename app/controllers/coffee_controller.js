@@ -40,8 +40,9 @@ controller.putVote = function(req, res) {
       response.result = 'OK';
       console.log('New vote: ' + req.body.userID);
       res.send(response);
-    }else {
-      response.result = 'one user = one vote!';
+    } else {
+      response.result = 'Either you have already voted for this coffee or the time for voting ' +
+        'has passed';
       res.status(400).send(response);
     }
   });
@@ -191,31 +192,31 @@ var buildQueryVote = function(req) {
   switch (req.body.vote) {
     case '1': {
       query = {
-        $inc: { one: 1, }, $push: { voted: req.body.userID },
+        $inc: { one: 1, }, $addToSet: { voted: req.body.userID },
       };
       break;
     }
     case '2': {
       query = {
-        $inc: { two: 1, }, $push: { voted: req.body.userID },
+        $inc: { two: 1, }, $addToSet: { voted: req.body.userID },
       };
       break;
     }
     case '3': {
       query = {
-        $inc: { three: 1, }, $push: { voted: req.body.userID },
+        $inc: { three: 1, }, $addToSet: { voted: req.body.userID },
       };
       break;
     }
     case '4': {
       query = {
-        $inc: { four: 1, }, $push: { voted: req.body.userID },
+        $inc: { four: 1, }, $addToSet: { voted: req.body.userID },
       };
       break;
     }
     case '5': {
       query = {
-        $inc: { five: 1, }, $push: { voted: req.body.userID },
+        $inc: { five: 1, }, $addToSet: { voted: req.body.userID },
       };
       break;
     }
