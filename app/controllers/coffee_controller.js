@@ -136,7 +136,7 @@ controller.getCurrent = function(req, res) {
       return res.status(500).send(err);
     }
     if (resultFromDB) {
-      resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB[0])));
+      resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
     }else {
       res.status(400).send(response);
     }
