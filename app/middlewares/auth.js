@@ -1,7 +1,7 @@
 var mysqlService = require('../../app/services/mysql_service');
 
 exports.requiresLogin = function(req, res, next) {
-  console.log('i requiresLogin, token: ' + req.query.token);
+  // console.log('i requiresLogin, token: ' + req.query.token);
   var token = req.query.token;
   var user = null;
   if (token) {
@@ -9,10 +9,10 @@ exports.requiresLogin = function(req, res, next) {
       if (err) {
         res.status(500).send('Shit..we have problems with the database');
       } else {
-        console.log('resultat från mysql: ' + JSON.stringify(result, null, 4));
+        // console.log('resultat från mysql: ' + JSON.stringify(result, null, 4));
         user = result;
         if (user) {
-          console.log('user är hittad! : ' + JSON.stringify(user, null, 4));
+          // console.log('user är hittad! : ' + JSON.stringify(user, null, 4));
           req.user = user[0];
           next();
         } else {
@@ -22,6 +22,6 @@ exports.requiresLogin = function(req, res, next) {
         }
       }
     });
-    console.log('USER: ' + user);
+    // console.log('USER: ' + user);
   }
 };

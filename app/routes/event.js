@@ -17,9 +17,8 @@ router.get('/',function(req, res, next) {
   eventCtrl.get(req, res);
 });
 
-router.post('/:id', auth.requiresLogin, function(req, res, next) {
-  console.log('i router /event/id post');
-  console.log('req.query är: ' + req.query.token);
+router.post('register/:id', auth.requiresLogin, function(req, res, next) {
+  // console.log('i router /event/register/id post');
   eventCtrl.registerForEvent(req, res);
 });
 

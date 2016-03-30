@@ -5,7 +5,7 @@ var validator = require('../utils/validator');
 var controller = {};
 
 controller.post = function(req, res) {
-  console.log('i events/ post');
+  // console.log('i events/ post');
 
   var eventToAdd = createEventModel(req);
 
@@ -16,7 +16,7 @@ controller.post = function(req, res) {
     if (err) {
       return res.status(500).send(err);
     }
-    console.log('Event added : ' + addedEvent.result.id);
+    // console.log('Event added : ' + addedEvent.result.id);
     res.send(addedEvent);
   });
 };
@@ -45,16 +45,13 @@ controller.get = function(req, res) {
 };
 
 controller.registerForEvent = function(req, res) {
-  console.log('i event controller');
-  console.log('här, req.user.id = ');
   if (!req.user.id) {
-    console.log('ingen user.id');
+    // console.log('ingen user.id');
     return res.status(400).send({error: 'You are not authenticated'});
   }
-  console.log('Controller, user id : ' + req.user.id);
   mongoService.registerForEvent(req.user.id, req.params.id, function(err, resultFromDB) {
     if (err) {
-      return res.status(err).send(err);
+      return res.status(err).send({message: 'Something went wrong..', error: err});
     }
     console.log('Controller, klarat, result: ' + resultFromDB);
     return res.send(resultFromDB);

@@ -29,7 +29,6 @@ var mysqlService = function() {
   };
 
   var getByLinkedInToken = function(token, done) {
-    console.log('ska skicka query');
     var query = mysql.format('SELECT * FROM `member` WHERE appToken = ?', [token]);
     executeQuery(query, done);
   };
