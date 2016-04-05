@@ -30,7 +30,7 @@ var mysqlService = function() {
     var day = date.getDate();
     var onlyDate = year + '-' + month + '-' + day;
 
-    var limit = parameter.limit || 8;
+    var limit = parameter.limit || 80;
 
     var query = mysql.format('SELECT dm.id, dm.firstName, dm.lastName, dm.linkedInProfile, ' +
     'dm.headline, dm.interests, dm.location, dm.image ' +
