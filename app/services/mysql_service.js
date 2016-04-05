@@ -30,10 +30,11 @@ var mysqlService = function() {
     var day = date.getDate();
     var onlyDate = year + '-' + month + '-' + day;
 
-    var query = mysql.format('SELECT dm.id, dm.firstName, dm.lastName, dm.image FROM ' +
-    'djakne.member AS dm INNER JOIN djakne.`order` as do ON dm.id = do.member_id ' +
+    var query = mysql.format('SELECT dm.id, dm.firstName, dm.lastName, dm.linkedInProfile, ' +
+    'dm.headline, dm.interests, dm.location, dm.image ' +
+    'FROM djakne.member AS dm INNER JOIN djakne.`order` as do ON dm.id = do.member_id ' +
     'WHERE date(do.orderTime) = ? and dm.active = 1 and dm.image != "" ' +
-    'GROUP BY dm.id;', [onlyDate]);
+    ';', [onlyDate]);
     executeQuery(query, done);
   };
 
