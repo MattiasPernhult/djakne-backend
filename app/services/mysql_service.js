@@ -20,22 +20,17 @@ var mysqlService = function() {
   });
 
   var getMenuWithCategory = function(done) {
-    var query = 'SELECT djakne.product.name AS Produkt, djakne.product.id AS Id, ' +
-      'djakne.product.price AS Pris, djakne.producttype.name AS Kategori FROM ' +
+    var query = 'SELECT djakne.product.name AS name, djakne.product.id AS id, ' +
+      'djakne.product.price AS price, djakne.producttype.name AS category FROM ' +
       'djakne.product_producttype INNER JOIN djakne.producttype ON djakne.producttype.id ' +
       '= djakne.product_producttype.producttype_id INNER JOIN djakne.product ON djakne.product.id ' +
-      '= djakne.product_producttype.product_id;';
-    executeQuery(query, done);
-  };
-
-  var getByLinkedInToken = function(token, done) {
-    var query = mysql.format('SELECT * FROM `member` WHERE appToken = ?', [token]);
+      '= djakne.product_producttype.product_id WHERE djakne.product.showInMenu = 1;';
     executeQuery(query, done);
   };
 
   var getUsersById = function(ids, done) {
     var query = 'SELECT dm.id, dm.firstName, dm.lastName, dm.linkedInProfile, dm.headline,' +
-    'dm.interests, dm.image FROM djakne.member AS dm';
+      'dm.interests, dm.image FROM djakne.member AS dm';
     for (var i = 0; i < ids.length; i++) {
       if (i === 0) {
         query += ' WHERE dm.id = ';
@@ -44,7 +39,29 @@ var mysqlService = function() {
       }
       query += ids[i];
     }
-    console.log('MySQL_service, mysql query: ' + query);
+    executeQuery(query, done);
+  };
+
+  var getPeopleAtDjakneToday = function(done)  {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    var day = date.getDate();
+    var onlyDate = year + '-' + month + '-' + day;
+
+    var query = mysql.format('SELECT dm.id, dm.firstName, dm.lastName, dm.linkedInProfile, ' +
+      'dm.headline, dm.interests, dm.location, dm.image ' +
+      'FROM djakne.member AS dm INNER JOIN djakne.`order` as do ON dm.id = do.member_id ' +
+      'WHERE date(do.orderTime) = ? and dm.active = 1 and dm.image != "" ' +
+      ';', [onlyDate]);
+    executeQuery(query, done);
+  };
+
+  var getUserByLinkedInToken = function(token, done) {
+    var query = mysql.format('SELECT id FROM `member` WHERE appToken = ?', [token]);
     executeQuery(query, done);
   };
 
@@ -56,8 +73,9 @@ var mysqlService = function() {
 
   return {
     getMenuWithCategory: getMenuWithCategory,
-    getByLinkedInToken: getByLinkedInToken,
     getUsersById: getUsersById,
+    getUserByLinkedInToken: getUserByLinkedInToken,
+    getPeopleAtDjakneToday: getPeopleAtDjakneToday,
   };
 };
 

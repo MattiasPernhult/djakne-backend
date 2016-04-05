@@ -28,12 +28,14 @@ var mongoService = function() {
   };
 
   var getCoffeeOneCurrent = function(query, callback) {
-    CoffeeSchema.find({}).sort({startDate: -1}).limit(1).exec(callback);
+    var date = new Date().toISOString();
+    CoffeeSchema.findOne({endDate: {$gte: date}}).exec(callback);
   };
 
   var putVote = function(id, query, callback) {
-    CoffeeSchema.findOneAndUpdate({voted: { $nin: [ id ] } }, query)
-      .sort({startDate: -1}).exec(function(err, res) {
+    var date = new Date().toISOString();
+    CoffeeSchema.findOneAndUpdate({endDate: {$gte: date}, voted: { $nin: [ id ] } }, query)
+      .exec(function(err, res) {
       return callback(err, res);
     });
   };

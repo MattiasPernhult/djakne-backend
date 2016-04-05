@@ -6,7 +6,7 @@ var chai = require('chai');
 var expect = chai.expect;
 
 var mongoose = require('mongoose');
-mongoose.connect(auth.mongoConnection);
+// mongoose.connect(auth.mongoConnection);
 
 
 describe('Mongoservice for events', function() {
