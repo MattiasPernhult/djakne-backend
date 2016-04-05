@@ -10,6 +10,7 @@ var eventRoute = require('./app/routes/event');
 var coffeeRoute = require('./app/routes/coffee');
 var menuRoute = require('./app/routes/menu');
 var auth = require('./app/config/auth');
+var userRoute = require('./app/routes/user');
 
 // connect to mongodb
 mongoose.connect(auth.mongoConnection);
@@ -50,6 +51,7 @@ app.use('/', index);
 app.use('/coffee', coffeeRoute);
 app.use('/events', eventRoute);
 app.use('/menu', menuRoute);
+app.use('/users', userRoute);
 
 
 // catch 404 and forward to error handler

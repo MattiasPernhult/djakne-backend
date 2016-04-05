@@ -14,6 +14,7 @@ var mongoService = function() {
           id: event._id,
         },
       };
+      console.log('Event added: ' + JSON.stringify(event, null, 4));
       return callback(null, r);
     });
   };
