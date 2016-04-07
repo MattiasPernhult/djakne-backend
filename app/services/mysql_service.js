@@ -42,7 +42,7 @@ var mysqlService = function() {
     executeQuery(query, done);
   };
 
-  var getPeopleAtDjakneToday = function(done)  {
+  var getPeopleAtDjakneToday = function(parameter, done) {
     var date = new Date();
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
@@ -52,11 +52,13 @@ var mysqlService = function() {
     var day = date.getDate();
     var onlyDate = year + '-' + month + '-' + day;
 
+    var limit = parameter.limit || 80;
+
     var query = mysql.format('SELECT dm.id, dm.firstName, dm.lastName, dm.linkedInProfile, ' +
-      'dm.headline, dm.interests, dm.location, dm.image ' +
-      'FROM djakne.member AS dm INNER JOIN djakne.`order` as do ON dm.id = do.member_id ' +
-      'WHERE date(do.orderTime) = ? and dm.active = 1 and dm.image != "" ' +
-      ';', [onlyDate]);
+    'dm.headline, dm.interests, dm.location, dm.image ' +
+    'FROM djakne.member AS dm INNER JOIN djakne.`order` as do ON dm.id = do.member_id ' +
+    'WHERE date(do.orderTime) = ? and dm.active = 1 and dm.image != "" ' +
+    ' LIMIT ?;', [onlyDate, limit]);
     executeQuery(query, done);
   };
 
