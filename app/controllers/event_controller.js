@@ -46,14 +46,13 @@ controller.get = function(req, res) {
 
 controller.registerForEvent = function(req, res) {
   if (!req.user.id) {
-    // console.log('ingen user.id');
     return res.status(400).send({error: 'You are not authenticated'});
   }
   mongoService.registerForEvent(req.user.id, req.params.id, function(err, resultFromDB) {
     if (err) {
       return res.status(err).send({message: 'Something went wrong..', error: err});
     }
-    console.log('Controller, klarat, result: ' + resultFromDB);
+    // console.log('Controller, klarat, result: ' + resultFromDB);
     return res.send(resultFromDB);
   });
 };

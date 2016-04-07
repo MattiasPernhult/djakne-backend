@@ -26,11 +26,12 @@ var mongoService = function() {
   };
 
   var registerForEvent = function(userId, eventId, callback) {
+    console.log('i mongo, registerForEvent, id: ' + userId);
     EventSchema.findOneAndUpdate({
       _id: eventId,
     }, {
       $addToSet: {
-        attendee: userId,
+        attendants: userId,
       },
     }, function(err, updatedEvent) {
       console.log(err);
