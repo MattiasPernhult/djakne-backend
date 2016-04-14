@@ -10,6 +10,7 @@ var eventRoute = require('./app/routes/event');
 var coffeeRoute = require('./app/routes/coffee');
 var menuRoute = require('./app/routes/menu');
 var memberRoute = require('./app/routes/member');
+var retrotvRoute = require('./app/routes/retro_tv');
 var auth = require('./app/config/auth');
 
 // connect to mongodb
@@ -47,11 +48,14 @@ app.use('*', function(req, res, next) {
   next();
 });
 
+app.use(express.static('app/views/static'));
+
 app.use('/', index);
 app.use('/coffee', coffeeRoute);
 app.use('/events', eventRoute);
 app.use('/menu', menuRoute);
 app.use('/member', memberRoute);
+app.use('/retrotv', retrotvRoute);
 
 
 
