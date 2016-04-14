@@ -41,34 +41,27 @@ p {
     border-style: hidden;
     top: 2.5%;
     left: 2.5%;
-    
+
 }
 
 [class*="col-1"] {
     float: left;
     padding: 0px;
-    border-left-style: solid;
+    border-left-style: none;
     border-right-style: solid;
     border-bottom-style: none;
     border-top-style: solid;
+    top: 0;
 }
 
 [class*="col-2"] {
     float: left;
     padding: 0px;
     border-left-style: none;
-    border-right-style: none;
-    border-bottom-style: solid;
-    border-top-style: solid;
-}
-
-[class*="col-3"] {
-    float: left;
-    padding: 0px;
-    border-left-style: solid;
     border-right-style: solid;
     border-bottom-style: solid;
     border-top-style: solid;
+    top: 0;
 }
 
 [class*="col-7"] {
@@ -84,9 +77,20 @@ p {
     float: left;
     padding: 0px;
     border-left-style: none;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-top-style: none;
+    top: 0;
+}
+
+[class*="col-6"] {
+    float: left;
+    padding: 0px;
+    border-left-style: none;
     border-right-style: none;
     border-bottom-style: solid;
     border-top-style: none;
+    top: 0;
 }
 
 [class*="col-8"] {
@@ -95,11 +99,12 @@ p {
     border: 0px solid #00ff00;
 }
 
-.col-1 {width: 20%;height: 10%;}
-.col-2 {width: 20%;height: 10%;}
-.col-3 {width: 20%;height: 10%;}
+.col-1 {width: 15%;height: 10%;}
+.col-2 {width: 15%;height: 10%;}
+.col-3 {width: 15%;height: 10%;}
 .col-4 {width: 95.00%;height: 95%;}
 .col-5 {width: 20%;height: 10%;}
+.col-6 {width: 20%;height: 10%;}
 .col-7 {width: 100%;height: 80%;}
 .col-8 {width: 100%;height: 5%;}
 
