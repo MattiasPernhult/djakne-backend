@@ -1,21 +1,22 @@
 var express = require('express');
 var router = express.Router();
 
-var conferenceController = require('../controllers/conference_controller');
+var calendarController = require('../controllers/calendar_controller');
 
 router.get('/', function(res, req, next) {
-  conferenceController.getBooking(res, req);
+  calendarController.get(res, req);
 });
 
 router.post('/', function(res, req) {
-  conferenceController.postBooking(res, req);
+  calendarController.postBooking(res, req);
 });
 
 router.get('/remove', function(res, req, next) {
-  conferenceController.removeBooking(res, req);
+  calendarController.removeBooking(res, req);
 });
 
 router.get('/update', function(res, req, next) {
-  conferenceController.upDate(res, req);
+  calendarController.upDate(res, req);
 });
+
 module.exports = router;
