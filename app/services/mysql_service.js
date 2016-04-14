@@ -58,7 +58,7 @@ var mysqlService = function() {
     'dm.headline, dm.interests, dm.location, dm.image ' +
     'FROM djakne.member AS dm INNER JOIN djakne.`order` as do ON dm.id = do.member_id ' +
     'WHERE date(do.orderTime) = ? and dm.active = 1 and dm.image != "" ' +
-    ' LIMIT ?;', [onlyDate, limit]);
+    'GROUP BY dm.id LIMIT ?;', [onlyDate, limit]);
     executeQuery(query, done);
   };
 
