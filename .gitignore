@@ -7,3 +7,5 @@ app/config/auth.js
 coverage
 
 app/config/client_secret.js
+
+.DS_Store
