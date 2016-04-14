@@ -14,6 +14,7 @@ var mongoService = function() {
           id: event._id,
         },
       };
+      console.log('Event added: ' + JSON.stringify(event, null, 4));
       return callback(null, r);
     });
   };
@@ -24,9 +25,24 @@ var mongoService = function() {
     });
   };
 
+  var registerForEvent = function(userId, eventId, callback) {
+    console.log('i mongo, registerForEvent, id: ' + userId);
+    EventSchema.findOneAndUpdate({
+      _id: eventId,
+    }, {
+      $addToSet: {
+        attendants: userId,
+      },
+    }, function(err, updatedEvent) {
+      console.log(err);
+      return callback(err, updatedEvent);
+    });
+  };
+
   return {
     insertEvent: insertEvent,
     getEvents: getEvents,
+    registerForEvent: registerForEvent,
   };
 };
 

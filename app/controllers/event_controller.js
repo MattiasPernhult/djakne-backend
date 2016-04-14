@@ -31,7 +31,7 @@ controller.get = function(req, res) {
     if (errors.length > 0) {
       return res.status(400).send({errors: errors});
     }
-    query = buildQuery(req);
+    query = buildQueryToGetEvents(req);
   }
   mongoService.getEvents(query, function(err, resultFromDB) {
     if (err) {
@@ -44,7 +44,23 @@ controller.get = function(req, res) {
   });
 };
 
-var buildQuery = function(req, res) {
+controller.registerForEvent = function(req, res) {
+  console.log('i registerForEvent');
+  if (!req.body.userID) {
+    return res.status(400).send({error: 'You are not authenticated'});
+  }
+  console.log('är inloggad');
+  mongoService.registerForEvent(req.body.userID, req.params.id, function(err, resultFromDB) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send({message: 'Something went wrong..', error: err});
+    }
+    // console.log('Controller, klarat, result: ' + resultFromDB);
+    return res.send(resultFromDB);
+  });
+};
+
+var buildQueryToGetEvents = function(req, res) {
   var query = {
     date: {},
   };

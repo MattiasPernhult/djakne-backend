@@ -11,6 +11,17 @@ var sanitize = function(s, encode) {
   return entities.decodeHTML(s);
 };
 
+helper.sanitizeMembers = function(members, encode) {
+  var sanitizedMembers = [];
+  for (var member in members) {
+    members[member].headline = sanitize(members[member].headline, encode);
+    members[member].firstName = sanitize(members[member].firstName, encode);
+    members[member].lastName = sanitize(members[member].lastName, encode);
+    sanitizedMembers.push(members[member]);
+  }
+  return sanitizedMembers;
+};
+
 helper.sanitizeProductNames = function(products, encode) {
   var productsInCategory = {};
   for (var product in products) {

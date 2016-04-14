@@ -37,7 +37,7 @@ coffeeValidator.validateVote = function(input) {
   if (!this.isString(input.body.vote)) {
     return false;
   }
-  if (!this.isString(input.body.userID)) {
+  if (!this.isString(input.body.token)) {
     return false;
   }
   if (input.body.vote.length !== 1) {
