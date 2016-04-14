@@ -1,6 +1,6 @@
 var validator = require('../utils/validator');
 
-var Event = function(title, text, author, date) {
+var Event = function(title, text, author, date, location) {
   if (this.validateString(title)) {
     this.title = title;
   }
@@ -13,6 +13,7 @@ var Event = function(title, text, author, date) {
   if (this.validateDate(date)) {
     this.date = date;
   }
+  this.location = location;
 };
 
 Event.prototype.checkAttributes = function() {

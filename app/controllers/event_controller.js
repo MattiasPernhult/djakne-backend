@@ -1,6 +1,7 @@
 var mongoService = require('../services/mongo_event_service');
 var EventModel = require('../models/event_model');
 var validator = require('../utils/validator');
+var helper = require('../utils/helper');
 
 var controller = {};
 
@@ -57,6 +58,7 @@ controller.registerForEvent = function(req, res) {
       }
       return res.send({message: 'Something went wrong..', error: err});
     }
+    resultFromDB.attendants = helper.sanitizeMembers(resultFromDB.attendants, true);
     return res.send(resultFromDB);
   });
 };
@@ -96,7 +98,10 @@ var validateQueryParameters = function(query) {
 
 var createEventModel = function(req) {
   var body = req.body;
-  var eventToAdd = new EventModel(body.title, body.text, body.author, body.date);
+  if (body.location === undefined) {
+    body.location = null;
+  }
+  var eventToAdd = new EventModel(body.title, body.text, body.author, body.date, body.location);
   return eventToAdd;
 };
 

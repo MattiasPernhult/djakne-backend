@@ -13,6 +13,7 @@ var EventSchema = new mongoose.Schema({
   title: String,
   text: String,
   author: String,
+  location: String,
   date: Date,
   attendants: [UserSchema],
   attendantsId: [String],
