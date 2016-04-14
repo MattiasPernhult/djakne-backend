@@ -9,6 +9,7 @@ var index = require('./app/routes/index');
 var eventRoute = require('./app/routes/event');
 var coffeeRoute = require('./app/routes/coffee');
 var menuRoute = require('./app/routes/menu');
+var conferenceRoute = require('./app/routes/conference');
 var auth = require('./app/config/auth');
 
 // connect to mongodb
@@ -50,7 +51,7 @@ app.use('/', index);
 app.use('/coffee', coffeeRoute);
 app.use('/events', eventRoute);
 app.use('/menu', menuRoute);
-
+app.use('/conference', conferenceRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

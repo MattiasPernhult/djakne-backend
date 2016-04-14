@@ -5,3 +5,5 @@ npm-debug.log
 app/config/auth.js
 
 coverage
+
+app/config/client_secret.js
