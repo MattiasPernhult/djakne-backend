@@ -63,7 +63,8 @@ var mysqlService = function() {
   };
 
   var getUserByLinkedInToken = function(token, done) {
-    var query = mysql.format('SELECT id FROM `member` WHERE appToken = ?', [token]);
+    var query = mysql.format('SELECT user.id, user.firstName, user.lastName, user.image, ' +
+     'user.headline, user.linkedInProfile FROM djakne.member AS user WHERE appToken = ?', [token]);
     executeQuery(query, done);
   };
 
