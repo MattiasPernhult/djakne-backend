@@ -6,13 +6,41 @@ var key = require('../config/auth').calendar;
 var Calendar = require('../models/calendar');
 
 var jwtClient = new google.auth.JWT(key.clientEmail, null, key.privateKey,
-  ['https://www.googleapis.com/auth/calendar'], null);
+['https://www.googleapis.com/auth/calendar'], null);
 
 var calendarService = function() {
 
   var authorize = function(authorized) {
     jwtClient.authorize(function(err, tokens) {
       authorized(err);
+    });
+  };
+
+  var deleteCalendarEvent = function(id, done) {
+    authorize(function(err) {
+      if (err) {
+        return done(err, null);
+      }
+      var query = {
+        auth: jwtClient,
+        calendarId: key.calendarId,
+        eventId: id,
+      };
+      calendar.events.delete(query, done);
+    });
+  };
+
+  var insertCalendarEvent = function(body, done) {
+    authorize(function(err) {
+      if (err) {
+        return done(err, null);
+      }
+      var query = {
+        auth: jwtClient,
+        calendarId: key.calendarId,
+        resource: body,
+      };
+      calendar.events.insert(query, done);
     });
   };
 
@@ -39,6 +67,8 @@ var calendarService = function() {
 
   return {
     getCalendarEvents: getCalendarEvents,
+    insertCalendarEvent: insertCalendarEvent,
+    deleteCalendarEvent: deleteCalendarEvent,
   };
 };
 

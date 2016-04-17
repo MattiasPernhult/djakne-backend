@@ -4,6 +4,31 @@ var validator = require('../utils/calendar_validator');
 
 var calendarService = require('../services/calendar_service');
 
+var CalendarEvent = require('../models/calendar_event');
+
+controller.delete = function(req, res) {
+  if (!req.params.id) {
+    return res.status(400).send({error: 'Missing id'});
+  }
+  calendarService.deleteCalendarEvent(req.params.id, function(err) {
+    if (err) {
+      return res.status(400).send({error: err});
+    }
+    return res.send({message: 'Event ' + req.params.id + ' is deleted'});
+  });
+};
+
+controller.post = function(req, res) {
+  var body = req.body;
+  var event = new CalendarEvent(body.summary, body.description, body.startTime, body.endTime);
+  calendarService.insertCalendarEvent(event.toString(), function(err, event) {
+    if (err) {
+      return res.status(500).send({error: err});
+    }
+    return res.send(event);
+  });
+};
+
 controller.get = function(req, res) {
   var parameters = req.query;
   console.log(parameters);
