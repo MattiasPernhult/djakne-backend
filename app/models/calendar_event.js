@@ -5,11 +5,11 @@ var CalendarEvent = function(summary, description, startTime, endTime) {
   this.description = description;
   this.start = {
     dateTime: startTime,
-    // timeZone: 'Europe/Stockholm',
+    timeZone: 'Europe/Stockholm',
   };
   this.end = {
     dateTime: endTime,
-    // timeZone: 'Europe/Stockholm',
+    timeZone: 'Europe/Stockholm',
   };
 };
 
