@@ -2,6 +2,7 @@ var mongoService = require('../services/mongo_event_service');
 var EventModel = require('../models/event_model');
 var validator = require('../utils/validator');
 var helper = require('../utils/helper');
+var moment = require('moment');
 
 var controller = {};
 
@@ -9,6 +10,7 @@ controller.post = function(req, res) {
   // console.log('i events/ post');
 
   var eventToAdd = createEventModel(req);
+  console.log('eventToAdd: ' + eventToAdd.date);
 
   if (!eventToAdd.checkAttributes()) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
@@ -17,7 +19,8 @@ controller.post = function(req, res) {
     if (err) {
       return res.status(500).send(err);
     }
-    // console.log('Event added : ' + addedEvent.result.id);
+    addedEvent.date = moment(addedEvent.date).format();
+    console.log('Event added : ' + JSON.stringify(addedEvent, null, 4));
     res.send(addedEvent);
   });
 };
@@ -102,6 +105,7 @@ var createEventModel = function(req) {
     body.location = null;
   }
   var eventToAdd = new EventModel(body.title, body.text, body.author, body.date, body.location);
+  console.log(eventToAdd);
   return eventToAdd;
 };
 

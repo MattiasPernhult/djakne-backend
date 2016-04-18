@@ -1,6 +1,7 @@
 var entities = require('entities');
 var iconv = require('iconv-lite');
 var capitalize = require('string-capitalize');
+var moment = require('moment');
 
 var helper = {};
 
@@ -33,6 +34,13 @@ helper.sanitizeProductNames = function(products, encode) {
     productsInCategory[products[product].category].push(products[product]);
   }
   return productsInCategory;
+};
+
+helper.formatDateTime = function(date) {
+  console.log(date);
+  var newDate = moment.format(date);
+  console.log('newDate: ' + newDate);
+  return newDate;
 };
 
 module.exports = helper;
