@@ -4,7 +4,10 @@ var http = require('http');
 var httpServer = http.Server(server);
 var handlebars = require('handlebars');
 var fs = require('fs');
-var mongoService = require('../services/mongo_coffee_service')
+var mongoService = require('../services/mongo_coffee_service');
+var mysqlService = require('../services/mysql_service');
+var helper = require('../utils/helper');
+var request = require('request');
 
 var controller = {};
 
@@ -15,22 +18,42 @@ controller.getRetrotv = function(req, res) {
   var file = '';
   if (n >= 0 && n < 15) {
     file = 'orders.html';
+    request('http://localhost:4000/member/today', function(error, response, body) {
+      body = JSON.parse(body);
+      if (!error && response.statusCode === 200) {
+        console.log(body);
+
+      } else if (response.statusCode === 400) {
+
+      } else {
+        return res.status(500).send({
+          message: 'Ohh... database is having some stomach problems, ' +
+            'maybe to much coffee for one day...',
+        });
+      }
+    });
     renderAndSend(file, data, res);
   } else if (n >= 15 && n < 35) {
     file = 'coffee.html';
-    mongoService.getCoffeeOneCurrent({startDate: -1,}, function(err, resultFromDB) {
-      if (err) {
-        console.log(err);
-      }
-      if (resultFromDB) {
-        resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
-      }
-      data.title = resultFromDB.title;
-      data.description = resultFromDB.description;
-      data.img = resultFromDB.image;
-      data.votes = resultFromDB.averageVotes;
-      if (data.votes === 0) {
-        data.votes = 'NO VOTES';
+    request('http://localhost:4000/coffee/current', function(error, response, body) {
+      body = JSON.parse(body);
+      if (!error && response.statusCode === 200) {
+        console.log(body.result.title);
+        data.title = body.result.title;
+        data.description = body.result.description;
+        data.img = body.result.image;
+        if (body.result.averageVotes === 0) {
+          data.votes = 'NO VOTES';
+        } else {
+          data.votes = 'SCORE: ' + body.result.averageVotes;
+        }
+      } else if (response.statusCode === 400) {
+        data.title = 'NO COFFEE ADDED';
+      } else {
+        return res.status(500).send({
+          message: 'Ohh... database is having some stomach problems, ' +
+            'maybe to much coffee for one day...',
+        });
       }
       renderAndSend(file, data, res);
     });
@@ -63,21 +86,6 @@ function renderAndSend(file, data, res) {
     var html = template(data);
     res.send(html);
   });
-}
-
-function modifyJSON(object) {
-  object.averageVotes = 0;
-  object.totalVotes = 0;
-  object.totalVotes = object.one + object.two +
-    object.three + object.four + object.five;
-  if (object.totalVotes > 0) {
-    object.averageVotes = ((object.one + (object.two * 2) +
-      (object.three * 3) + (object.four * 4) +
-      (object.five * 5)) / object.totalVotes).toFixed(1);
-  }
-  delete object._id;
-  delete object.__v;
-  return object;
 }
 
 module.exports = controller;
