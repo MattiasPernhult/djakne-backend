@@ -2,7 +2,6 @@ var mongoService = require('../services/mongo_event_service');
 var EventModel = require('../models/event_model');
 var validator = require('../utils/validator');
 var helper = require('../utils/helper');
-var moment = require('moment');
 
 var controller = {};
 
@@ -46,17 +45,15 @@ controller.get = function(req, res) {
 };
 
 controller.registerForEvent = function(req, res) {
-  if (!req.body.user.id) {
+  console.log('i registerForEvent');
+  if (!req.body.userID) {
     return res.status(400).send({error: 'You are not authenticated'});
   }
-  mongoService.registerForEvent(req.body.user, req.params.id, function(err, resultFromDB) {
+  console.log('är inloggad');
+  mongoService.registerForEvent(req.body.userID, req.params.id, function(err, resultFromDB) {
     if (err) {
-      if (err.status) {
-        res.status(err.status);
-      } else {
-        res.status(500);
-      }
-      return res.send({message: 'Something went wrong..', error: err});
+      console.log(err);
+      return res.status(500).send({message: 'Something went wrong..', error: err});
     }
     resultFromDB.attendants = helper.sanitizeMembers(resultFromDB.attendants, true);
     return res.send(resultFromDB);
