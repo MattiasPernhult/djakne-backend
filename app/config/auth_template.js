@@ -1,4 +1,13 @@
 var auth = {};
+auth.google = {
+  clientId: '<id>',
+  projectId: '<ferrous-module>',
+  authUri: '<url>',
+  tokenUi: '<url>',
+  authProviderX509CertUrl: '<url>',
+  clientSecret: '<key>',
+  redirectUris: '<localhost>',
+};
 
 auth.mongoUrl = 'your_host:port';
 auth.mongoConnection = 'mongodb://' + auth.mongoUrl + '/djakne';

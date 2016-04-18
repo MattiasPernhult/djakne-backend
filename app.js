@@ -9,6 +9,7 @@ var index = require('./app/routes/index');
 var eventRoute = require('./app/routes/event');
 var coffeeRoute = require('./app/routes/coffee');
 var menuRoute = require('./app/routes/menu');
+var calendarRoute = require('./app/routes/calendar');
 var memberRoute = require('./app/routes/member');
 var auth = require('./app/config/auth');
 
@@ -47,13 +48,21 @@ app.use('*', function(req, res, next) {
   next();
 });
 
+app.use(function(req, res, next) {
+  for (var key in req.query) {
+    if (Number(req.query[key])) {
+      req.query[key] = Number(req.query[key]);
+    }
+  }
+  next();
+});
+
 app.use('/', index);
 app.use('/coffee', coffeeRoute);
 app.use('/events', eventRoute);
 app.use('/menu', menuRoute);
 app.use('/member', memberRoute);
-
-
+app.use('/calendar', calendarRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

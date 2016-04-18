@@ -16,6 +16,10 @@ validator.isString = function(attribute) {
   return (typeof attribute === 'string');
 };
 
+validator.isNumber = function(attribute) {
+  return !isNaN(attribute);
+};
+
 validator.isDate = function(input) {
   if (input === undefined || typeof input !== 'string') {
     return false;

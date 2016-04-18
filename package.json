@@ -35,6 +35,8 @@
     "chai-http": "~2.0.1",
     "entities": "^1.1.1",
     "express": "4.13.4",
+    "google-auth-library": "^0.9.7",
+    "googleapis": "^4.0.0",
     "iconv-lite": "^0.4.13",
     "jade": "^1.11.0",
     "moment": "2.12.0",
