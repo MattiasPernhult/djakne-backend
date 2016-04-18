@@ -29,14 +29,14 @@ validator.validatePostBody = function(body) {
   if (!body.startTime) {
     errors.push({error: 'Must provide \'startTime\' in the request body'});
   } else {
-    if (body.startTime.indexOf('Z')) {
+    if (body.startTime.indexOf('Z') > 1) {
       errors.push({error: '\'startTime\' cannot have a Z in the date'});
     }
   }
   if (!body.endTime) {
     errors.push({error: 'Must provide \'endTime\' in the request body'});
   } else {
-    if (body.endTime.indexOf('Z')) {
+    if (body.endTime.indexOf('Z') > 1) {
       errors.push({error: '\'endTime\' cannot have a Z in the date'});
     }
   }
