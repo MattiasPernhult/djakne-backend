@@ -36,11 +36,4 @@ helper.sanitizeProductNames = function(products, encode) {
   return productsInCategory;
 };
 
-helper.formatDateTime = function(date) {
-  console.log(date);
-  var newDate = moment.format(date);
-  console.log('newDate: ' + newDate);
-  return newDate;
-};
-
 module.exports = helper;

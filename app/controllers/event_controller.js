@@ -7,11 +7,10 @@ var moment = require('moment');
 var controller = {};
 
 controller.post = function(req, res) {
-  // console.log('i events/ post');
-
+  console.log(req.body);
   var eventToAdd = createEventModel(req);
-  console.log('eventToAdd: ' + eventToAdd.date);
-
+  console.log(eventToAdd.checkAttributes());
+  console.log(eventToAdd);
   if (!eventToAdd.checkAttributes()) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
@@ -19,8 +18,6 @@ controller.post = function(req, res) {
     if (err) {
       return res.status(500).send(err);
     }
-    addedEvent.date = moment(addedEvent.date).format();
-    console.log('Event added : ' + JSON.stringify(addedEvent, null, 4));
     res.send(addedEvent);
   });
 };
@@ -101,11 +98,10 @@ var validateQueryParameters = function(query) {
 
 var createEventModel = function(req) {
   var body = req.body;
-  if (body.location === undefined) {
-    body.location = null;
+  if (!body.location) {
+    body.location = 'Djäkne';
   }
   var eventToAdd = new EventModel(body.title, body.text, body.author, body.date, body.location);
-  console.log(eventToAdd);
   return eventToAdd;
 };
 
