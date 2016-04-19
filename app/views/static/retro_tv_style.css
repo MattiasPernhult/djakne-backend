@@ -126,7 +126,7 @@ img {
 [class*="col-cont"] {
     float: left;
     padding: 0px;
-    border-style: none;
+    border-style: solid;
 }
 
 [class*="col-cont2"] {

@@ -99,8 +99,8 @@ controller.getRetrotv = function(req, res) {
       fmt: 'json',
       limit: 2,
     }, function(err, res) {
-      console.log(res);
-      data.img = res.data.url;
+      console.log(res.data[0].url);
+      data.img = res.data[0].url;
     });
     renderAndSend(file, data, res);
   } else {
