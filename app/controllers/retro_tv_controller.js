@@ -19,27 +19,30 @@ controller.getRetrotv = function(req, res) {
     renderAndSend(file, data, res);
   } else if (n >= 15 && n < 35) {
     file = 'coffee.html';
-/**    mongoService.getCoffeeOneCurrent({
-      startDate: -1,
-    }, function(err, resultFromDB) {
-      if (err) {
-        console.log(err);
-      }
-      if (resultFromDB) {
-        resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
-      }
-      data.title = resultFromDB.title;
-      data.description = resultFromDB.description;
-      data.img = resultFromDB.image;
-      data.votes = resultFromDB.averageVotes;
-      if (data.votes === 0) {
-        data.votes = 'NO VOTES';
+    request('http://localhost:4000/coffee/current', function(error, response, respBody) {
+      if (!error && response.statusCode === 200 && respBody !== null) {
+        body = JSON.parse(respBody);
+        data.title = body.result.title;
+        data.description = body.result.description;
+        data.img = body.result.image;
+        if (body.result.averageVotes === 0) {
+          data.votes = 'NO VOTES';
+        } else {
+          data.votes = 'SCORE: ' + body.result.averageVotes;
+        }
+      } else if (response.statusCode === 400) {
+        data.title = 'NO COFFEE ADDED';
+      } else {
+        return res.status(500).send({
+          message: 'Ohh... database is having some stomach problems, ' +
+            'maybe to much coffee for one day...',
+        });
       }
       renderAndSend(file, data, res);
     });
   } else if (n >= 35 && n < 50) {
     file = 'giphy.html';
-    renderAndSend(file, data, res);**/
+    renderAndSend(file, data, res);
   } else if (n >= 50 && n < 60) {
     file = 'giphy.html';
 
