@@ -44,6 +44,7 @@
     "slack-notify": "^0.1.6",
     "string-capitalize": "^1.0.1",
     "validator": "5.1.0",
-    "handlebars": "~4.0.5"
+    "handlebars": "~4.0.5",
+    "giphy": "0.0.4"
   }
 }
