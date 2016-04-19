@@ -135,6 +135,15 @@ img {
     border-style: none;
 }
 
+[class*="col-order"] {
+    float: left;
+    padding: 0px;
+    border-left-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-top-style: none;
+}
+
 .col-1 {width: 15%;height: 10%;}
 .col-2 {width: 15%;height: 10%;}
 .col-3 {width: 15%;height: 10%;}
@@ -146,6 +155,7 @@ img {
 .col-head {width: 100%;height: 10%;}
 .col-cont {width: 100%;height: 90%;}
 .col-cont2 {width: 60%;height: 100%;}
+.col-order {width: 50%;height: 25%;}
 
 @keyframes scan{
   0%    {top:0%;}

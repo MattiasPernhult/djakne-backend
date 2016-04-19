@@ -39,7 +39,7 @@ controller.putVote = function(req, res) {
     if (resultFromDB !== null) {
       response.result = 'OK';
       console.log('New vote: ' + req.body.userID);
-      res.send(response);
+      return res.send(response);
     } else {
       response.result = 'Either you have already voted for this coffee or the time for voting ' +
         'has passed';
@@ -88,7 +88,7 @@ controller.getHistory = function(req, res) {
       resultFromDB = modifyJSONArray(
         JSON.parse(JSON.stringify(resultFromDB)));
     }else {
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
     var response = {
       result: resultFromDB,
@@ -112,7 +112,7 @@ controller.getID = function(req, res) {
     if (resultFromDB) {
       resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
     }else {
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
     var response = {
       result: resultFromDB,
@@ -138,7 +138,7 @@ controller.getCurrent = function(req, res) {
     if (resultFromDB) {
       resultFromDB = modifyJSON(JSON.parse(JSON.stringify(resultFromDB)));
     }else {
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
     var response = {
       result: resultFromDB,
@@ -160,7 +160,7 @@ controller.removeID = function(req, res) {
       return res.status(500).send(err);
     }
     if (!resultFromDB) {
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
     var response = {
       result: resultFromDB.djakneID,
