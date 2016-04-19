@@ -69,8 +69,8 @@ controller.getRetrotv = function(req, res) {
   } else if (n >= 15 && n < 35) {
     file = 'coffee.html';
     request('http://localhost:4000/coffee/current', function(error, response, respBody) {
-      body = JSON.parse(respBody);
-      if (!error && response.statusCode === 200) {
+      if (!error && response.statusCode === 200 && respBody !== null) {
+        body = JSON.parse(respBody);
         data.title = body.result.title;
         data.description = body.result.description;
         data.img = body.result.image;
