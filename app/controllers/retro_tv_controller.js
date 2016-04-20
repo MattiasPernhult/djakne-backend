@@ -5,6 +5,7 @@ var test = require('../data/member_today');
 var giphy = require('giphy-api')();
 
 var controller = {};
+var giphyQueue = [];
 
 controller.getRetrotv = function(req, res) {
   var data = {};
@@ -14,6 +15,7 @@ controller.getRetrotv = function(req, res) {
   var file = '';
   if (n >= 0 && n < 15) {
     file = 'orders.html';
+    data.sync = 15 - n;
     request('http://localhost:4000/member/today', function(error, response, respBody) {
       body = JSON.parse(respBody);
       body = test;
@@ -69,8 +71,8 @@ controller.getRetrotv = function(req, res) {
     request('http://localhost:4000/coffee/current', function(error, response, respBody) {
       if (!error && response.statusCode === 200 && respBody !== null) {
         body = JSON.parse(respBody);
-        data.title = body.result.title;
-        data.description = body.result.description;
+        data.title = body.result.title.toUpperCase();
+        data.description = body.result.description.toUpperCase();
         data.img = body.result.image;
         if (body.result.averageVotes === 0) {
           data.votes = 'NO VOTES';
@@ -93,23 +95,66 @@ controller.getRetrotv = function(req, res) {
   } else if (n >= 50 && n < 60) {
     file = 'giphy.html';
 
-    giphy.random({
-      tag: '8bit, vintage',
-      rating: 'g',
-      fmt: 'json',
-    }, function(err, result) {
-      if (result) {
-        data.img = result.data.image_url;
-        data.image = true;
-      }
-      renderAndSend(file, data, res);
-    });
+    if (giphyQueue[0] !== undefined) {
+      request('http://localhost:4000/member?ids=' + giphyQueue[0].user,
+        function(error, response, respBody) {
+        if (!error && response.statusCode === 200 && respBody !== null) {
+          body = JSON.parse(respBody);
+          giphy.random({
+            tag: giphyQueue[0].giphy,
+            rating: 'g',
+            fmt: 'json',
+          }, function(err, result) {
+            data.imageR = false;
+            if (result) {
+              data.img = result.data.image_url;
+              data.name = body.data.members[0].firstName.toUpperCase() + ' ' +
+              body.data.members[0].lastName.toUpperCase();
+              data.req = giphyQueue[0].giphy.toUpperCase();
+              data.imgR = body.data.members[0].image;
+              data.imageR = true;
+            }
+            giphyQueue.shift();
+            renderAndSend(file, data, res);
+          });
+        }
+      });
+    } else {
+      giphy.random({
+        tag: '8bit, vintage',
+        rating: 'g',
+        fmt: 'json',
+      }, function(err, result) {
+        data.image = false;
+        if (result) {
+          data.img = result.data.image_url;
+          data.image = true;
+        }
+        renderAndSend(file, data, res);
+      });
+    }
   } else {
     return res.status(500).send({
       message: 'Old hardware do break from time to time...',
     });
   }
 };
+
+controller.postRequest = function(req, res) {
+  var tmp = {};
+  if(req.body === undefined) {
+    console.log('body = undefined');
+    return res.status(400).send({
+      message: 'Try again... (better luck this time)',
+    });
+  }
+  tmp.user = req.body.userID;
+  tmp.giphy = req.body.giphy;
+  giphyQueue.push(tmp);
+  return res.status(200).send({
+    message: 'That went well...',
+  });
+}
 
 function renderAndSend(file, data, res) {
   fs.readFile('app/views/' + file, 'utf-8', function(error, source) {

@@ -14,14 +14,33 @@
     <div class="col-1"><p>GIPHY</p></div>
     <div class="col-6">  </div>
     <div class="col-7">
-      <div class="col-head"><p>  </p></div>
-      <div class="col-cont" style="display: flex;align-items: center;justify-content: center">
-        {{#if image}}
+      {{#if image}}
+        <div class="col-head"><p>  </p></div>
+        <div class="col-cont" style="display: flex;align-items: center;justify-content: center">
           <img src="{{img}}" style="height:95%" class="tint"><br>
-        {{else}}
+        </div>
+      {{else}}
 
-        {{/if}}
-      </div>
+      {{/if}}
+      {{#if imageR}}
+        <div class="col-cont" style="height:100%">
+          <div class="col-head" style="display: flex;align-items: center;justify-content: center;height:25%">
+            <div class="col-order" style="height:100%">
+              <div class="col-orderimg" style="display: flex;align-items: center;justify-content: center;height:100%;width:19%">
+                <img src="data:image/jpeg;base64,{{imgR}}" style="height:95%">
+              </div>
+              <div class="col-ordertext;width:81%">
+                <p1><br>REQUEST: {{req}}<br>MADE BY: {{name}}</p1>
+              </div>
+            </div>
+          </div>
+          <div class="col-cont" style="height:75%;display: flex;align-items: center;justify-content: center">
+            <img src="{{img}}" style="height:95%" class="tint"><br>
+          </div>
+        </div>
+      {{else}}
+
+      {{/if}}
     </div>
     <div class="col-8"><p>***</p></div>
   </div>
