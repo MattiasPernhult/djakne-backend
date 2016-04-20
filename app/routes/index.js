@@ -2,16 +2,17 @@ var express = require('express');
 var router = express.Router();
 var mysqlService = require('../services/mysql_service');
 var auth = require('../config/auth');
+var authMiddleware = require('../middleware/auth');
 
 router.get('/', function(req, res, next) {
   res.send('Hej');
 });
 
-router.get('/wifi', function(req, res, next) {
-  if (!req.query.userId) {
+router.get('/wifi', authMiddleware.requiresLogin, function(req, res, next) {
+  if (!req.body.user.id) {
     return res.status(400).send({error: 'Missing user id'});
   }
-  mysqlService.isUserPremium(req.query.userId, function(err, isPremium) {
+  mysqlService.isUserPremium(req.body.user.id, function(err, isPremium) {
     if (err) {
       return res.status(500).send({error: err});
     }
