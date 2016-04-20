@@ -1,4 +1,6 @@
 
+<!DOCTYPE html>
+<html>
 <link rel="stylesheet" type="text/css" href="retro_tv_style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="refresh" content="10">
@@ -13,8 +15,12 @@
     <div class="col-6">  </div>
     <div class="col-7">
       <div class="col-head"><p>  </p></div>
-      <div class="col-cont">
-        <img src="{{img}}" title="opacity" class="rss opacity">
+      <div class="col-cont" style="display: flex;align-items: center;justify-content: center">
+        {{#if image}}
+          <img src="{{img}}" style="height:95%" class="tint"><br>
+        {{else}}
+
+        {{/if}}
       </div>
     </div>
     <div class="col-8"><p>***</p></div>
@@ -22,3 +28,4 @@
 </div>
 <div class="scan"></div>
 <div id="overlay"></div>
+</html>

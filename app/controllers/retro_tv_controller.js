@@ -93,16 +93,17 @@ controller.getRetrotv = function(req, res) {
   } else if (n >= 50 && n < 60) {
     file = 'giphy.html';
 
-    giphy.search({
-      q: '8bit+vintage',
+    giphy.random({
+      tag: '8bit, vintage',
       rating: 'g',
       fmt: 'json',
-      limit: 2,
-    }, function(err, res) {
-      console.log(res.data[0].url);
-      data.img = res.data[0].url;
+    }, function(err, result) {
+      if (result) {
+        data.img = result.data.image_url;
+        data.image = true;
+      }
+      renderAndSend(file, data, res);
     });
-    renderAndSend(file, data, res);
   } else {
     return res.status(500).send({
       message: 'Old hardware do break from time to time...',

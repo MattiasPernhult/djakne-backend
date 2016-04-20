@@ -41,9 +41,9 @@ img {
     float: right;
     border-radius: 8px;
     max-width: 100%;
+    background: rgba(0,255,0, 0.9);
+    -webkit-filter: sepia(1) hue-rotate(400deg) saturate(7) opacity(50%); filter: sepia(1) hue-rotate(400deg) saturate(7) opacity(50%);
 }
-
-.rss.opacity {-webkit-filter: opacity(30%); filter: opacity(30%);}
 
 .scan{width:100%;height:15%;background:linear-gradient(rgba(0,0,0,0),#7ff12a);position:absolute;left: 0;animation:scan;animation-duration:3s;animation-iteration-count: infinite;top:-85px;/*z-index:99*/;opacity:0.25;}
 
@@ -126,7 +126,7 @@ img {
 [class*="col-cont"] {
     float: left;
     padding: 0px;
-    border-style: solid;
+    border-style: none;
 }
 
 [class*="col-cont2"] {
