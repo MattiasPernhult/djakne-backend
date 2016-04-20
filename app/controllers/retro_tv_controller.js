@@ -121,7 +121,7 @@ controller.getRetrotv = function(req, res) {
       });
     } else {
       giphy.random({
-        tag: '8bit, vintage',
+        tag: '8bit, retro',
         rating: 'g',
         fmt: 'json',
       }, function(err, result) {
