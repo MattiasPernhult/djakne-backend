@@ -25,6 +25,7 @@ p {
     font-size: 3.6vh;
     color: #00cc00;
     text-align: center;
+    -webkit-filter: opacity(80%); filter: opacity(80%);
 }
 
 p1 {
@@ -32,6 +33,7 @@ p1 {
     font-size: 3.6vh;
     color: #00cc00;
     text-align: left;
+    -webkit-filter: opacity(80%); filter: opacity(80%);
 }
 
 img {
@@ -41,7 +43,7 @@ img {
     float: right;
     border-radius: 8px;
     max-width: 100%;
-    background: rgba(0,255,0, 0.9);
+
     -webkit-filter: sepia(1) hue-rotate(400deg) saturate(7) opacity(50%); filter: sepia(1) hue-rotate(400deg) saturate(7) opacity(50%);
 }
 
@@ -182,8 +184,8 @@ img {
 .col-cont {width: 100%;height: 90%;}
 .col-cont2 {width: 60%;height: 100%;}
 .col-order {width: 50%;height: 25%;}
-.col-ordertext {width: 85%;height: 100%;}
-.col-orderimg {width: 15%;height: 100%;}
+.col-ordertext {width: 81%;height: 100%;}
+.col-orderimg {width: 19%;height: 100%;}
 .col-coffeeimg {width: 30%;height: 100%;}
 
 @keyframes scan{
