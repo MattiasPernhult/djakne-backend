@@ -9,6 +9,7 @@ var index = require('./app/routes/index');
 var eventRoute = require('./app/routes/event');
 var coffeeRoute = require('./app/routes/coffee');
 var menuRoute = require('./app/routes/menu');
+var calendarRoute = require('./app/routes/calendar');
 var memberRoute = require('./app/routes/member');
 var retrotvRoute = require('./app/routes/retro_tv');
 var auth = require('./app/config/auth');
@@ -48,16 +49,31 @@ app.use('*', function(req, res, next) {
   next();
 });
 
+<<<<<<< HEAD
 app.use(express.static('app/views/static'));
+=======
+app.use(function(req, res, next) {
+  for (var key in req.query) {
+    if (Number(req.query[key])) {
+      req.query[key] = Number(req.query[key]);
+    }
+  }
+  next();
+});
+>>>>>>> 838f1e9c6250cc064174285315260f3c34b08df5
 
 app.use('/', index);
 app.use('/coffee', coffeeRoute);
 app.use('/events', eventRoute);
 app.use('/menu', menuRoute);
 app.use('/member', memberRoute);
+<<<<<<< HEAD
 app.use('/retrotv', retrotvRoute);
 
 
+=======
+app.use('/calendar', calendarRoute);
+>>>>>>> 838f1e9c6250cc064174285315260f3c34b08df5
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

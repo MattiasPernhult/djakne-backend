@@ -30,7 +30,7 @@ controller.putVote = function(req, res) {
     });
   }
   query = buildQueryVote(req);
-  mongoService.putVote(req.body.userID, query, function(err, resultFromDB) {
+  mongoService.putVote(req.body.user.id, query, function(err, resultFromDB) {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
@@ -192,31 +192,31 @@ var buildQueryVote = function(req) {
   switch (req.body.vote) {
     case '1': {
       query = {
-        $inc: { one: 1, }, $addToSet: { voted: req.body.userID },
+        $inc: { one: 1, }, $addToSet: { voted: req.body.user.id },
       };
       break;
     }
     case '2': {
       query = {
-        $inc: { two: 1, }, $addToSet: { voted: req.body.userID },
+        $inc: { two: 1, }, $addToSet: { voted: req.body.user.id },
       };
       break;
     }
     case '3': {
       query = {
-        $inc: { three: 1, }, $addToSet: { voted: req.body.userID },
+        $inc: { three: 1, }, $addToSet: { voted: req.body.user.id },
       };
       break;
     }
     case '4': {
       query = {
-        $inc: { four: 1, }, $addToSet: { voted: req.body.userID },
+        $inc: { four: 1, }, $addToSet: { voted: req.body.user.id },
       };
       break;
     }
     case '5': {
       query = {
-        $inc: { five: 1, }, $addToSet: { voted: req.body.userID },
+        $inc: { five: 1, }, $addToSet: { voted: req.body.user.id },
       };
       break;
     }

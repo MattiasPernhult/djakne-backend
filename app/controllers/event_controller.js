@@ -1,14 +1,15 @@
 var mongoService = require('../services/mongo_event_service');
 var EventModel = require('../models/event_model');
 var validator = require('../utils/validator');
+var helper = require('../utils/helper');
 
 var controller = {};
 
 controller.post = function(req, res) {
-  // console.log('i events/ post');
-
+  console.log(req.body);
   var eventToAdd = createEventModel(req);
-
+  console.log(eventToAdd.checkAttributes());
+  console.log(eventToAdd);
   if (!eventToAdd.checkAttributes()) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
@@ -16,7 +17,6 @@ controller.post = function(req, res) {
     if (err) {
       return res.status(500).send(err);
     }
-    // console.log('Event added : ' + addedEvent.result.id);
     res.send(addedEvent);
   });
 };
@@ -45,14 +45,17 @@ controller.get = function(req, res) {
 };
 
 controller.registerForEvent = function(req, res) {
-  if (!req.user.id) {
+  console.log('i registerForEvent');
+  if (!req.body.user.id) {
     return res.status(400).send({error: 'You are not authenticated'});
   }
-  mongoService.registerForEvent(req.user.id, req.params.id, function(err, resultFromDB) {
+  console.log('är inloggad');
+  mongoService.registerForEvent(req.body.user, req.params.id, function(err, resultFromDB) {
     if (err) {
-      return res.status(err).send({message: 'Something went wrong..', error: err});
+      console.log(err);
+      return res.status(500).send({message: 'Something went wrong..', error: err});
     }
-    // console.log('Controller, klarat, result: ' + resultFromDB);
+    resultFromDB.attendants = helper.sanitizeMembers(resultFromDB.attendants, true);
     return res.send(resultFromDB);
   });
 };
@@ -92,7 +95,10 @@ var validateQueryParameters = function(query) {
 
 var createEventModel = function(req) {
   var body = req.body;
-  var eventToAdd = new EventModel(body.title, body.text, body.author, body.date);
+  if (!body.location) {
+    body.location = 'Djäkne';
+  }
+  var eventToAdd = new EventModel(body.title, body.text, body.author, body.date, body.location);
   return eventToAdd;
 };
 

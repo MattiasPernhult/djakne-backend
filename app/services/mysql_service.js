@@ -23,8 +23,8 @@ var mysqlService = function() {
     var query = 'SELECT djakne.product.name AS name, djakne.product.id AS id, ' +
       'djakne.product.price AS price, djakne.producttype.name AS category FROM ' +
       'djakne.product_producttype INNER JOIN djakne.producttype ON djakne.producttype.id ' +
-      '= djakne.product_producttype.producttype_id INNER JOIN djakne.product ON djakne.product.id ' +
-      '= djakne.product_producttype.product_id WHERE djakne.product.showInMenu = 1;';
+      '= djakne.product_producttype.producttype_id INNER JOIN djakne.product ON djakne.product.id' +
+      ' = djakne.product_producttype.product_id WHERE djakne.product.showInMenu = 1;';
     executeQuery(query, done);
   };
 
@@ -58,13 +58,28 @@ var mysqlService = function() {
     'dm.headline, dm.interests, dm.location, dm.image ' +
     'FROM djakne.member AS dm INNER JOIN djakne.`order` as do ON dm.id = do.member_id ' +
     'WHERE date(do.orderTime) = ? and dm.active = 1 and dm.image != "" ' +
-    ' LIMIT ?;', [onlyDate, limit]);
+    'GROUP BY dm.id LIMIT ?;', [onlyDate, limit]);
     executeQuery(query, done);
   };
 
   var getUserByLinkedInToken = function(token, done) {
-    var query = mysql.format('SELECT id FROM `member` WHERE appToken = ?', [token]);
+    var query = mysql.format('SELECT user.id, user.firstName, user.lastName, user.image, ' +
+     'user.headline, user.linkedInProfile FROM djakne.member AS user WHERE appToken = ?', [token]);
     executeQuery(query, done);
+  };
+
+  var isUserPremium = function(userId, done) {
+    var query = mysql.format('SELECT group_id FROM djakne.group_member WHERE member_id = ? ' +
+    'HAVING group_id = 19', [userId]);
+    executeQuery(query, function(err, rows) {
+      if (err) {
+        return done(err, false);
+      }
+      if (rows.length > 0) {
+        return done(null, true);
+      }
+      return done(null, false);
+    });
   };
 
   var executeQuery = function(query, done) {
@@ -78,6 +93,7 @@ var mysqlService = function() {
     getUsersById: getUsersById,
     getUserByLinkedInToken: getUserByLinkedInToken,
     getPeopleAtDjakneToday: getPeopleAtDjakneToday,
+    isUserPremium: isUserPremium,
   };
 };
 

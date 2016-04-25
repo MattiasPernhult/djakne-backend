@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 var validator = {};
 
 validator.hasMinLength = function(attribute, minLength) {
@@ -14,11 +16,17 @@ validator.isString = function(attribute) {
   return (typeof attribute === 'string');
 };
 
+validator.isNumber = function(attribute) {
+  return !isNaN(attribute);
+};
+
 validator.isDate = function(input) {
   if (input === undefined || typeof input !== 'string') {
     return false;
   }
-  return true;
+  console.log('isdatevalid, input =' + input);
+  console.log('isdatevalid: ' + moment(input).isValid());
+  return moment(input).isValid();
   // return input.match(/^(\d{4})\-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/);
   // return input.match(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/);
 };

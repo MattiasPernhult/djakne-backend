@@ -1,6 +1,7 @@
 var entities = require('entities');
 var iconv = require('iconv-lite');
 var capitalize = require('string-capitalize');
+var moment = require('moment');
 
 var helper = {};
 

@@ -1,5 +1,6 @@
 // project packages
-var EventSchema = require('../schemas/event');
+var EventSchema = require('../schemas/event').Event;
+var UserSchema = require('../schemas/event').User;
 
 var mongoService = function() {
 
@@ -14,7 +15,6 @@ var mongoService = function() {
           id: event._id,
         },
       };
-      console.log('Event added: ' + JSON.stringify(event, null, 4));
       return callback(null, r);
     });
   };
@@ -25,17 +25,30 @@ var mongoService = function() {
     });
   };
 
-  var registerForEvent = function(userId, eventId, callback) {
-    console.log('i mongo, registerForEvent, id: ' + userId);
+  var registerForEvent = function(user, eventId, callback) {
+    var newUser = new UserSchema(user);
     EventSchema.findOneAndUpdate({
       _id: eventId,
+      attendantsId: { $nin: [ user.id ] },
     }, {
-      $addToSet: {
-        attendants: userId,
+      $push: {
+        attendants: newUser,
+        attendantsId: user.id,
       },
-    }, function(err, updatedEvent) {
-      console.log(err);
-      return callback(err, updatedEvent);
+    }, {
+      new: true,
+    }, function(err, event) {
+      if (err) {
+        return callback(err, null);
+      }
+      if (!event) {
+        var error = {
+          message: 'You are already registered for this event',
+          status: 400,
+        };
+        return callback(error, null);
+      }
+      return callback(err, event);
     });
   };
 

@@ -189,7 +189,9 @@ describe('Testing coffee_controller', function() {
       req = {
         body: {
           vote: '1',
-          userID: '12',
+          user: {
+            id: '12',
+          },
         },
         query: { },
       };
@@ -214,7 +216,7 @@ describe('Testing coffee_controller', function() {
     });
     it('should respond with 200 with changed userID', function(done) {
       req.body.vote = '3';
-      req.body.userID = '123';
+      req.body.user.id = '123';
       chai.request(server)
           .put('/coffee/vote')
           .send(req.body)
