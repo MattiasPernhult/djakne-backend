@@ -47,7 +47,7 @@ controller.postRequest = function(req, res) {
   return res.status(200).send({
     message: 'That went well...',
   });
-}
+};
 
 function setOrder(data, res) {
   var file = 'orders.html';
@@ -188,7 +188,7 @@ function renderAndSend(file, data, res) {
       }
       title = words.join(' ');
       return title;
-    })
+    });
     var template = handlebars.compile(source);
     var html = template(data);
     res.send(html);
