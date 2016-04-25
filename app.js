@@ -49,9 +49,7 @@ app.use('*', function(req, res, next) {
   next();
 });
 
-<<<<<<< HEAD
 app.use(express.static('app/views/static'));
-=======
 app.use(function(req, res, next) {
   for (var key in req.query) {
     if (Number(req.query[key])) {
@@ -60,20 +58,16 @@ app.use(function(req, res, next) {
   }
   next();
 });
->>>>>>> 838f1e9c6250cc064174285315260f3c34b08df5
 
 app.use('/', index);
 app.use('/coffee', coffeeRoute);
 app.use('/events', eventRoute);
 app.use('/menu', menuRoute);
 app.use('/member', memberRoute);
-<<<<<<< HEAD
 app.use('/retrotv', retrotvRoute);
 
 
-=======
 app.use('/calendar', calendarRoute);
->>>>>>> 838f1e9c6250cc064174285315260f3c34b08df5
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
