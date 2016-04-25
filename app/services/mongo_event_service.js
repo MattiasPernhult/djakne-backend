@@ -19,8 +19,17 @@ var mongoService = function() {
     });
   };
 
+  var deleteEvent = function(eventToDelete, callback) {
+    EventSchema.remove({ _id: eventToDelete }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      return callback(null);
+    });
+  };
+
   var getEvents = function(query, callback) {
-    EventSchema.find(query, function(err, events) {
+    EventSchema.find(query).sort({date: 1}).exec(function(err, events) {
       return callback(err, events);
     });
   };
@@ -56,6 +65,7 @@ var mongoService = function() {
     insertEvent: insertEvent,
     getEvents: getEvents,
     registerForEvent: registerForEvent,
+    deleteEvent: deleteEvent,
   };
 };
 
