@@ -23,8 +23,8 @@ controller.getRetrotv = function(req, res) {
     setCoffee(res);
   } else if (n >= 35 && n < 50) {
     setCoworking(res);
-    removeGiphy = true;
   } else if (n >= 50 && n < 60) {
+    removeGiphy = true;
     setGiphy(res);
   } else {
     return res.status(500).send({
@@ -41,7 +41,7 @@ controller.postRequest = function(req, res) {
       message: 'Try again... (better luck this time)',
     });
   }
-  tmp.user = req.body.userID;
+  tmp.user = '' + req.body.user.id;
   tmp.giphy = req.body.giphy;
   giphyQueue.push(tmp);
   return res.status(200).send({
@@ -139,28 +139,28 @@ function setGiphy(res) {
   var file = 'giphy.html';
   var data = {};
   if (giphyQueue[0] !== undefined) {
-    request('http://localhost:4000/member?ids=' + giphyQueue[0].user,
+    request('http://localhost:4000/member?ids=%27' + giphyQueue[0].user + '%27',
       function(error, response, respBody) {
-      if (!error && response.statusCode === 200 && respBody !== null) {
-        var body = JSON.parse(respBody);
-        giphy.random({
-          tag: giphyQueue[0].giphy,
-          rating: 'g',
-          fmt: 'json',
-        }, function(err, result) {
-          data.imageR = false;
-          if (result) {
-            data.img = result.data.image_url;
-            data.name = body.data.members[0].firstName.toUpperCase() + ' ' +
-            body.data.members[0].lastName.toUpperCase();
-            data.req = giphyQueue[0].giphy.toUpperCase();
-            data.imgR = body.data.members[0].image;
-            data.imageR = true;
-          }
-          renderAndSend(file, data, res);
-        });
-      }
-    });
+        if (!error && response.statusCode === 200 && respBody !== null) {
+          var body = JSON.parse(respBody);
+          giphy.random({
+            tag: giphyQueue[0].giphy,
+            rating: 'g',
+            fmt: 'json',
+          }, function(err, result) {
+            data.imageR = false;
+            if (result) {
+              data.img = result.data.image_url;
+              data.name = body.data.members[0].firstName.toUpperCase() + ' ' +
+              body.data.members[0].lastName.toUpperCase();
+              data.req = giphyQueue[0].giphy.toUpperCase();
+              data.imgR = body.data.members[0].image;
+              data.imageR = true;
+            }
+            renderAndSend(file, data, res);
+          });
+        }
+      });
   } else {
     giphy.random({
       tag: '8bit, retro',

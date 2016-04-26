@@ -38,7 +38,7 @@ controller.putVote = function(req, res) {
     var response = {result: undefined};
     if (resultFromDB !== null) {
       response.result = 'OK';
-      console.log('New vote: ' + req.body.userID);
+      console.log('New vote: ' + req.body.user.id);
       return res.send(response);
     } else {
       response.result = 'Either you have already voted for this coffee or the time for voting ' +

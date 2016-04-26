@@ -21,4 +21,8 @@ router.post('/register/:id', auth.requiresLogin, function(req, res, next) {
   eventCtrl.registerForEvent(req, res);
 });
 
+router.delete('/:id', function(req, res, next) {
+  eventCtrl.deleteEvent(req, res);
+});
+
 module.exports = router;
