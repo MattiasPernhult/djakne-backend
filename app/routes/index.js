@@ -18,8 +18,8 @@ router.get('/wifi', authMiddleware.requiresLogin, function(req, res, next) {
     }
     var response = {
       member: {
-        group: 'Djakne Premium',
-        wifiName: 'djakne-premium',
+        group: 'Djakne Member',
+        wifiName: 'djakne-member',
         wifiPassword: auth.wifiPassword.member,
       },
     };

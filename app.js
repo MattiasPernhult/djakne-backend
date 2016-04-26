@@ -65,8 +65,6 @@ app.use('/events', eventRoute);
 app.use('/menu', menuRoute);
 app.use('/member', memberRoute);
 app.use('/retrotv', retrotvRoute);
-
-
 app.use('/calendar', calendarRoute);
 
 // catch 404 and forward to error handler
