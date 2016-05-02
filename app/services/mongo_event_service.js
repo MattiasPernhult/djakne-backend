@@ -2,6 +2,7 @@
 var EventSchema = require('../schemas/event').Event;
 var UserSchema = require('../schemas/event').User;
 var CommentSchema = require('../schemas/event').Comment;
+var mongoose = require('mongoose');
 
 var mongoService = function() {
 
@@ -38,17 +39,24 @@ var mongoService = function() {
     }, {
       $pull: {
         comments: {
+          memberId: parameters.userId,
           _id: parameters.commentId,
         },
       },
     }, {
       new: true,
-    }, function(err, updatedEvent) {
+    }, function(err, updatedEvent, test) {
       if (err) {
         return done({status: 500, error: 'Problem when performing querying the database'}, null);
       }
       if (!updatedEvent) {
         return done({status: 400, error: 'The request event doesn\'t exists'}, null);
+      }
+      for (var i = 0; i < updatedEvent.comments.length; i++) {
+        var mongoCommentId = updatedEvent.comments[i]._id.toString();
+        if (mongoCommentId === parameters.commentId) {
+          return done({status: 400, error: 'You can only remove your own comments'});
+        }
       }
       return done(err, updatedEvent);
     });
