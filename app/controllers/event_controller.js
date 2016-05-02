@@ -5,6 +5,24 @@ var helper = require('../utils/helper');
 
 var controller = {};
 
+controller.addCommentToEvent = function(req, res) {
+  var parameters = {
+    eventId: req.params.id,
+    userId: req.body.user.id,
+    userFirstname: req.body.user.firstName,
+    userLastname: req.body.user.lastName,
+    comment: req.body.comment,
+  };
+
+  // TODO: validera comment att det är en sträng och längden är 2.
+  mongoService.addCommentToEvent(parameters, function(err, updatedEvent) {
+    if (err) {
+      return res.status(err.status).send({error: err.error});
+    }
+    return res.send({event: updatedEvent});
+  });
+};
+
 controller.post = function(req, res) {
   console.log(req.body);
   var eventToAdd = createEventModel(req);

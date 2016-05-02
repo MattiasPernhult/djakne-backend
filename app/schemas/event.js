@@ -9,6 +9,14 @@ var UserSchema = new mongoose.Schema({
   image: String,
 });
 
+var CommentSchema = new mongoose.Schema({
+  firstName: String,
+  lastName: String,
+  memberId: String,
+  comment: String,
+  date: {type: Date, default: new Date()},
+});
+
 var EventSchema = new mongoose.Schema({
   title: String,
   text: String,
@@ -17,9 +25,11 @@ var EventSchema = new mongoose.Schema({
   date: Date,
   attendants: [UserSchema],
   attendantsId: [String],
+  comments: [CommentSchema],
 });
 
 module.exports = {
   User: mongoose.model('User', UserSchema),
   Event: mongoose.model('Event', EventSchema),
+  Comment: mongoose.model('Comment', CommentSchema),
 };

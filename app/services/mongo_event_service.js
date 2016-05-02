@@ -1,8 +1,38 @@
 // project packages
 var EventSchema = require('../schemas/event').Event;
 var UserSchema = require('../schemas/event').User;
+var CommentSchema = require('../schemas/event').Comment;
 
 var mongoService = function() {
+
+  var addCommentToEvent = function(parameters, done) {
+    var comment = {
+      firstName: parameters.userFirstname,
+      lastName: parameters.userLastname,
+      memberId: parameters.userId,
+      comment: parameters.comment,
+    };
+    var newComment = new CommentSchema(comment);
+    EventSchema.findOneAndUpdate({
+      _id: parameters.eventId,
+    }, {
+      $push: {
+        comments: newComment,
+      },
+    }, {
+      new: true,
+    }, function(err, updatedEvent) {
+      console.log(err);
+      console.log(updatedEvent);
+      if (err) {
+        return done({status: 500, error: 'Problem when performing querying the database'}, null);
+      }
+      if (!updatedEvent) {
+        return done({status: 400, error: 'The request event doesn\'t exists'}, null);
+      }
+      return done(err, updatedEvent);
+    });
+  };
 
   var insertEvent = function(eventToAdd, callback) {
     var newEvent = new EventSchema(eventToAdd);
@@ -29,7 +59,9 @@ var mongoService = function() {
     var newUser = new UserSchema(user);
     EventSchema.findOneAndUpdate({
       _id: eventId,
-      attendantsId: { $nin: [ user.id ] },
+      attendantsId: {
+        $nin: [user.id]
+      },
     }, {
       $push: {
         attendants: newUser,
@@ -56,6 +88,7 @@ var mongoService = function() {
     insertEvent: insertEvent,
     getEvents: getEvents,
     registerForEvent: registerForEvent,
+    addCommentToEvent: addCommentToEvent,
   };
 };
 
