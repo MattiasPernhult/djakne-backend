@@ -23,8 +23,8 @@ var mysqlService = function() {
     var query = 'SELECT djakne.product.name AS name, djakne.product.id AS id, ' +
       'djakne.product.price AS price, djakne.producttype.name AS category FROM ' +
       'djakne.product_producttype INNER JOIN djakne.producttype ON djakne.producttype.id ' +
-      '= djakne.product_producttype.producttype_id INNER JOIN djakne.product ON djakne.product.id ' +
-      '= djakne.product_producttype.product_id WHERE djakne.product.showInMenu = 1;';
+      '= djakne.product_producttype.producttype_id INNER JOIN djakne.product ON djakne.product.id' +
+      ' = djakne.product_producttype.product_id WHERE djakne.product.showInMenu = 1;';
     executeQuery(query, done);
   };
 
@@ -68,6 +68,20 @@ var mysqlService = function() {
     executeQuery(query, done);
   };
 
+  var isUserPremium = function(userId, done) {
+    var query = mysql.format('SELECT group_id FROM djakne.group_member WHERE member_id = ? ' +
+    'HAVING group_id = 19', [userId]);
+    executeQuery(query, function(err, rows) {
+      if (err) {
+        return done(err, false);
+      }
+      if (rows.length > 0) {
+        return done(null, true);
+      }
+      return done(null, false);
+    });
+  };
+
   var executeQuery = function(query, done) {
     connection.query(query, function(err, rows) {
       return done(err, rows);
@@ -79,6 +93,7 @@ var mysqlService = function() {
     getUsersById: getUsersById,
     getUserByLinkedInToken: getUserByLinkedInToken,
     getPeopleAtDjakneToday: getPeopleAtDjakneToday,
+    isUserPremium: isUserPremium,
   };
 };
 

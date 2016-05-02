@@ -24,10 +24,8 @@ controller.addCommentToEvent = function(req, res) {
 };
 
 controller.post = function(req, res) {
-  console.log(req.body);
   var eventToAdd = createEventModel(req);
-  console.log(eventToAdd.checkAttributes());
-  console.log(eventToAdd);
+
   if (!eventToAdd.checkAttributes()) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
@@ -36,6 +34,19 @@ controller.post = function(req, res) {
       return res.status(500).send(err);
     }
     res.send(addedEvent);
+  });
+};
+
+controller.deleteEvent = function(req, res) {
+  console.log('i deleteEvent, req.params.id = ' + req.params.id);
+  if (!req.params.id) {
+    return res.status(400).send({message: 'You must provide an event id for deletion'});
+  }
+  mongoService.deleteEvent(req.params.id, function(err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.send({message: 'Event was successfully deleted'});
   });
 };
 

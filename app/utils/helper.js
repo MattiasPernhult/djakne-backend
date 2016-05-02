@@ -12,6 +12,22 @@ var sanitize = function(s, encode) {
   return entities.decodeHTML(s);
 };
 
+helper.excludeCategories = function(products) {
+  return products;
+};
+
+// TODO: More error handling
+helper.joinCategories = function(products, join) {
+  for (var i = 0; i < join.length; i += 2) {
+    var main = join[i];
+    var sub = join[i + 1];
+    products[main] = products[main].concat(products[sub]);
+    delete products[sub];
+  }
+  console.log(products);
+  return products;
+};
+
 helper.sanitizeMembers = function(members, encode) {
   var sanitizedMembers = [];
   for (var member in members) {

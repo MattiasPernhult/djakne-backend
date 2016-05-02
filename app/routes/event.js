@@ -21,9 +21,13 @@ router.post('/register/:id', auth.requiresLogin, function(req, res, next) {
   eventCtrl.registerForEvent(req, res);
 });
 
-router.put('/:id/comment', auth.requiresLogin, function(req, res, next) {
+router.put('/:id/comment', auth.requiresLogin, function(req, res, next) {
   console.log('i /:id/comment');
   eventCtrl.addCommentToEvent(req, res);
+});
+
+router.delete('/:id', function(req, res, next) {
+  eventCtrl.deleteEvent(req, res);
 });
 
 module.exports = router;
