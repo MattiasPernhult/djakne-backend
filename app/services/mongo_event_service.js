@@ -22,8 +22,28 @@ var mongoService = function() {
     }, {
       new: true,
     }, function(err, updatedEvent) {
-      console.log(err);
-      console.log(updatedEvent);
+      if (err) {
+        return done({status: 500, error: 'Problem when performing querying the database'}, null);
+      }
+      if (!updatedEvent) {
+        return done({status: 400, error: 'The request event doesn\'t exists'}, null);
+      }
+      return done(err, updatedEvent);
+    });
+  };
+
+  var removeCommentFromEvent = function(parameters, done) {
+    EventSchema.findOneAndUpdate({
+      _id: parameters.eventId,
+    }, {
+      $pull: {
+        comments: {
+          _id: parameters.commentId,
+        },
+      },
+    }, {
+      new: true,
+    }, function(err, updatedEvent) {
       if (err) {
         return done({status: 500, error: 'Problem when performing querying the database'}, null);
       }
@@ -98,6 +118,7 @@ var mongoService = function() {
     getEvents: getEvents,
     registerForEvent: registerForEvent,
     addCommentToEvent: addCommentToEvent,
+    removeCommentFromEvent: removeCommentFromEvent,
     deleteEvent: deleteEvent,
   };
 };

@@ -26,6 +26,10 @@ router.put('/:id/comment', auth.requiresLogin, function(req, res, next) {
   eventCtrl.addCommentToEvent(req, res);
 });
 
+router.delete('/:id/comment/:commentId', auth.requiresLogin, function(req, res, next) {
+  eventCtrl.removeCommentFromEvent(req, res);
+});
+
 router.delete('/:id', function(req, res, next) {
   eventCtrl.deleteEvent(req, res);
 });

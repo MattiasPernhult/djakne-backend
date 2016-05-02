@@ -13,9 +13,25 @@ controller.addCommentToEvent = function(req, res) {
     userLastname: req.body.user.lastName,
     comment: req.body.comment,
   };
-
-  // TODO: validera comment att det är en sträng och längden är 2.
+  if (parameters.comment.length < 2) {
+    return res.status(400).send({error: 'The comment must me at least one character'});
+  }
   mongoService.addCommentToEvent(parameters, function(err, updatedEvent) {
+    if (err) {
+      return res.status(err.status).send({error: err.error});
+    }
+    return res.send({event: updatedEvent});
+  });
+};
+
+controller.removeCommentFromEvent = function(req, res) {
+  var parameters = {
+    eventId: req.params.id,
+    userId: req.body.user.id,
+    commentId: req.params.commentId,
+  };
+
+  mongoService.removeCommentFromEvent(parameters, function(err, updatedEvent) {
     if (err) {
       return res.status(err.status).send({error: err.error});
     }
