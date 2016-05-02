@@ -19,6 +19,21 @@ var mysqlService = function() {
     console.log('MySQL: connected as id ' + connection.threadId);
   });
 
+  var getPushTokensByIds = function(ids, done) {
+    var query = 'SELECT token FROM djakne.memberPushTokens WHERE ';
+    for (var i = 0; i < ids.length; i++) {
+      var id = ids[i];
+      query += 'member_id = ' + id;
+      if (i !== ids.length - 1) {
+        query += ' OR ';
+      } else {
+        query += ';';
+      }
+    }
+    console.log(query);
+    executeQuery(query, done);
+  };
+
   var getMenuWithCategory = function(done) {
     var query = 'SELECT djakne.product.name AS name, djakne.product.id AS id, ' +
       'djakne.product.price AS price, djakne.producttype.name AS category FROM ' +
@@ -94,6 +109,7 @@ var mysqlService = function() {
     getUserByLinkedInToken: getUserByLinkedInToken,
     getPeopleAtDjakneToday: getPeopleAtDjakneToday,
     isUserPremium: isUserPremium,
+    getPushTokensByIds: getPushTokensByIds,
   };
 };
 

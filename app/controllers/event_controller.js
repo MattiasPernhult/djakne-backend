@@ -1,4 +1,5 @@
 var mongoService = require('../services/mongo_event_service');
+var pushService = require('../services/push_service');
 var EventModel = require('../models/event_model');
 var validator = require('../utils/validator');
 var helper = require('../utils/helper');
@@ -20,6 +21,7 @@ controller.addCommentToEvent = function(req, res) {
     if (err) {
       return res.status(err.status).send({error: err.error});
     }
+    pushService.notifyAllAttendants(updatedEvent.title, updatedEvent.attendantsId);
     return res.send({event: updatedEvent});
   });
 };
