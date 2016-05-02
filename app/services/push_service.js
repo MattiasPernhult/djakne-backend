@@ -5,9 +5,18 @@ var sender = new gcm.Sender(auth.gcm);
 
 var service = function() {
 
-  var notifyAllAttendants = function(title, ids) {
-    console.log(title);
-    console.log(ids);
+  var notifyAllAttendants = function(title, userId, ids) {
+    for (var j = 0; j < ids.length; j++) {
+      var id = ids[j];
+      if (userId === Number(id)) {
+        ids.splice(j, 1);
+      }
+    }
+    if (ids.length === 0) {
+      console.log('No id in ids array');
+      console.log('No id to send push notification to');
+      return;
+    }
     mysqlService.getPushTokensByIds(ids, function(err, pushTokens) {
       if (err) {
         console.log('--------- ERROR ---------');
@@ -27,13 +36,17 @@ var service = function() {
       console.log(correctPushTokens);
 
       var gcmMessage = new gcm.Message({
-        data: {message: 'New comment for the event: ' + title},
+        notification: {
+          title: 'Djäkne',
+          sound: 'default',
+          icon: 'img/Icons/home/coffee_black.png',
+          body: 'New comment for the event: ' + title,
+        },
       });
 
-      /**
-       * Params: message-literal, registrationIds-array, No. of retries, callback-function
-       **/
-      sender.send(gcmMessage, {registrationTokens: correctPushTokens}, 4, function(err, result) {
+      sender.send(gcmMessage, {
+        registrationTokens: correctPushTokens,
+      }, 4, function(err, result) {
         console.log(err);
         console.log(result);
       });

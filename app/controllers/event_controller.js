@@ -21,7 +21,8 @@ controller.addCommentToEvent = function(req, res) {
     if (err) {
       return res.status(err.status).send({error: err.error});
     }
-    pushService.notifyAllAttendants(updatedEvent.title, updatedEvent.attendantsId);
+    pushService.notifyAllAttendants(updatedEvent.title, parameters.userId,
+      updatedEvent.attendantsId);
     return res.send({event: updatedEvent});
   });
 };
