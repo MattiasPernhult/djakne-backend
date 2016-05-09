@@ -13,9 +13,11 @@ controller.addCommentToEvent = function(req, res) {
     userFirstname: req.body.user.firstName,
     userLastname: req.body.user.lastName,
     comment: req.body.comment,
+    userImage: req.body.user.image,
   };
+  console.log(parameters);
   if (parameters.comment.length < 2) {
-    return res.status(400).send({error: 'The comment must me at least one character'});
+    return res.status(400).send({error: 'The comment must be at least one character'});
   }
   mongoService.addCommentToEvent(parameters, function(err, updatedEvent) {
     if (err) {

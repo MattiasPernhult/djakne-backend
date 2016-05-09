@@ -18,9 +18,12 @@ helper.excludeCategories = function(products) {
 
 // TODO: More error handling
 helper.joinCategories = function(products, join) {
+  console.log(products);
   for (var i = 0; i < join.length; i += 2) {
     var main = join[i];
     var sub = join[i + 1];
+    console.log(products[main]);
+    console.log(products[sub]);
     products[main] = products[main].concat(products[sub]);
     delete products[sub];
   }
@@ -39,11 +42,40 @@ helper.sanitizeMembers = function(members, encode) {
   return sanitizedMembers;
 };
 
+var getEnglishCategory = function(category) {
+  switch (category) {
+    case 'Kaffe':
+      return 'Coffee';
+    case 'Kall dryck':
+      return 'Cold drink';
+    case 'Mat':
+      return 'Food';
+    case 'Kakor':
+      return 'Cookies';
+    case 'Frukost':
+      return 'Breakfast';
+    case 'Droppkaffe':
+      return 'Dropcoffee';
+    case 'Julmust':
+      return 'Christmas must';
+    case 'Hela bönor':
+      return 'Whole coffee beans';
+    case 'Godis':
+      return 'Sweets';
+    case 'Specialte':
+      return 'Special tea';
+    default:
+      return category;
+  }
+};
+
 helper.sanitizeProductNames = function(products, encode) {
   var productsInCategory = {};
   for (var product in products) {
     products[product].name = capitalize(sanitize(products[product].name, encode));
-    products[product].category = capitalize(sanitize(products[product].category, encode));
+    var category = capitalize(sanitize(products[product].category, encode));
+    var categoryEnglish = getEnglishCategory(category);
+    products[product].category = categoryEnglish;
     if (!productsInCategory.hasOwnProperty(products[product].category)) {
       productsInCategory[products[product].category] = [];
     }

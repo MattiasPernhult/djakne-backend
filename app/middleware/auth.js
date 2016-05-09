@@ -3,6 +3,9 @@ var mysqlService = require('../services/mysql_service');
 var auth = {};
 
 auth.requiresLogin = function(req, res, next) {
+  console.log('in requiresLogin function');
+  console.log(req.body.token);
+  console.log(req.query.token);
   var token = req.body.token;
   if (!token) {
     token = req.query.token;

@@ -14,6 +14,7 @@ var CommentSchema = new mongoose.Schema({
   lastName: String,
   memberId: String,
   comment: String,
+  userImage: String,
   date: {type: Date, default: new Date()},
 });
 

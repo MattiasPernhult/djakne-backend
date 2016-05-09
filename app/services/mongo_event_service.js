@@ -12,6 +12,7 @@ var mongoService = function() {
       lastName: parameters.userLastname,
       memberId: parameters.userId,
       comment: parameters.comment,
+      userImage: parameters.userImage,
     };
     var newComment = new CommentSchema(comment);
     EventSchema.findOneAndUpdate({
