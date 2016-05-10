@@ -59,13 +59,19 @@ controller.post = function(req, res) {
 };
 
 controller.deleteEvent = function(req, res) {
-  console.log('i deleteEvent, req.params.id = ' + req.params.id);
   if (!req.params.id) {
     return res.status(400).send({message: 'You must provide an event id for deletion'});
   }
-  mongoService.deleteEvent(req.params.id, function(err) {
+  if (!req.body.user.id) {
+    return res.status(400).send({message: 'You are not authenticated'});
+  }
+  var parameters = {
+    eventId: req.params.id,
+    userId: req.body.user.id,
+  };
+  mongoService.deleteEvent(parameters, function(err) {
     if (err) {
-      return res.status(500).send(err);
+      return res.status(err.status).send({error: err.error});
     }
     res.send({message: 'Event was successfully deleted'});
   });
@@ -95,11 +101,9 @@ controller.get = function(req, res) {
 };
 
 controller.registerForEvent = function(req, res) {
-  console.log('i registerForEvent');
   if (!req.body.user.id) {
-    return res.status(400).send({error: 'You are not authenticated'});
+    return res.status(400).send({message: 'You are not authenticated'});
   }
-  console.log('är inloggad');
   mongoService.registerForEvent(req.body.user, req.params.id, function(err, resultFromDB) {
     if (err) {
       console.log(err);

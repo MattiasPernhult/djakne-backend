@@ -78,13 +78,27 @@ var mongoService = function() {
     });
   };
 
-  var deleteEvent = function(eventToDelete, callback) {
-    EventSchema.remove({ _id: eventToDelete }, function(err) {
-      if (err) {
-        return callback(err);
-      }
-      return callback(null);
-    });
+  var deleteEvent = function(parameters, done) {
+    EventSchema.findOneAndRemove(
+      {
+        _id: parameters.eventId,
+        author: parameters.userId,
+      }, {
+        passRawResult: true,
+      },
+       function(err, doc, result) {
+        if (err) {
+          return done({status: 500, error: 'Problem when performing querying the database'});
+        }
+        if (!result) {
+          return done({status: 400, error: 'You cannot delete an event you ' +
+         'haven\'t created yourself',});
+        }
+        if (result.value) {
+          return done(null);
+        }
+        return done({status: 400, error: 'Could not delete the requested event'});
+      });
   };
 
   var getEvents = function(query, callback) {
