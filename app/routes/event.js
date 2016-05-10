@@ -30,7 +30,8 @@ router.put('/:id/comment/:commentId', auth.requiresLogin, function(req, res, nex
   eventCtrl.removeCommentFromEvent(req, res);
 });
 
-router.delete('/:id', function(req, res, next) {
+router.put('/:id', auth.requiresLogin, function(req, res, next) {
+  console.log('i router , deleteEvent');
   eventCtrl.deleteEvent(req, res);
 });
 

@@ -24,7 +24,7 @@ Event.prototype.checkAttributes = function() {
 };
 
 Event.prototype.validateString = function(attribute) {
-  return validator.isString(attribute) && validator.hasMinLength(attribute, 2);
+  return validator.isString(attribute) && validator.hasMinLength(attribute, 1);
 };
 
 Event.prototype.validateDate = function(date) {

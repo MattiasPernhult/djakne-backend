@@ -60,9 +60,16 @@ controller.deleteEvent = function(req, res) {
   if (!req.params.id) {
     return res.status(400).send({error: 'You must provide an event id for deletion'});
   }
-  mongoService.deleteEvent(req.params.id, function(err) {
+  if (!req.body.user.id) {
+    return res.status(400).send({message: 'You are not authenticated'});
+  }
+  var parameters = {
+    eventId: req.params.id,
+    userId: req.body.user.id,
+  };
+  mongoService.deleteEvent(parameters, function(err) {
     if (err) {
-      return res.status(500).send({error: err});
+      return res.status(err.status).send({error: err.error});
     }
     res.send({data: {message: 'Event was successfully deleted'}});
   });
@@ -90,7 +97,7 @@ controller.get = function(req, res) {
 
 controller.registerForEvent = function(req, res) {
   if (!req.body.user.id) {
-    return res.status(400).send({error: 'You are not authenticated'});
+    return res.status(400).send({message: 'You are not authenticated'});
   }
   mongoService.registerForEvent(req.body.user, req.params.id, function(err, resultFromDB) {
     if (err) {
