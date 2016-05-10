@@ -12,17 +12,14 @@ router.post('/', jsonParser, function(req, res, next) {
 });
 
 router.get('/',function(req, res, next) {
-  console.log('i event get');
   eventCtrl.get(req, res);
 });
 
 router.post('/register/:id', auth.requiresLogin, function(req, res, next) {
-  console.log('i register/id');
   eventCtrl.registerForEvent(req, res);
 });
 
 router.put('/:id/comment', auth.requiresLogin, function(req, res, next) {
-  console.log('i /:id/comment');
   eventCtrl.addCommentToEvent(req, res);
 });
 
@@ -31,7 +28,6 @@ router.put('/:id/comment/:commentId', auth.requiresLogin, function(req, res, nex
 });
 
 router.put('/:id', auth.requiresLogin, function(req, res, next) {
-  console.log('i router , deleteEvent');
   eventCtrl.deleteEvent(req, res);
 });
 

@@ -46,7 +46,6 @@ controller.removeCommentFromEvent = function(req, res) {
 
 controller.post = function(req, res) {
   var eventToAdd = createEventModel(req);
-
   if (!eventToAdd.checkAttributes()) {
     return res.status(400).send({message: 'The parameters for the event were wrong'});
   }
