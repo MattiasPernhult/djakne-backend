@@ -1,20 +1,24 @@
 var controller = {};
 
 var validator = require('../utils/calendar_validator');
-
 var calendarService = require('../services/calendar_service');
-
 var CalendarEvent = require('../models/calendar_event');
 
 controller.delete = function(req, res) {
   if (!req.params.id) {
-    return res.status(400).send({error: 'Missing id'});
+    return res.status(400).send({
+      error: 'Missing id',
+    });
   }
   calendarService.deleteCalendarEvent(req.params.id, function(err) {
     if (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({
+        error: err,
+      });
     }
-    return res.send({message: 'Event ' + req.params.id + ' is deleted'});
+    return res.send({
+      data: 'Event ' + req.params.id + ' is deleted',
+    });
   });
 };
 
@@ -22,15 +26,22 @@ controller.post = function(req, res) {
   var body = req.body;
   var errors = validator.validatePostBody(body);
   if (errors.length > 0) {
-    return res.status(400).send({errors: errors});
+    return res.status(400).send({
+      error: {
+        errors: errors,
+      }
+    });
   }
   var event = new CalendarEvent(body.summary, body.description, body.startTime, body.endTime);
-  console.log(event.toString());
   calendarService.insertCalendarEvent(event.toString(), function(err, event) {
     if (err) {
-      return res.status(500).send({error: err});
+      return res.status(400).send({
+        error: err,
+      });
     }
-    return res.send(event);
+    return res.send({
+      data: event,
+    });
   });
 };
 
@@ -38,19 +49,26 @@ controller.get = function(req, res) {
   var parameters = req.query;
   var errors = validator.validateGetParameters(parameters);
   if (errors.length > 0) {
-    return res.status(400).send({errors: errors});
+    return res.status(400).send({
+      error: {
+        errors: errors,
+      }
+    });
   }
   var query = {};
   query.maxResults = parameters.limit || 10;
   var time = getDateTime(parameters.timeMin, parameters.timeMax);
   query.timeMin = time.timeMin;
   query.timeMax = time.timeMax;
-  console.log(query);
   calendarService.getCalendarEvents(query, function(err, events) {
     if (err) {
-      return res.status(500).send(err);
+      return res.status(400).send({
+        error: err,
+      });
     }
-    return res.send({events: events});
+    return res.send({
+      data: events,
+    });
   });
 };
 

@@ -17,7 +17,7 @@ controller.getPeopleAtDjakneToday = function(req, res) {
         'maybe to much coffee for one day...';
       return res.status(500).send({error: errorMessage});
     }
-    return res.send({members: helper.sanitizeMembers(members.reverse(), true)});
+    return res.send({data: helper.sanitizeMembers(members.reverse(), true)});
   });
 };
 
@@ -27,7 +27,7 @@ controller.getUsersById = function(req, res) {
     if (err) {
       return res.status(500).send({data: {error: err}});
     }
-    res.send({data: {members: helper.sanitizeMembers(users, true)}});
+    res.send({data: helper.sanitizeMembers(users, true)});
   });
 };
 

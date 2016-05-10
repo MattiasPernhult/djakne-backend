@@ -1,5 +1,15 @@
 {
   "preset": "node-style-guide",
   "requireCapitalizedComments": false,
-  "maximumLineLength": 100
+  "maximumLineLength": 100,
+  "requireTrailingComma": false,
+  "requireCurlyBraces": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch",
+  ]
 }

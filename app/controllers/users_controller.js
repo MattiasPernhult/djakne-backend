@@ -7,10 +7,9 @@ controller.getUsersById = function(req, res) {
 
   mysqlService.getUsersById(arrayOfIds, function(err, users) {
     if (err) {
-      console.log('Error i mysql');
-      return res.status(500).send({data: {error: err}});
+      return res.status(500).send({error: err});
     }
-    res.send({data: {members: users}});
+    res.send({data: users});
   });
 };
 

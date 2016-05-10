@@ -15,7 +15,6 @@ controller.addCommentToEvent = function(req, res) {
     comment: req.body.comment,
     userImage: req.body.user.image,
   };
-  console.log(parameters);
   if (parameters.comment.length < 2) {
     return res.status(400).send({error: 'The comment must be at least one character'});
   }
@@ -25,7 +24,7 @@ controller.addCommentToEvent = function(req, res) {
     }
     pushService.notifyAllAttendants(updatedEvent.title, parameters.userId,
       updatedEvent.attendantsId);
-    return res.send({event: updatedEvent});
+    return res.send({data: updatedEvent});
   });
 };
 
@@ -40,34 +39,32 @@ controller.removeCommentFromEvent = function(req, res) {
     if (err) {
       return res.status(err.status).send({error: err.error});
     }
-    return res.send({event: updatedEvent});
+    return res.send({data: updatedEvent});
   });
 };
 
 controller.post = function(req, res) {
   var eventToAdd = createEventModel(req);
-
   if (!eventToAdd.checkAttributes()) {
-    return res.status(400).send({message: 'The parameters for the event were wrong'});
+    return res.status(400).send({error: 'The parameters for the event were wrong'});
   }
   mongoService.insertEvent(eventToAdd, function(err, addedEvent) {
     if (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
-    res.send(addedEvent);
+    res.send({data: addedEvent});
   });
 };
 
 controller.deleteEvent = function(req, res) {
-  console.log('i deleteEvent, req.params.id = ' + req.params.id);
   if (!req.params.id) {
-    return res.status(400).send({message: 'You must provide an event id for deletion'});
+    return res.status(400).send({error: 'You must provide an event id for deletion'});
   }
   mongoService.deleteEvent(req.params.id, function(err) {
     if (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
-    res.send({message: 'Event was successfully deleted'});
+    res.send({data: {message: 'Event was successfully deleted'}});
   });
 };
 
@@ -79,34 +76,28 @@ controller.get = function(req, res) {
   if (queryParamsExists) {
     errors = validateQueryParameters(req.query);
     if (errors.length > 0) {
-      return res.status(400).send({errors: errors});
+      return res.status(400).send({error: {errors: errors}});
     }
     query = buildQueryToGetEvents(req);
   }
   mongoService.getEvents(query, function(err, resultFromDB) {
     if (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
-    var response = {
-      result: resultFromDB,
-    };
-    res.send(response);
+    res.send({data: resultFromDB});
   });
 };
 
 controller.registerForEvent = function(req, res) {
-  console.log('i registerForEvent');
   if (!req.body.user.id) {
     return res.status(400).send({error: 'You are not authenticated'});
   }
-  console.log('är inloggad');
   mongoService.registerForEvent(req.body.user, req.params.id, function(err, resultFromDB) {
     if (err) {
-      console.log(err);
-      return res.status(500).send({message: 'Something went wrong..', error: err});
+      return res.status(500).send({error: 'Something went wrong..'});
     }
     resultFromDB.attendants = helper.sanitizeMembers(resultFromDB.attendants, true);
-    return res.send(resultFromDB);
+    return res.send({data: resultFromDB});
   });
 };
 
