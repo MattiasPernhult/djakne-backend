@@ -192,10 +192,10 @@ function setGiphy(data, res) {
             data.imageR = false;
             if (result) {
               data.img = result.data.image_url;
-              data.name = body.data.members[0].firstName.toUpperCase() + ' ' +
-              body.data.members[0].lastName.toUpperCase();
+              data.name = body.data[0].firstName.toUpperCase() + ' ' +
+              body.data[0].lastName.toUpperCase();
               data.req = giphyQueue[0].giphy.toUpperCase();
-              data.imgR = body.data.members[0].image;
+              data.imgR = body.data[0].image;
               data.imageR = true;
             }
             renderAndSend(file, data, res);

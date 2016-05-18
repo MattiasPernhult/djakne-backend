@@ -22,7 +22,7 @@ controller.getPeopleAtDjakneToday = function(req, res) {
 };
 
 controller.getUsersById = function(req, res) {
-  var arrayOfIds = splitStringOfIds(req.query.ids);
+  var arrayOfIds = splitStringOfIds(String(req.query.ids));
   mysqlService.getUsersById(arrayOfIds, function(err, users) {
     if (err) {
       return res.status(500).send({data: {error: err}});
