@@ -2,12 +2,11 @@
 
 #Endpoints
 
-# POST
-## /coffee
+## POST
+#### /coffee
 Inserts a new coffeebean into the database
 
-### body
-
+##### body
 ```json
 {
      "title" : "text",
@@ -19,11 +18,10 @@ Inserts a new coffeebean into the database
 }
 ```
 
-## /calendar
+#### /calendar
 Inserts a new calendar-event into Google Calendar
 
-### body
-
+##### body
 ```json
 {
      "summary": "text",
@@ -33,11 +31,10 @@ Inserts a new calendar-event into Google Calendar
 }
 ```
 
-## /events
+#### /events
 Inserts a new event into the database
 
-### body
-
+##### body
 ```json
 {
      "title": "text",
@@ -48,22 +45,20 @@ Inserts a new event into the database
 }
 ```
 
-## /events/register/:id
+#### /events/register/:id
 Registers a user to an existing event
 
-### body
-
+##### body
 ```json
 {
      "token": "linkedin_token"
 }
 ```
 
-## /retrotv/request
+#### /retrotv/request
 Requests a giphy for the retrotv
 
-### body
-
+##### body
 ```json
 {
      "token":  "linkedin_token",
@@ -71,12 +66,11 @@ Requests a giphy for the retrotv
 }
 ```
 
-# GET
-## /coffee/history
+## GET
+#### /coffee/history
 Returns list of coffee from all previous weeks including current
 
-### response
-
+##### response
 ```json
 {
   "data":[
@@ -102,7 +96,7 @@ Returns list of coffee from all previous weeks including current
 }
 ```
 
-## /coffee/current
+#### /coffee/current
 Returns only coffee from the current week
 
 ##### response
@@ -128,7 +122,7 @@ Returns only coffee from the current week
 }
 ```
 
-## /coffee/:id
+#### /coffee/:id
 Returns coffee from id
 
 ##### response
@@ -154,10 +148,10 @@ Returns coffee from id
 }
 ```
 
-## /calendar
+#### /calendar
 Returns list of events in calendar
 
-### Params
+##### Params
 - **timeMin**: Days from today. Providing negative number will look for event before the day the request is sent. So if today
 - is the 16 of May and you provide _-4_ then timeMin will be the 12 of May.
 - **timeMax**: Days from today. Providing negative number will look for event before the day the request is sent. So if today
@@ -191,10 +185,10 @@ Returns list of events in calendar
 }
 ```
 
-## /events
+#### /events
 Returns list of events with list of all attendants
 
-### Params
+##### Params
 - **dateFrom**: A start date in ISO standard, 2016-05-05T09:02:00.000Z
 - **dateTo**: A start date in ISO standard, 2016-05-05T09:02:00.000Z
 
