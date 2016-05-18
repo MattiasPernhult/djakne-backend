@@ -7,29 +7,39 @@ var giphy = require('giphy-api')();
 var controller = {};
 var giphyQueue = [];
 var removeGiphy = false;
+var state = 0;
+var myVar = setInterval(inter, 20000);
+
+function inter() {
+  state++;
+  state = state % 5;
+  console.log(state);
+}
 
 controller.getRetrotv = function(req, res) {
   var data = {};
-  var d = new Date();
-  var n = d.getSeconds();
-  if (n >= 0 && n < 15 && false) {
-    data.sync = 15 - n;
+  if (state === 0) {
+    data.sync = 20;
     setOrder(data, res);
     if (removeGiphy && giphyQueue[0] !== undefined) {
       removeGiphy = false;
       giphyQueue.shift();
     }
-  } else if (n >= 15 && n < 35) {
-    setCoffee(res);
-  } else if (n >= 35 && n < 50) {
-    setCoworking(res);
-  } else if (n >= 0 && n < 60 && false) {
-    setEvents(res);
-  } else if (n >= 50 && n < 60) {
+  } else if (state === 1) {
+    data.sync = 20;
+    setCoffee(data, res);
+  } else if (state === 2) {
+    data.sync = 20;
+    setCoworking(data, res);
+  } else if (state === 3) {
+    data.sync = 20;
+    setEvents(data, res);
+  } else if (state === 4) {
+    data.sync = 20;
     if (!removeGiphy) {
       removeGiphy = true;
     }
-    setGiphy(res);
+    setGiphy(data, res);
   } else {
     return res.status(500).send({
       message: 'Old hardware do break from time to time...',
@@ -107,9 +117,8 @@ function setOrder(data, res) {
   });
 }
 
-function setCoffee(res) {
+function setCoffee(data, res) {
   var file = 'coffee.html';
-  var data = {};
   request('http://localhost:4000/coffee/current', function(error, response, respBody) {
     if (!error && response.statusCode === 200 && respBody !== null) {
       var body = JSON.parse(respBody);
@@ -133,9 +142,8 @@ function setCoffee(res) {
   });
 }
 
-function setEvents(res) {
+function setEvents(data, res) {
   var file = 'events.html';
-  var data = {};
   var d = new Date();
   var monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
@@ -145,34 +153,32 @@ function setEvents(res) {
     if (!error && response.statusCode === 200 && respBody !== undefined) {
       var body = JSON.parse(respBody);
       var eventNr = Math.floor(Math.random() * body.data.length);
-      //console.log(body.data[eventNr].date);
       var da = new Date(body.data[eventNr].date);
-      //console.log(da);
-      //console.log(da.getDate());
       data.date = da.getDate();
       data.month = monthNames[da.getMonth()];
       data.title = body.data[eventNr].title;
       data.text = body.data[eventNr].text;
+      if (data.text.length > 230) {
+        data.text = data.text.substr(0, 230) + '...';
+      }
       data.location = body.data[eventNr].location;
       data.attendants = [];
       for (var i = 0; i < body.data[eventNr].attendants.length; i++) {
         data.attendants.push(body.data[eventNr].attendants[i].image);
       }
-      console.log(data);
+      //console.log(data);
     }
     renderAndSend(file, data, res);
   });
 }
 
-function setCoworking(res) {
+function setCoworking(data, res) {
   var file = 'coworking.html';
-  var data = {};
   renderAndSend(file, data, res);
 }
 
-function setGiphy(res) {
+function setGiphy(data, res) {
   var file = 'giphy.html';
-  var data = {};
   if (giphyQueue[0] !== undefined) {
     request('http://localhost:4000/member?ids=%27' + giphyQueue[0].user + '%27',
       function(error, response, respBody) {
