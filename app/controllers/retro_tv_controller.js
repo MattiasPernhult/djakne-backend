@@ -38,9 +38,6 @@ controller.getRetrotv = function(req, res) {
     setEvents(data, res);
   } else if (state === 4) {
     data.sync = rotation;
-    if (!removeGiphy) {
-      removeGiphy = true;
-    }
     setGiphy(data, res);
   } else {
     return res.status(500).send({
@@ -205,6 +202,7 @@ function setGiphy(data, res) {
           });
         }
       });
+    removeGiphy = true;
   } else {
     giphy.random({
       tag: '8bit, retro',
