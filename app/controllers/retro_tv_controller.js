@@ -12,7 +12,7 @@ controller.getRetrotv = function(req, res) {
   var data = {};
   var d = new Date();
   var n = d.getSeconds();
-  if (n >= 0 && n < 15) {
+  if (n >= 0 && n < 15 && false) {
     data.sync = 15 - n;
     setOrder(data, res);
     if (removeGiphy && giphyQueue[0] !== undefined) {
@@ -23,8 +23,12 @@ controller.getRetrotv = function(req, res) {
     setCoffee(res);
   } else if (n >= 35 && n < 50) {
     setCoworking(res);
+  } else if (n >= 0 && n < 60 && false) {
+    setEvents(res);
   } else if (n >= 50 && n < 60) {
-    removeGiphy = true;
+    if (!removeGiphy) {
+      removeGiphy = true;
+    }
     setGiphy(res);
   } else {
     return res.status(500).send({
@@ -109,13 +113,13 @@ function setCoffee(res) {
   request('http://localhost:4000/coffee/current', function(error, response, respBody) {
     if (!error && response.statusCode === 200 && respBody !== null) {
       var body = JSON.parse(respBody);
-      data.title = body.result.title.toUpperCase();
-      data.description = body.result.description.toUpperCase();
-      data.img = body.result.image;
-      if (body.result.averageVotes === 0) {
+      data.title = body.data.title.toUpperCase();
+      data.description = body.data.description.toUpperCase();
+      data.img = body.data.image;
+      if (body.data.averageVotes === 0) {
         data.votes = 'NO VOTES';
       } else {
-        data.votes = 'SCORE: ' + body.result.averageVotes;
+        data.votes = 'SCORE: ' + body.data.averageVotes;
       }
     } else if (response.statusCode === 400) {
       data.title = 'NO COFFEE ADDED';
@@ -124,6 +128,37 @@ function setCoffee(res) {
         message: 'Ohh... database is having some stomach problems, ' +
           'maybe to much coffee for one day...',
       });
+    }
+    renderAndSend(file, data, res);
+  });
+}
+
+function setEvents(res) {
+  var file = 'events.html';
+  var data = {};
+  var d = new Date();
+  var monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
+  ];
+  request('http://localhost:4000/events?dateFrom=' + d.toISOString(),
+    function(error, response, respBody) {
+    if (!error && response.statusCode === 200 && respBody !== undefined) {
+      var body = JSON.parse(respBody);
+      var eventNr = Math.floor(Math.random() * body.data.length);
+      //console.log(body.data[eventNr].date);
+      var da = new Date(body.data[eventNr].date);
+      //console.log(da);
+      //console.log(da.getDate());
+      data.date = da.getDate();
+      data.month = monthNames[da.getMonth()];
+      data.title = body.data[eventNr].title;
+      data.text = body.data[eventNr].text;
+      data.location = body.data[eventNr].location;
+      data.attendants = [];
+      for (var i = 0; i < body.data[eventNr].attendants.length; i++) {
+        data.attendants.push(body.data[eventNr].attendants[i].image);
+      }
+      console.log(data);
     }
     renderAndSend(file, data, res);
   });
