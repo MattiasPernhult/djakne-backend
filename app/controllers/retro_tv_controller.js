@@ -7,35 +7,37 @@ var giphy = require('giphy-api')();
 var controller = {};
 var giphyQueue = [];
 var removeGiphy = false;
+var rotation = 15;
 var state = 0;
-var myVar = setInterval(inter, 20000);
+var myVar = setInterval(inter, rotation * 1000);
 
 function inter() {
   state++;
   state = state % 5;
-  console.log(state);
+  if (removeGiphy && giphyQueue[0] !== undefined) {
+    removeGiphy = false;
+    console.log('removed: ' + giphyQueue[0].giphy);
+    giphyQueue.shift();
+  }
+  //console.log(state);
 }
 
 controller.getRetrotv = function(req, res) {
   var data = {};
   if (state === 0) {
-    data.sync = 20;
+    data.sync = rotation;
     setOrder(data, res);
-    if (removeGiphy && giphyQueue[0] !== undefined) {
-      removeGiphy = false;
-      giphyQueue.shift();
-    }
   } else if (state === 1) {
-    data.sync = 20;
+    data.sync = rotation;
     setCoffee(data, res);
   } else if (state === 2) {
-    data.sync = 20;
+    data.sync = rotation;
     setCoworking(data, res);
   } else if (state === 3) {
-    data.sync = 20;
+    data.sync = rotation;
     setEvents(data, res);
   } else if (state === 4) {
-    data.sync = 20;
+    data.sync = rotation;
     if (!removeGiphy) {
       removeGiphy = true;
     }
@@ -180,7 +182,8 @@ function setCoworking(data, res) {
 function setGiphy(data, res) {
   var file = 'giphy.html';
   if (giphyQueue[0] !== undefined) {
-    request('http://localhost:4000/member?ids=%27' + giphyQueue[0].user + '%27',
+    console.log(giphyQueue[0]);
+    request('http://localhost:4000/member?ids=' + giphyQueue[0].user,
       function(error, response, respBody) {
         if (!error && response.statusCode === 200 && respBody !== null) {
           var body = JSON.parse(respBody);
