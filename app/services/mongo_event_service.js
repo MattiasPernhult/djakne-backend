@@ -2,7 +2,6 @@
 var EventSchema = require('../schemas/event').Event;
 var UserSchema = require('../schemas/event').User;
 var CommentSchema = require('../schemas/event').Comment;
-var mongoose = require('mongoose');
 
 var mongoService = function() {
 
@@ -65,16 +64,11 @@ var mongoService = function() {
 
   var insertEvent = function(eventToAdd, callback) {
     var newEvent = new EventSchema(eventToAdd);
-    newEvent.save(function(err, event) {
+    newEvent.save(function(err, addedEvent) {
       if (err) {
         return callback(err, null);
       }
-      var r = {
-        result: {
-          id: event._id,
-        },
-      };
-      return callback(null, r);
+      return callback(null, addedEvent);
     });
   };
 
