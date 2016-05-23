@@ -66,7 +66,7 @@ function setOrder(data, res) {
   var file = 'orders.html';
   request('http://localhost:4000/member/today', function(error, response, respBody) {
     var body = JSON.parse(respBody);
-    body = test;
+    //body = test;
     if (!error && response.statusCode === 200) {
       if (body.members[0] !== undefined) {
         data.name0 = body.members[0].firstName + ' ' + body.members[0].lastName;
