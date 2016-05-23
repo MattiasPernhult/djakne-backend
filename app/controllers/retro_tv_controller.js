@@ -66,42 +66,42 @@ function setOrder(data, res) {
   var file = 'orders.html';
   request('http://localhost:4000/member/today', function(error, response, respBody) {
     var body = JSON.parse(respBody);
-    body = test;
-    if (!error && response.statusCode === 200) {
-      if (body.members[0] !== undefined) {
-        data.name0 = body.members[0].firstName + ' ' + body.members[0].lastName;
-        data.img0 = body.members[0].image;
-        data.headline0 = body.members[0].headline;
+    //body = test;
+    if (!error && response.statusCode === 200 && body.data !== undefined) {
+      if (body.data[0] !== undefined) {
+        data.name0 = body.data[0].firstName + ' ' + body.data[0].lastName;
+        data.img0 = body.data[0].image;
+        data.headline0 = body.data[0].headline;
         data.order0 = true;
       }
-      if (body.members[1] !== undefined) {
-        data.name1 = body.members[1].firstName + ' ' + body.members[1].lastName;
-        data.img1 = body.members[1].image;
-        data.headline1 = body.members[1].headline;
+      if (body.data[1] !== undefined) {
+        data.name1 = body.data[1].firstName + ' ' + body.data[1].lastName;
+        data.img1 = body.data[1].image;
+        data.headline1 = body.data[1].headline;
         data.order1 = true;
       }
-      if (body.members[2] !== undefined) {
-        data.name2 = body.members[2].firstName + ' ' + body.members[2].lastName;
-        data.img2 = body.members[2].image;
-        data.headline2 = body.members[2].headline;
+      if (body.data[2] !== undefined) {
+        data.name2 = body.data[2].firstName + ' ' + body.data[2].lastName;
+        data.img2 = body.data[2].image;
+        data.headline2 = body.data[2].headline;
         data.order2 = true;
       }
-      if (body.members[3] !== undefined) {
-        data.name3 = body.members[3].firstName + ' ' + body.members[3].lastName;
-        data.img3 = body.members[3].image;
-        data.headline3 = body.members[3].headline;
+      if (body.data[3] !== undefined) {
+        data.name3 = body.data[3].firstName + ' ' + body.data[3].lastName;
+        data.img3 = body.data[3].image;
+        data.headline3 = body.data[3].headline;
         data.order3 = true;
       }
-      if (body.members[4] !== undefined) {
-        data.name4 = body.members[4].firstName + ' ' + body.members[4].lastName;
-        data.img4 = body.members[4].image;
-        data.headline4 = body.members[4].headline;
+      if (body.data[4] !== undefined) {
+        data.name4 = body.data[4].firstName + ' ' + body.data[4].lastName;
+        data.img4 = body.data[4].image;
+        data.headline4 = body.data[4].headline;
         data.order4 = true;
       }
-      if (body.members[5] !== undefined) {
-        data.name5 = body.members[5].firstName + ' ' + body.members[5].lastName;
-        data.img5 = body.members[5].image;
-        data.headline5 = body.members[5].headline;
+      if (body.data[5] !== undefined) {
+        data.name5 = body.data[5].firstName + ' ' + body.data[5].lastName;
+        data.img5 = body.data[5].image;
+        data.headline5 = body.data[5].headline;
         data.order5 = true;
       }
     } else if (response.statusCode === 400) {
